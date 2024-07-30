@@ -1,9 +1,31 @@
 :root {
-    --darkbutton: #2A3647;
+  /* MAIN COLOUR */
+    --main-darkblue: #091931;
+    --main-middleblue: #2A3647;
+    --main-lightblue: #29ABE2;
+    --input-border-red: #FF001F;
+    --input-text-red: #FF8190;
     --white: #ffffff;
+  /* CONTACT COLOUR */
+    --contact-orange1: #FF7A00;
+    --contact-pink1: #FF5EB3;
+    --contact-violet1: #6E52FF;
+    --contact-violet2: #9327FF;
+    --contact-blue1: #00BEE8;
+    --contact-blue2: #1FD7C1;
+    --contact-orangered: #FF745E;
+    --contact-orange2: #FFA35E;
+    --contact-pink2: #FC71FF;
+    --contact-yellow1: #FFC701;
+    --contact-blue3: #0038FF;
+    --contact-limegreen: #C3FF2B;
+    --contact-yellow2: #FFE62B;
+    --contact-red: #FF4646;
+    --contact-orange3: #FFBB2B;
+/* summary colour, board, add task, etc. */
   }
   
   /* 
   BEISPIEL: 
-  button { background-color: var(--darkbutton); }
+  button { background-color: var(--darkblue); }
    */
