@@ -1,4 +1,3 @@
-
 let API_URL = "https://join-d67a5-default-rtdb.europe-west1.firebasedatabase.app/";
 
 async function loadData(){
@@ -12,9 +11,9 @@ async function loadData(){
             let contact = responseToJson[i];
             document.getElementById('contacts').innerHTML += /*html*/ `
                 <div>
-                    <h2>${contact.firstName + contact.lastName}</h2>
-                    <p>Email <br>${contact.email}</p>
-                    <p>Phone <br>${contact.phone}</p>
+                    <h2>${contact.Name}</h2>
+                    <p>Email <br>${contact.Email}</p>
+                    <p>Phone <br>${contact.Phone}</p>
                 </div>
             `;
         }
