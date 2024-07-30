@@ -12,9 +12,9 @@ async function loadData(){
             let contact = responseToJson[i];
             document.getElementById('contacts').innerHTML += /*html*/ `
                 <div>
-                    <h2>${contact.firstName + ' ' + contact.lastName}</h2>
-                    <p>Email <br>${contact.email}</p>
-                    <p>Phone <br>${contact.phone}</p>
+                    <h2>${contact.Name}</h2>
+                    <p>Email <br>${contact.Email}</p>
+                    <p>Phone <br>${contact.Phone}</p>
                 </div>
             `;
         }
