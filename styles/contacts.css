@@ -5,18 +5,14 @@
 .headline-contacts{
     display: flex;
     align-items: center;
-    width: Hug (569px)px;
-    height: Hug (73px)px;
     top: 206px;
     left: 743px;
     gap: 30px;
-    opacity: 0px;
 }
 
 .headline-contacts>h1{
     width: 274px;
     height: 73px;
-    font-weight: 700;
     font-size: 61px;
     font-weight: 700;
     line-height: 73.2px;
@@ -24,7 +20,6 @@
 }
 
 .headline-contacts>p{
-    width: 235px;
     height: 32px;
     font-size: 27px;
     font-weight: 400;
@@ -39,4 +34,5 @@
     width: 3px;
     border-radius: 3px;
     border: none;
+    margin: 0;
 }
