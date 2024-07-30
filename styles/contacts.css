@@ -1,6 +1,7 @@
-body{
+*{
     font-family: "Inter";
 }
+
 .headline-contacts{
     display: flex;
     align-items: center;
