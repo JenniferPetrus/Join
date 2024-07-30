@@ -1,0 +1,9 @@
+:root {
+    --darkbutton: #2A3647;
+    --white: #ffffff;
+  }
+  
+  /* 
+  BEISPIEL: 
+  button { background-color: var(--darkbutton); }
+   */
