@@ -38,7 +38,6 @@ function groupContacts(contacts) {
 function renderContacts(groupedContacts) {
     let contacts = document.getElementById('contactlist');
     contacts.innerHTML = '';
-
     for (let letter in groupedContacts) {
         contacts.innerHTML += `<h3>${letter}</h3><div class="vector">`;
         for (let contact of groupedContacts[letter]) {
