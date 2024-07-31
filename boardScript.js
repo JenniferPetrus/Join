@@ -10,7 +10,7 @@ let todos = [{
 }, {
     'id': 2,
     'title': 'Einkaufen',
-    'category': 'closed'
+    'category': 'ToDo'
 }];
 
 let currentDraggedElement;
@@ -52,7 +52,7 @@ function updateHTML() {
         const element = AwaitFeedback[index];
         document.getElementById('AwaitFeedback').innerHTML += generateTodoHTML(element);
     }
-    if(InProgress.length == 0){
+    if(AwaitFeedback.length == 0){
         document.getElementById('AwaitFeedback').innerHTML += /*html*/`<div class="nothingInside">No Feedback</div>`
     }
     
@@ -66,7 +66,7 @@ function updateHTML() {
         const element = Done[index];
         document.getElementById('Done').innerHTML += generateTodoHTML(element);
     }
-    if(InProgress.length == 0){
+    if(Done.length == 0){
         document.getElementById('Done').innerHTML += /*html*/`<div class="nothingInside">Nothing Finished</div>`
     }
 }

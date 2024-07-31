@@ -1,17 +1,63 @@
+@font-face {
+    font-family: Roboto;
+    src: url(fonts/Roboto-Medium.ttf);
+}
+
 .drag-area {
     height: 500px;
-    width: 200px;
+    width: 25%;
     background-color: rgba(255, 255, 255, 0.1);
     margin: 5px;
     margin-bottom: 50px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     flex-direction: column;
     border-collapse: collapse;
 }
 
 body{
     background-color: #f6f7f8;
+    margin: 0;
+    font-family: Roboto;
+}
+
+#SM{
+    border: #2a3647 2px solid;
+    border-radius: 50%;
+    display: flex;
+    margin-left: 20px;
+}
+
+#header{
+    position: absolute;
+    top: 0;
+    left: 230px;
+    height: 70px;
+    width: calc(100% - 330px);
+    padding: 0 50px;
+    display: flex;
+    align-items: center;
+    font-size: 26px;
+    background-color: white;
+    border-bottom: 1px solid #2a3647;
+    justify-content: space-between;
+}
+
+#user {
+    margin-left: 10px;
+    border: 2px solid #2a3647;
+    border-radius: 50%;
+    padding: 8px 5px;
+    color: #29abe2;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#header img{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border-radius: 50%;
 }
 
 .drag-area-highlight {
@@ -23,13 +69,20 @@ body{
     border: 1px solid #2a3647;
     border-radius: 5px;
     padding: 10px;
-    margin: 2px;
-    width: 160px;
+    margin: 2px 0 2px 10px;
+    width: 184px;
 }
 
-#Kanban{
+#Kanban {
     display: flex;
     flex-direction: row;
+    padding: 10px 20px;
+    /* border: 1px solid #2a3647; */
+    height: calc(100% - 90px);
+    width: calc(100% - 270px);
+    position: absolute;
+    top: 200px;
+    left: 230px;
 }
 
 #Kanban img{
@@ -37,13 +90,84 @@ body{
     height: 30px;
 }
 
-.nothingInside{
+.nothingInside {
     padding: 10px 20px;
-    background-color: lightgray;
+    background-color: #eeeef3;
     border-radius: 10px;
+    margin: 0 0 0 5px;
+    width: 171px;
 }
 
+#LogoLeft{
+    margin-bottom: 50px;
+}
 
+#Navbar {
+    color: white;
+    width: 230px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5% 0% 5% 0%;
+    background-color: #2a3647;
+    height: calc(100vh - 112px);
+}
+
+#NavLeft{
+    position: relative;
+    right: 0px;
+    font-size: 18px;
+}
+
+.NavGap {
+    display: flex;
+    align-items: center;
+    padding: 10px 50px 10px 60px;
+    width: 120px;
+}
+
+.NavGap img{
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+#LogoLeft img {
+    width: 160px;
+    height: 150px;
+}
+
+.hover:hover{
+    background-color: #091931;
+    cursor: pointer;
+}
+
+#Impressum {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    margin: 30px 0;
+}
+
+#AddTaskButton{
+    padding: 10px 20px;
+    border-radius: 20px;
+    background-color: #2a3647;
+    color: white;
+}
+
+#BoardNewTask {
+    width: calc(100% - 230px);
+    position: absolute;
+    top: 70px;
+    left: 230px;
+    display: flex;
+    align-items: center;
+}
+
+#BoardNewTask img{}
 
 .b1{
     border-top-left-radius: 5px;
@@ -56,9 +180,9 @@ body{
 }
 
 #toDo{
-    width: 180px;
+    width: 208px;
     text-align: center;
-    padding: 5px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
     color: #2a3647;
     display: flex;
     justify-content: space-between;
@@ -66,9 +190,9 @@ body{
 }
 
 #inProgress{
-    width: 180px;
+    width: 208px;
     text-align: center;
-    padding: 5px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
     color: #2a3647;
     display: flex;
     justify-content: space-between;
@@ -76,9 +200,9 @@ body{
 }
 
 #awaitFeedback{
-    width: 180px;
+    width: 208px;
     text-align: center;
-    padding: 5px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
     color: #2a3647;
     display: flex;
     justify-content: space-between;
@@ -86,9 +210,9 @@ body{
 }
 
 #done{
-    width: 180px;
+    width: 208px;
     text-align: center;
-    padding: 5px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
     color: #2a3647;
     display: flex;
     justify-content: space-between;
