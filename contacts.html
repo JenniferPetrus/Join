@@ -12,16 +12,13 @@
     <link rel="stylesheet" href="/styles/root.css">
 </head>
 <body onload="init(), includeHTML()">
-<div w3-include-html="header.html"></div>
-
-    <div class="contacts-section">
-        <div class="headline-contacts">
-            <h1>Contacts</h1>
-            <hr>
-            <p>Better with a team</p>
-        </div>
+    <div w3-include-html="header.html"></div>
+    <div class="contact-header">
+        <h1>Contacts</h1>
+        <hr>
+        <p>Better with a team</p>
     </div>
-    <div class="chosen-contact">
+    <div class="chosen-contact" style="display: none;">
         <div class="contact-headline">
             <div class="contact-icon">AM</div>
             <div class="contact-name-edit">
@@ -42,9 +39,7 @@
         <div class="contact-phone">Phone</div>
         <div class="phone-number">+49 1111 1111 11 1</div>
     </div>
-    <div id="contacts"></div>
-
-<div w3-include-html="footer.html"></div>
-    
+    <div id="contacts" class="contacts-section"></div>
+    <div w3-include-html="footer.html"></div>
 </body>
 </html>

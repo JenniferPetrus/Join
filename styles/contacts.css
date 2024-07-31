@@ -7,19 +7,19 @@ body{
 }
 
 .contacts-section{
-    margin-top: 206px;
-    margin-left: 743px;
+    margin-left: 300px;
+    width: 300px;
 }
 
-.headline-contacts{
+.contact-header{
     display: flex;
     align-items: center;
-    top: 206px;
-    left: 743px;
+    margin-top: 206px;
+    margin-left: 743px;
     gap: 30px;
 }
 
-.headline-contacts>h1{
+.contact-header>h1{
     width: 274px;
     height: 73px;
     font-size: 61px;
@@ -28,7 +28,7 @@ body{
     text-align: left;
 }
 
-.headline-contacts>p{
+.contact-header>p{
     height: 32px;
     font-size: 27px;
     font-weight: 400;
@@ -37,7 +37,7 @@ body{
     color: #2A3647;
 }
 
-.headline-contacts>hr{
+.contact-header>hr{
     background-color: var(--main-lightblue);
     height: 59px;
     width: 3px;
@@ -48,6 +48,7 @@ body{
 
 .chosen-contact{
     margin-left: 750px;
+    position: absolute;
 }
 
 .contact-headline{
@@ -89,12 +90,14 @@ body{
     display: flex;
     width: 62px;
     gap: 8px;
+    cursor: pointer;
 }
 
 .contact-delete{
     display: flex;
     width: 81px;
     gap: 8px;
+    cursor: pointer;
 }
 
 .image-edit{
@@ -129,6 +132,7 @@ body{
     font-size: 16px;
     padding-bottom: 20px;
     color: var(--contact-email-blue);
+    cursor: pointer;
 }
 
 .contact-phone{
@@ -141,4 +145,8 @@ body{
 .phone-number{
     font-size: 16px;
     padding-bottom: 12px;
+}
+
+.contacts-section{
+    cursor: pointer;
 }
