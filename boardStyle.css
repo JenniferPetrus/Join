@@ -1,0 +1,65 @@
+.drag-area {
+    height: 500px;
+    width: 200px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px dashed black;
+    margin-bottom: 50px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border-collapse: collapse;
+}
+
+.drag-area-highlight {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.todo {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 2px;
+    width: 160px;
+}
+
+#Kanban{
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.b1{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.b2{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+#ToDo{
+    width: 200px;
+    text-align: center;
+    padding: 5px 0 10px 0;
+    
+}
+
+#InProgress{
+    width: 200px;
+    text-align: center;
+    padding: 5px 0 10px 0;
+}
+
+#AwaitFeedback{
+    width: 200px;
+    text-align: center;
+    padding: 5px 0 10px 0;
+}
+
+#Done{
+    width: 200px;
+    text-align: center;
+    padding: 5px 0 10px 0;
+}
