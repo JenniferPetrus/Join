@@ -1,13 +1,64 @@
+@font-face {
+    font-family: Roboto;
+    src: url(fonts/Inter-VariableFont_slnt\,wght.woff2);
+}
+
 .drag-area {
     height: 500px;
-    width: 200px;
+    width: calc(25% - 10px);
     background-color: rgba(255, 255, 255, 0.1);
-    border: 1px dashed black;
+    margin: 5px;
     margin-bottom: 50px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     flex-direction: column;
     border-collapse: collapse;
+}
+
+body{
+    background-color: #f6f7f8;
+    margin: 0;
+    font-family: Roboto;
+    overflow: hidden;
+}
+
+#SM{
+    border: #2a3647 2px solid;
+    border-radius: 50%;
+    display: flex;
+    margin-left: 20px;
+}
+
+#header{
+    position: absolute;
+    top: 0;
+    left: 230px;
+    height: 90px;
+    width: calc(100% - 330px);
+    padding: 0 50px;
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    background-color: white;
+    border-bottom: 1px solid #2a3647;
+    justify-content: space-between;
+}
+
+#user {
+    margin-left: 10px;
+    border: 2px solid #2a3647;
+    border-radius: 50%;
+    padding: 8px 5px;
+    color: #29abe2;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#header img{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border-radius: 50%;
 }
 
 .drag-area-highlight {
@@ -16,17 +67,146 @@
 
 .todo {
     background-color: white;
-    border: 1px solid black;
-    border-radius: 5px;
+    border: 1px solid #2a3647;
+    border-radius: 10px;
     padding: 10px;
-    margin: 2px;
-    width: 160px;
+    margin: 2px 0 2px 0px;
+    width: calc(100% - 22px);
 }
 
-#Kanban{
+#Kanban {
     display: flex;
     flex-direction: row;
-    
+    padding: 10px 0px;
+    height: calc(100% - 260px);
+    width: calc(100% - 230px);
+    position: absolute;
+    top: 240px;
+    left: 230px;
+}
+
+#Kanban img{
+    width: 30px;
+    height: 30px;
+}
+
+.nothingInside {
+    padding: 10px;
+    background-color: #eeeef3;
+    border-radius: 10px;
+    margin: 0 0 0 0px;
+    width: calc(100% - 22px);
+    position: relative;
+    top: 3px;
+    border: black 1px solid;
+}
+
+#LogoLeft{
+    margin-bottom: 50px;
+}
+
+#modal {
+    position: fixed;
+    top: 0;
+    left: 0px;
+    right: 0;
+    padding: 180px 230px 180px 345px;
+    height: calc(100% - 40px);
+    width: calc(100% - 460px);
+}
+
+#Navbar {
+    color: white;
+    width: 230px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0% 78px 0%;
+    background-color: #2a3647;
+    height: calc(100vh - 98px);
+}
+
+#NavLeft{
+    position: relative;
+    right: 0px;
+    font-size: 18px;
+}
+
+.NavGap {
+    display: flex;
+    align-items: center;
+    padding: 10px 50px 10px 60px;
+    width: 120px;
+}
+
+.NavGap img{
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+#LogoLeft img {
+    width: 160px;
+    height: 150px;
+}
+
+.hover:hover{
+    background-color: #091931;
+    cursor: pointer;
+}
+
+#Impressum {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    margin: 30px 0;
+}
+
+#AddTaskButton{
+    padding: 10px 20px;
+    border-radius: 10px;
+    background-color: #2a3647;
+    color: white;
+    position: absolute;
+    right: 45px;
+    border: none;
+    font-size: 20px;
+}
+
+textarea{
+    resize: none;
+    border: none;
+    height: 24px;
+    width: 188px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    position: relative;
+    bottom: 21px;
+    font-size: 20px;
+    padding: 8px;
+    font-family: Roboto;
+}
+
+#BoardNewTask {
+    padding: 35px 0 35px 35px;
+    width: calc(100% - 265px);
+    position: absolute;
+    top: 100px;
+    left: 230px;
+    display: flex;
+    align-items: center;
+    font-size: 65px;
+}
+
+#BoardNewTask img {
+    width: 60px;
+    height: 40px;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+    position: relative;
+    bottom: 21px;
 }
 
 .b1{
@@ -39,27 +219,42 @@
     border-bottom-right-radius: 5px;
 }
 
-#ToDo{
-    width: 200px;
+#toDo{
+    width: calc(100% - 6px);
     text-align: center;
-    padding: 5px 0 10px 0;
-    
+    padding: 10px 0px 10px 7px;
+    color: #2a3647;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-#InProgress{
-    width: 200px;
+#inProgress{
+    width: calc(100% - 6px);
     text-align: center;
-    padding: 5px 0 10px 0;
+    padding: 10px 0px 10px 7px;
+    color: #2a3647;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-#AwaitFeedback{
-    width: 200px;
+#awaitFeedback{
+    width: calc(100% - 6px);
     text-align: center;
-    padding: 5px 0 10px 0;
+    padding: 10px 0px 10px 7px;
+    color: #2a3647;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-#Done{
-    width: 200px;
+#done{
+    width: calc(100% - 6px);
     text-align: center;
-    padding: 5px 0 10px 0;
+    padding: 10px 0px 10px 7px;
+    color: #2a3647;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
