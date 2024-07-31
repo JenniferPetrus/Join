@@ -14,7 +14,6 @@ async function loadData() {
                 <div class="contact-item" onclick="showContactDetails(${i})">
                     <h2>${contact.Name}</h2>
                     <p>Email <br>${contact.Email}</p>
-                    <p>Phone <br>${contact.Phone}</p>
                 </div>
             `;
         }
