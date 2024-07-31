@@ -2,12 +2,16 @@
     height: 500px;
     width: 200px;
     background-color: rgba(255, 255, 255, 0.1);
-    border: 1px dashed black;
+    margin: 5px;
     margin-bottom: 50px;
     display: flex;
     align-items: center;
     flex-direction: column;
     border-collapse: collapse;
+}
+
+body{
+    background-color: #f6f7f8;
 }
 
 .drag-area-highlight {
@@ -16,7 +20,7 @@
 
 .todo {
     background-color: white;
-    border: 1px solid black;
+    border: 1px solid #2a3647;
     border-radius: 5px;
     padding: 10px;
     margin: 2px;
@@ -26,8 +30,20 @@
 #Kanban{
     display: flex;
     flex-direction: row;
-    
 }
+
+#Kanban img{
+    width: 30px;
+    height: 30px;
+}
+
+.nothingInside{
+    padding: 10px 20px;
+    background-color: lightgray;
+    border-radius: 10px;
+}
+
+
 
 .b1{
     border-top-left-radius: 5px;
@@ -39,27 +55,42 @@
     border-bottom-right-radius: 5px;
 }
 
-#ToDo{
-    width: 200px;
+#toDo{
+    width: 180px;
     text-align: center;
-    padding: 5px 0 10px 0;
-    
+    padding: 5px 10px 10px 10px;
+    color: #2a3647;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-#InProgress{
-    width: 200px;
+#inProgress{
+    width: 180px;
     text-align: center;
-    padding: 5px 0 10px 0;
+    padding: 5px 10px 10px 10px;
+    color: #2a3647;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-#AwaitFeedback{
-    width: 200px;
+#awaitFeedback{
+    width: 180px;
     text-align: center;
-    padding: 5px 0 10px 0;
+    padding: 5px 10px 10px 10px;
+    color: #2a3647;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-#Done{
-    width: 200px;
+#done{
+    width: 180px;
     text-align: center;
-    padding: 5px 0 10px 0;
+    padding: 5px 10px 10px 10px;
+    color: #2a3647;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
