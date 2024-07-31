@@ -33,7 +33,7 @@
         <div class="drag-area b2" id="Done" ondrop="moveTo('Done')" ondragleave="removeHighlight('Done')" ondragover="allowDrop(event); highlight('Done')"></div>
     </div>
     <div id="modal" style="display: none;background-color: rgba(40, 40, 40, 0.204);">
-        <div style="background-color: #f6f7f8;position: relative;height: 550px;padding: 20px 20px;">
+        <div style="background-color: #f6f7f8;position: relative;height: 550px;padding: 20px 20px;border-radius: 10px;">
             <div style="font-size: 30px;">Add Task</div>
             <div style='display: flex;height: 40px;padding: 20px 0 10px;align-items: center;'><div>Aufgabe</div><div><textarea name="Aufgabe" id="Aufgabe" placeholder="Aufgabe" style="position: absolute;top: 75px;right: 35px;width: 50%;border-bottom-right-radius: 10px;border-top-right-radius: 10px;"></textarea></div></div>
             <div style='display: flex;height: 40px;padding-bottom: 10px;align-items: center;'><div>Zeitraum</div><div><textarea name="Zeitraum" id="Zeitraum" placeholder="Zeitraum" style="position: absolute;top: 125px;right: 35px;width: 50%;border-bottom-right-radius: 10px;border-top-right-radius: 10px;"></textarea></div></div>
@@ -41,45 +41,9 @@
             <div style='display: flex;height: 40px;padding-bottom: 10px;align-items: center;'><div>Stichworte</div><div><textarea name="Stichworte" id="Stichworte" placeholder="Stichworte" style="position: absolute;top: 225px;right: 35px;width: 50%;border-bottom-right-radius: 10px;border-top-right-radius: 10px;"></textarea></div></div>
             <div style='display: flex;height: 40px;padding-bottom: 10px;align-items: center;'><div>Beschreibung</div><div><textarea name="Beschreibung" id="Beschreibung" placeholder="Beschreibung" style="position: absolute;top: 275px;right: 35px;width: 50%;border-bottom-right-radius: 10px;border-top-right-radius: 10px;height: 200px;"></textarea></div></div>
         </div>
+        <div>Clear<img src="assets/img/close.png" alt="Close Button"></div>
+        <div>Create Task<img src="assets/img/create.png" alt="Create Task Button"></div>
     </div>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
 </body>
 </html>
 
