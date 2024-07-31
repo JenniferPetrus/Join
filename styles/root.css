@@ -1,5 +1,6 @@
 :root {
   /* MAIN COLOUR */
+    --main-background: #F6F7F8;
     --main-darkblue: #091931;
     --main-middleblue: #2A3647;
     --main-lightblue: #29ABE2;
@@ -7,6 +8,10 @@
     --input-text-red: #FF8190;
     --white: #ffffff;
   /* CONTACT COLOUR */
+    --contact-icon-scrollbar: #A8A8A8;
+    --contact-list-selector: #D1D1D1;
+    --contact-sidebar: #CDCDCD;
+    --contact-email-blue: #007CEE;
     --contact-orange1: #FF7A00;
     --contact-pink1: #FF5EB3;
     --contact-violet1: #6E52FF;
