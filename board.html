@@ -25,7 +25,7 @@
         <div>Kanban Project Management Tool</div>
         <div style="display: flex;align-items: center;"><img src="assets/img/help.png" alt=""><div id="user">SM</div></div>
     </div>
-    <div id="BoardNewTask"><div>BOARD</div><div><div><textarea name="FindTask" id="FindTask"></textarea></div><div><img src="assets/img/Lupe.png" alt=""></div></div><div><button id="AddTaskButton">Add Task +</button></div></div>
+    <div id="BoardNewTask"><div style="position: relative;top: 18px;font-size: 64px;">Board</div><div style="position: absolute;top: 73px;right: 200px;width: 264px;display: flex;height: 41px;border: 2px solid;border-radius: 10px;"><div ><textarea placeholder="Find Task" name="FindTask" id="FindTask"></textarea></div><div><img src="assets/img/Lupe.png" alt=""></div></div><div><button id="AddTaskButton">Add Task +</button></div></div>
     <div id="Kanban">
         <div class="drag-area b1" id="ToDo" ondrop="moveTo('ToDo')" ondragleave="removeHighlight('ToDo')" ondragover="allowDrop(event); highlight('ToDo')"></div>
         <div class="drag-area" id="InProgress" ondrop="moveTo('InProgress')" ondragleave="removeHighlight('InProgress')" ondragover="allowDrop(event); highlight('InProgress')"></div>
@@ -34,3 +34,4 @@
     </div>
 </body>
 </html>
+
