@@ -25,13 +25,62 @@
         <div>Kanban Project Management Tool</div>
         <div style="display: flex;align-items: center;"><img src="assets/img/help.png" alt=""><div id="user">SM</div></div>
     </div>
-    <div id="BoardNewTask"><div style="position: relative;top: 18px;font-size: 64px;">Board</div><div style="position: absolute;top: 73px;right: 200px;width: 264px;display: flex;height: 41px;border: 2px solid;border-radius: 10px;"><div ><textarea placeholder="Find Task" name="FindTask" id="FindTask"></textarea></div><div><img src="assets/img/Lupe.png" alt=""></div></div><div><button id="AddTaskButton">Add Task +</button></div></div>
+    <div id="BoardNewTask"><div style="position: relative;top: 18px;font-size: 64px;">Board</div><div style="position: absolute;top: 73px;right: 200px;width: 264px;display: flex;height: 41px;border: 2px solid;border-radius: 10px;"><div ><textarea placeholder="Find Task" name="FindTask" id="FindTask"></textarea></div><div><img src="assets/img/Lupe.png" alt=""></div></div><div><button id="AddTaskButton" onclick="addTask()">Add Task +</button></div></div>
     <div id="Kanban">
         <div class="drag-area b1" id="ToDo" ondrop="moveTo('ToDo')" ondragleave="removeHighlight('ToDo')" ondragover="allowDrop(event); highlight('ToDo')"></div>
         <div class="drag-area" id="InProgress" ondrop="moveTo('InProgress')" ondragleave="removeHighlight('InProgress')" ondragover="allowDrop(event); highlight('InProgress')"></div>
         <div class="drag-area" id="AwaitFeedback" ondrop="moveTo('AwaitFeedback')" ondragleave="removeHighlight('AwaitFeedback')" ondragover="allowDrop(event); highlight('AwaitFeedback')"></div>
         <div class="drag-area b2" id="Done" ondrop="moveTo('Done')" ondragleave="removeHighlight('Done')" ondragover="allowDrop(event); highlight('Done')"></div>
     </div>
+    <div id="modal" style="display: none;background-color: rgba(40, 40, 40, 0.204);">
+        <div style="background-color: #f6f7f8;position: relative;height: 550px;padding: 20px 20px;">
+            <div style="font-size: 30px;">Add Task</div>
+            <div style='display: flex;height: 40px;padding: 20px 0 10px;align-items: center;'><div>Aufgabe</div><div><textarea name="Aufgabe" id="Aufgabe" placeholder="Aufgabe" style="position: absolute;top: 75px;right: 35px;width: 50%;border-bottom-right-radius: 10px;border-top-right-radius: 10px;"></textarea></div></div>
+            <div style='display: flex;height: 40px;padding-bottom: 10px;align-items: center;'><div>Zeitraum</div><div><textarea name="Zeitraum" id="Zeitraum" placeholder="Zeitraum" style="position: absolute;top: 125px;right: 35px;width: 50%;border-bottom-right-radius: 10px;border-top-right-radius: 10px;"></textarea></div></div>
+            <div style='display: flex;height: 40px;padding-bottom: 10px;align-items: center;'><div>Teammitglieder</div><div><textarea name="Teammitglieder" id="Teammitglieder" placeholder="Teammitglieder" style="position: absolute;top: 175px;right: 35px;width: 50%;border-bottom-right-radius: 10px;border-top-right-radius: 10px;"></textarea></div></div>
+            <div style='display: flex;height: 40px;padding-bottom: 10px;align-items: center;'><div>Stichworte</div><div><textarea name="Stichworte" id="Stichworte" placeholder="Stichworte" style="position: absolute;top: 225px;right: 35px;width: 50%;border-bottom-right-radius: 10px;border-top-right-radius: 10px;"></textarea></div></div>
+            <div style='display: flex;height: 40px;padding-bottom: 10px;align-items: center;'><div>Beschreibung</div><div><textarea name="Beschreibung" id="Beschreibung" placeholder="Beschreibung" style="position: absolute;top: 275px;right: 35px;width: 50%;border-bottom-right-radius: 10px;border-top-right-radius: 10px;height: 200px;"></textarea></div></div>
+        </div>
+    </div>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
 </body>
 </html>
+
 

@@ -1,3 +1,8 @@
+function addTask(){
+    document.getElementById("modal").style.display = "block"
+}
+
+
 
 let todos = [{
     'id': 0,
