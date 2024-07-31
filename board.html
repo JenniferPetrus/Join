@@ -4,8 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="boardStyle.css">
+    <script src="boardScript.js"></script>
 </head>
-<body>
-    
+<body onload="updateHTML()">
+    <div id="Kanban">
+        <div class="drag-area b1" id="ToDo" ondrop="moveTo('ToDo')" ondragleave="removeHighlight('ToDo')" ondragover="allowDrop(event); highlight('ToDo')"></div>
+        <div class="drag-area" id="InProgress" ondrop="moveTo('InProgress')" ondragleave="removeHighlight('InProgress')" ondragover="allowDrop(event); highlight('InProgress')"></div>
+        <div class="drag-area" id="AwaitFeedback" ondrop="moveTo('AwaitFeedback')" ondragleave="removeHighlight('AwaitFeedback')" ondragover="allowDrop(event); highlight('AwaitFeedback')"></div>
+        <div class="drag-area b2" id="Done" ondrop="moveTo('Done')" ondragleave="removeHighlight('Done')" ondragover="allowDrop(event); highlight('Done')"></div>
+    </div>
 </body>
 </html>
