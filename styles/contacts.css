@@ -2,6 +2,10 @@
     font-family: "Inter";
 }
 
+body{
+    background-color: var(--main-background);
+}
+
 .headline-contacts{
     display: flex;
     align-items: center;
