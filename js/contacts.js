@@ -1,12 +1,10 @@
 let API_URL = "https://join-d67a5-default-rtdb.europe-west1.firebasedatabase.app/";
-let contactsData = [];
 
-async function loadData() {
-    let response = await fetch(API_URL + ".json");
-    if (response) {
-        contactsData = await response.json();
-        let contacts = document.getElementById('contacts');
-        contacts.innerHTML = '';
+const colors = [
+    '#A8A8A8', '#D1D1D1', '#CDCDCD', '#007CEE', '#FF7A00', '#FF5EB3', 
+    '#6E52FF', '#9327FF', '#00BEE8', '#1FD7C1', '#FF745E', '#FFA35E', 
+    '#FC71FF', '#FFC701', '#0038FF', '#C3FF2B', '#FFE62B', '#FF4646', '#FFBB2B'
+];
 
         for (let i = 0; i < contactsData.length; i++) {
             let contact = contactsData[i];
@@ -16,40 +14,64 @@ async function loadData() {
                     <p>Email <br>${contact.Email}</p>
                 </div>
             `;
+function getRandomColor() {
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+async function loadData(){
+    try {
+        let response = await fetch(API_URL + ".json");
+        if(!response.ok) {
+            throw new Error('Network response was not ok');
         }
-    } else {
-        console.error('Error');
-    }
-}
 
-function showContactDetails(index) {
-    let contact = contactsData[index];
+        let responseToJson = await response.json();
 
-    document.querySelector('.chosen-contact').style.display = 'block';
+        if (!Array.isArray(responseToJson)) {
+            throw new Error('Response is not an array');
+        }
 
-    let contactName = document.getElementsByClassName('contact-name')[0];
-    contactName.innerText = contact.Name;
+        responseToJson.sort((a, b) => a.Name.localeCompare(b.Name));
 
-    let emailAddress = document.getElementsByClassName('email-address')[0];
-    emailAddress.innerText = contact.Email;
+         
+         let groupedContacts = {};
+         for (let contact of responseToJson) {
+             let firstLetter = contact.Name[0].toUpperCase();
+             if (!groupedContacts[firstLetter]) {
+                 groupedContacts[firstLetter] = [];
+             }
+             groupedContacts[firstLetter].push(contact);
+         }
+ 
+         let contacts = document.getElementById('contacts');
+         contacts.innerHTML = '';
+ 
+         
+         for (let letter in groupedContacts) {
+             contacts.innerHTML += `<h3>${letter}</h2> 
+                  <div class="vector"><div>                    
+             `;
+             for (let contact of groupedContacts[letter]) {
+                let initials = contact.Name.split(' ').map(word => word[0]).join('').toUpperCase();
+                let color = getRandomColor();
 
-    let phoneNumber = document.getElementsByClassName('phone-number')[0];
-    phoneNumber.innerText = contact.Phone;
+                contacts.innerHTML += /*html*/ `
+                    <div class="single-contact">
+                        <div class="contact-icon" style="background-color: ${color};">${initials}</div>
+                        <div>
+                            <h3>${contact.Name}</h3>
+                            <a href="mailto:${contact.Email}">${contact.Email}</a>
+                        </div>
+                    </div>
+                     <br>
+                 `;
+             }
+         }
+     } catch (error) {
+         console.error('Error:', error);
+     }
+ }
 
-    let initials = getInitials(contact.Name);
-    let contactIcon = document.getElementsByClassName('contact-icon')[0];
-    contactIcon.innerText = initials;
-}
-
-function getInitials(name) {
-    let nameParts = name.split(' ');
-    let initials = '';
-    for (let i = 0; i < nameParts.length; i++) {
-        initials += nameParts[i].charAt(0).toUpperCase();
-    }
-    return initials;
-}
-
-function init() {
+function init(){
     loadData();
 }
