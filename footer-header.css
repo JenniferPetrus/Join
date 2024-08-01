@@ -51,6 +51,8 @@ body {
     padding: 20px 0% 78px 0%;
     background-color: #2a3647;
     height: calc(100vh - 98px);
+    position: fixed;
+    top: 0;
 }
 
 #NavLeft {
