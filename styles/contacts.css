@@ -10,14 +10,22 @@ body{
     position: fixed;
     width: 400px;
     height: calc(100vh - 90px);
+    top: 96px;
     left: 232px;
     background: rgba(255, 255, 255, 1);
     box-shadow: 4px 0px 6px 0px rgba(0, 0, 0, 0.08);
     overflow: scroll;
     overflow-x: hidden;
-    top: 90px;
-    scrollbar-width: thin;
-    scrollbar-color: #A8A8A8 rgba(255, 255, 255, 0); 
+    top: 92px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.contacts-section img {
+    height: 50px;
+    margin-top: 10px;
+    cursor: pointer;
 }
 
 .contact-header{
@@ -35,18 +43,6 @@ body{
     font-weight: 700;
     line-height: 73.2px;
     text-align: left;
-}
-
-.contactlist{
-    width: 456px;
-    height: 600px;
-    top: 96px;
-    left: 232px;
-    gap: 0px;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 4px 0px 6px 0px rgba(0, 0, 0, 0.08);
-    overflow: scroll;
-    overflow-x: hidden;
 }
 
 .contact-header>p{
@@ -109,6 +105,11 @@ body{
     align-items: center;
     gap: 22px;
     font-size: 14px;
+    cursor: pointer;
+}
+
+.single-contact:hover{
+    background-color: rgba(0, 0, 0, 0.08);
 }
 
 .single-contact a{
@@ -116,6 +117,11 @@ body{
     background-color: white;
     font-size: 14px;
 }
+
+.single-contact a:hover{
+    background-color: rgba(0, 0, 0, 0.08);
+}
+
 
 .vector{
     width: 352px;
@@ -199,6 +205,3 @@ body{
     padding-bottom: 12px;
 }
 
-.contacts-section{
-    cursor: pointer;
-}
