@@ -6,7 +6,6 @@ body{
     background-color: var(--main-background);
 }
 
-
 .contacts-section{
     margin-left: 235px;
     position: fixed;
@@ -21,7 +20,9 @@ body{
     box-shadow: 4px 0px 6px 0px rgba(0, 0, 0, 0.08);
     overflow: scroll;
     overflow-x: hidden;
-    top: 92px;
+    top: 90px;
+    scrollbar-width: thin;
+    scrollbar-color: #A8A8A8 rgba(255, 255, 255, 0); 
 }
 
 .contact-header{
@@ -52,7 +53,6 @@ body{
     overflow: scroll;
     overflow-x: hidden;
 }
-
 
 .contact-header>p{
     height: 32px;
@@ -91,9 +91,7 @@ body{
     justify-content: center;
     font-size: 18px;
     color: white;
-    
 }
-
 
 .contact-icon{
     width: 120px;
@@ -124,14 +122,12 @@ body{
     font-size: 14px;
 }
 
-
 .vector{
     width: 352px;
     height: 1px;
     border: 1px solid rgba(209, 209, 209, 1);
     background-color: rgba(209, 209, 209, 1);
 }
-
 
 .contact-name{
     font-size: 47px;
