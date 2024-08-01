@@ -7,9 +7,7 @@ body{
 }
 
 .contacts-section{
-    margin-left: 235px;
     position: fixed;
-    margin-left: 2px;
     width: 400px;
     height: calc(100vh - 90px);
     left: 232px;
