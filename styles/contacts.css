@@ -17,35 +17,46 @@ body{
     top: 92px;
     display: flex;
     flex-direction: column; 
+    overflow: scroll;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #A8A8A8 rgba(255, 255, 255, 0); 
 }
 
-.contactSectionBtn{
-    display: flex;
-}
-
-
-.contacts-section button {
-
+.background-btn{
     position: fixed;
-    cursor: pointer;
-    padding: 40px;
-    padding-right: 70px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: white;
+    width: 440px;
+    height: 101px;
+}
+
+.add-contact-btn{
+    background-color: #2A3647;
+    width: 350px;
+    height: 55px;
+    border-radius: 10px;
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    cursor: pointer;
 }
 
 .contacts-section{
-    position: fixed;
     width: 400px;
     height: calc(100vh - 90px);
     left: 232px;
     background: rgba(255, 255, 255, 1);
     top: 92px;
-    padding-top: 80px;
     margin-left: 50px;
-    overflow: scroll;
-    overflow-x: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: #A8A8A8 rgba(255, 255, 255, 0); 
+    margin-top: 80px;
 }
 
 .contact-header{
@@ -127,6 +138,7 @@ body{
     font-size: 14px;
     cursor: pointer;
     padding-left: 25px;
+    padding-top: 20px;
 }
 
 .first-letter{
@@ -139,6 +151,7 @@ body{
     font-size: 20px;
     font-weight: 500;
     margin-bottom: 5px;
+    margin-top: 5px;
 }
 
 .single-contact:hover{
