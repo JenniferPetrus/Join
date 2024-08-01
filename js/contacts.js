@@ -38,7 +38,7 @@ function groupContacts(contacts) {
 function renderContacts(groupedContacts) {
     let contacts = document.getElementById('contactlist');
     contacts.innerHTML = '';
-    contacts.innerHTML = '<img src="assets/icons/addContactButton.svg" alt="Add Contact Button">';
+    // contacts.innerHTML = '<img src="assets/icons/addContactButton.svg" alt="Add Contact Button">';
     for (let letter in groupedContacts) {
         contacts.innerHTML += `<h3>${letter}</h3><div class="vector">`;
         for (let contact of groupedContacts[letter]) {
@@ -50,7 +50,7 @@ function renderContacts(groupedContacts) {
                 <div class="single-contact" onclick="showContactDetails(${contactsData.indexOf(contact)})">
                     <div class="contactIcon" style="background-color: ${color};">${initials}</div>
                     <div>
-                        <h3>${contact.Name}</h3>
+                        <h3 class="contact-list-name">${contact.Name}</h3>
                         <a href="mailto:${contact.Email}">${contact.Email}</a>
                     </div>
                 </div>

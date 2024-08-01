@@ -22,11 +22,12 @@ body{
 }
 
 
-.contacts-section img {
+/* .contacts-section img {
     height: 50px;
     margin-top: 10px;
     cursor: pointer;
-}
+    position: fixed;
+} */
 
 .contact-header{
     display: flex;
@@ -108,14 +109,20 @@ body{
     cursor: pointer;
 }
 
+.contact-list-name{
+    font-size: 20px;
+    font-weight: 500;
+}
+
 .single-contact:hover{
     background-color: rgba(0, 0, 0, 0.08);
 }
 
 .single-contact a{
-    color: blue;
+    color: #007CEE;
+    text-decoration: none;
     background-color: white;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .single-contact a:hover{
