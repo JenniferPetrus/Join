@@ -19,29 +19,18 @@ body{
     flex-direction: column; 
 }
 
-.background-btn{
-    z-index: 2;
+.contactSectionBtn{
     display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: white;
-    width: calc(100% - 15px);
-    height: 101px;
 }
 
-.add-contact-btn{
-    background-color: #2A3647;
-    width: 350px;
-    height: 55px;
-    border-radius: 10px;
-    color: white;
-    font-size: 18px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
+
+.contacts-section button {
+
+    position: fixed;
     cursor: pointer;
+    padding: 40px;
+    padding-right: 70px;
+    background-color: white;
 }
 
 .contacts-section{
