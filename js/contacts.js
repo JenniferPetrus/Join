@@ -38,9 +38,8 @@ function groupContacts(contacts) {
 function renderContacts(groupedContacts) {
     let contacts = document.getElementById('contactlist');
     contacts.innerHTML = '';
-    // contacts.innerHTML = '<img src="assets/icons/addContactButton.svg" alt="Add Contact Button">';
     for (let letter in groupedContacts) {
-        contacts.innerHTML += `<h3>${letter}</h3><div class="vector">`;
+        contacts.innerHTML += `<h3 class="first-letter">${letter}</h3><div class="vector">`;
         for (let contact of groupedContacts[letter]) {
             let initials = getInitials(contact.Name);
             let color = getRandomColor();
