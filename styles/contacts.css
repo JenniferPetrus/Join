@@ -21,11 +21,18 @@ body{
     flex-direction: column;
 }
 
+.contactSectionBtn{
+    display: flex;
+}
 
-.contacts-section img {
-    height: 50px;
-    margin-top: 10px;
+
+.contacts-section button {
+
+    position: fixed;
     cursor: pointer;
+    padding: 40px;
+    padding-right: 70px;
+    background-color: white;
 }
 
 .contact-header{
