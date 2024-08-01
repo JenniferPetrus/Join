@@ -113,6 +113,7 @@ body{
     justify-content: center;
     font-size: 18px;
     color: white;
+    border: 3px solid #FFFFFF;
 }
 
 .contact-icon{
@@ -139,6 +140,16 @@ body{
     cursor: pointer;
     padding-left: 25px;
     padding-top: 20px;
+    width: 305px;
+    margin-top: 10px;
+    height: 78px;
+    padding: 15px 20px 15px 20px;
+    border-radius: 10px;
+}
+
+.single-contact:hover{
+    background-color: #2A3647 !important;
+    color: white;
 }
 
 .first-letter{
@@ -161,7 +172,6 @@ body{
 .single-contact a{
     color: #007CEE;
     text-decoration: none;
-    background-color: white;
     font-size: 16px;
 }
 
