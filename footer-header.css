@@ -1,0 +1,142 @@
+@font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter-VariableFont_slnt,wght.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+}
+
+.NavGap img, .NavGap div {
+    color: #ccc; 
+}
+
+.NavGap.hover:hover {
+    background-color: #091931; 
+    color: #fff; 
+}
+
+.NavGap.active {
+    color: #fff; 
+    background-color: #091931; 
+}
+
+.NavGap.active img {
+    content: url('/assets/icons/summary-icon-bright.png');
+    color: #fff; 
+}
+
+.NavGap:not(.active) img {
+    content: url('/assets/icons/summary-icon-dark.png');
+}
+
+#Impressum div {
+    color: #ccc; 
+}
+
+.header-user-info {
+    display: flex;
+    align-items: center;
+}
+
+#Navbar {
+    color: white;
+    width: 230px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0% 78px 0%;
+    background-color: #2a3647;
+    height: calc(100vh - 98px);
+    position: fixed;
+    top: 0;
+}
+
+#NavLeft {
+    position: relative;
+    right: 0px;
+    font-size: 18px;
+}
+
+.NavGap {
+    display: flex;
+    align-items: center;
+    padding: 10px 50px 10px 60px;
+    width: 120px;
+}
+
+.NavGap img {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+.hover:hover {
+    background-color: #091931;
+    cursor: pointer;
+}
+
+#Impressum {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    margin: 30px 0;
+}
+
+#header {
+    position: absolute;
+    top: 0;
+    left: 230px;
+    height: 90px;
+    width: calc(100% - 330px);
+    padding: 0 50px;
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    background-color: white;
+    border-bottom: 1px solid #2a3647;
+    justify-content: space-between;
+}
+
+#user {
+    margin-left: 10px;
+    border: 2px solid #2a3647;
+    border-radius: 50%;
+    padding: 8px;
+    color: #29abe2;
+    font-size: 20px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#header img {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.search-bar {
+    position: absolute;
+    top: 73px;
+    right: 200px;
+    width: 264px;
+    display: flex;
+    height: 41px;
+    border: 2px solid;
+    border-radius: 10px;
+}
+
+#LogoLeft {
+    margin-bottom: 54px;
+    margin-top: 31px;
+}
