@@ -99,8 +99,12 @@ body {
     align-items: center;
     font-size: 20px;
     background-color: white;
+<<<<<<< HEAD
     box-shadow: 0px 4px 4px 0px #0000001A;
+=======
+>>>>>>> 30e7f93d29f52e6cce854a8d64bf8ab9155f6fcf
     justify-content: space-between;
+    box-shadow: 0px 4px 4px 0px #0000001A;
 }
 
 #user {
@@ -139,9 +143,4 @@ body {
 #LogoLeft {
     margin-bottom: 54px;
     margin-top: 31px;
-}
-
-#Navbar{
-    position: fixed;
-    top: 0;
 }

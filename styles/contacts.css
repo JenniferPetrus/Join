@@ -6,20 +6,22 @@ body{
     background-color: var(--main-background);
 }
 
-
 .contacts-section{
     margin-left: 235px;
     position: fixed;
     margin-left: 2px;
     width: 400px;
     height: calc(100vh - 90px);
+<<<<<<< HEAD
     top: 96px;
+=======
+>>>>>>> 30e7f93d29f52e6cce854a8d64bf8ab9155f6fcf
     left: 232px;
-    gap: 0px;
     background: rgba(255, 255, 255, 1);
     box-shadow: 4px 0px 6px 0px rgba(0, 0, 0, 0.08);
     overflow: scroll;
     overflow-x: hidden;
+<<<<<<< HEAD
     top: 92px;
     display: flex;
     flex-direction: column;
@@ -30,6 +32,11 @@ body{
     height: 50px;
     margin-top: 10px;
     cursor: pointer;
+=======
+    top: 90px;
+    scrollbar-width: thin;
+    scrollbar-color: #A8A8A8 rgba(255, 255, 255, 0); 
+>>>>>>> 30e7f93d29f52e6cce854a8d64bf8ab9155f6fcf
 }
 
 .contact-header{
@@ -49,6 +56,21 @@ body{
     text-align: left;
 }
 
+<<<<<<< HEAD
+=======
+.contactlist{
+    width: 456px;
+    height: 600px;
+    top: 96px;
+    left: 232px;
+    gap: 0px;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 4px 0px 6px 0px rgba(0, 0, 0, 0.08);
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+>>>>>>> 30e7f93d29f52e6cce854a8d64bf8ab9155f6fcf
 .contact-header>p{
     height: 32px;
     font-size: 27px;
@@ -88,7 +110,6 @@ body{
     color: white;
 }
 
-
 .contact-icon{
     width: 120px;
     height: 120px;
@@ -123,18 +144,20 @@ body{
     font-size: 14px;
 }
 
+<<<<<<< HEAD
 .single-contact a:hover{
     background-color: rgba(0, 0, 0, 0.08);
 }
 
 
+=======
+>>>>>>> 30e7f93d29f52e6cce854a8d64bf8ab9155f6fcf
 .vector{
     width: 352px;
     height: 1px;
     border: 1px solid rgba(209, 209, 209, 1);
     background-color: rgba(209, 209, 209, 1);
 }
-
 
 .contact-name{
     font-size: 47px;
