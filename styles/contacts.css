@@ -10,12 +10,9 @@ body{
     margin-left: 235px;
     position: fixed;
     margin-left: 2px;
-    width: 300px;
     width: 400px;
-    height: 720px;
-    top: 96px;
+    height: calc(100vh - 90px);
     left: 232px;
-    gap: 0px;
     background: rgba(255, 255, 255, 1);
     box-shadow: 4px 0px 6px 0px rgba(0, 0, 0, 0.08);
     overflow: scroll;
