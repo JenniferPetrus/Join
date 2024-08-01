@@ -11,9 +11,8 @@ body{
     margin-left: 235px;
     position: fixed;
     margin-left: 2px;
-    width: 300px;
     width: 400px;
-    height: 720px;
+    height: calc(100vh - 90px);
     top: 96px;
     left: 232px;
     gap: 0px;
@@ -22,6 +21,15 @@ body{
     overflow: scroll;
     overflow-x: hidden;
     top: 92px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.contacts-section img {
+    height: 50px;
+    margin-top: 10px;
+    cursor: pointer;
 }
 
 .contact-header{
@@ -40,19 +48,6 @@ body{
     line-height: 73.2px;
     text-align: left;
 }
-
-.contactlist{
-    width: 456px;
-    height: 600px;
-    top: 96px;
-    left: 232px;
-    gap: 0px;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 4px 0px 6px 0px rgba(0, 0, 0, 0.08);
-    overflow: scroll;
-    overflow-x: hidden;
-}
-
 
 .contact-header>p{
     height: 32px;
@@ -91,7 +86,6 @@ body{
     justify-content: center;
     font-size: 18px;
     color: white;
-    
 }
 
 
@@ -116,12 +110,21 @@ body{
     align-items: center;
     gap: 22px;
     font-size: 14px;
+    cursor: pointer;
+}
+
+.single-contact:hover{
+    background-color: rgba(0, 0, 0, 0.08);
 }
 
 .single-contact a{
     color: blue;
     background-color: white;
     font-size: 14px;
+}
+
+.single-contact a:hover{
+    background-color: rgba(0, 0, 0, 0.08);
 }
 
 
@@ -208,6 +211,3 @@ body{
     padding-bottom: 12px;
 }
 
-.contacts-section{
-    cursor: pointer;
-}
