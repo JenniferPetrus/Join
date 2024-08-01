@@ -6,9 +6,22 @@ body{
     background-color: var(--main-background);
 }
 
+
 .contacts-section{
-    margin-left: 300px;
+    margin-left: 235px;
+    position: fixed;
+    margin-left: 2px;
     width: 300px;
+    width: 400px;
+    height: 720px;
+    top: 96px;
+    left: 232px;
+    gap: 0px;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 4px 0px 6px 0px rgba(0, 0, 0, 0.08);
+    overflow: scroll;
+    overflow-x: hidden;
+    top: 92px;
 }
 
 .contact-header{
@@ -27,6 +40,19 @@ body{
     line-height: 73.2px;
     text-align: left;
 }
+
+.contactlist{
+    width: 456px;
+    height: 600px;
+    top: 96px;
+    left: 232px;
+    gap: 0px;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 4px 0px 6px 0px rgba(0, 0, 0, 0.08);
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
 
 .contact-header>p{
     height: 32px;
@@ -56,6 +82,19 @@ body{
     align-items: center;
 }
 
+.contactIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: white;
+    
+}
+
+
 .contact-icon{
     width: 120px;
     height: 120px;
@@ -71,6 +110,28 @@ body{
     font-size: 47px;
     font-weight: 500;
 }
+
+.single-contact{
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    font-size: 14px;
+}
+
+.single-contact a{
+    color: blue;
+    background-color: white;
+    font-size: 14px;
+}
+
+
+.vector{
+    width: 352px;
+    height: 1px;
+    border: 1px solid rgba(209, 209, 209, 1);
+    background-color: rgba(209, 209, 209, 1);
+}
+
 
 .contact-name{
     font-size: 47px;

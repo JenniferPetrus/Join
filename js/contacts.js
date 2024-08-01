@@ -47,7 +47,7 @@ function renderContacts(groupedContacts) {
 
             contacts.innerHTML += /*html*/ `
                 <div class="single-contact" onclick="showContactDetails(${contactsData.indexOf(contact)})">
-                    <div class="contact-icon" style="background-color: ${color};">${initials}</div>
+                    <div class="contactIcon" style="background-color: ${color};">${initials}</div>
                     <div>
                         <h3>${contact.Name}</h3>
                         <a href="mailto:${contact.Email}">${contact.Email}</a>
