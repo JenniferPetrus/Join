@@ -192,6 +192,36 @@ async function fetchData() {
     return result;
 }
 
+async function deleteContact(contactId) {
+    try {
+        await fetch(`${API_URL}/${contactId}.json`, {
+            method: 'DELETE'
+        });
+        await loadData();
+        hideChosenContact();
+        showDeleteSuccessMessage();
+    } catch (error) {
+        console.error('Error deleting contact:', error);
+    }
+}
+
+function hideChosenContact() {
+    let chosenContact = document.getElementById('chosenContacts');
+    chosenContact.style.display = 'none';
+}
+
+function showDeleteSuccessMessage() {
+    let messageContainer = document.createElement('div');
+    messageContainer.className = 'delete-success-message';
+    messageContainer.innerText = 'Contact successfully deleted';
+    
+    document.body.appendChild(messageContainer);
+
+    setTimeout(() => {
+        messageContainer.remove();
+    }, 3000);
+}
+
 function init() {
     loadData();
 }
