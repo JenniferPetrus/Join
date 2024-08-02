@@ -93,6 +93,12 @@ function showContactDetails(index) {
     contactName.innerText = contact.Name;
     emailAddress.innerText = contact.Email;
     phoneNumber.innerText = contact.Phone;
+
+    currentContactIndex = index;
+
+    document.querySelector('.contact-edit').addEventListener('click', setupEditContact);
+    document.querySelector('.contact-delete').addEventListener('click', () => deleteContact(contact.id));
+
 }
 
 function getInitials(name) {
@@ -102,6 +108,87 @@ function getInitials(name) {
         initials += nameParts[i].charAt(0).toUpperCase();
     }
     return initials;
+}
+
+async function setupEditContact() {
+    const contact = contactsData[currentContactIndex];
+    const overlayHTML = await fetch('overlay.html').then(response => response.text());
+
+    const overlayContainer = document.getElementById('overlay-container');
+    overlayContainer.innerHTML = overlayHTML;
+    showOverlay();
+
+    const overlayTitle = document.querySelector('.text-bold');
+    overlayTitle.innerText = 'Edit Contact';
+
+    document.getElementById('contactName').value = contact.Name;
+    document.getElementById('contactEmail').value = contact.Email;
+    document.getElementById('contactPhone').value = contact.Phone;
+
+    setupCloseButton();
+    setupBackgroundClick();
+    setupCancelButton();
+
+    async function updateContact() {
+        const updatedContact = {
+            Name: document.getElementById('contactName').value,
+            Email: document.getElementById('contactEmail').value,
+            Phone: document.getElementById('contactPhone').value
+        };
+
+        try {
+            await updateContactInAPI(contact.id, updatedContact);
+        } catch (error) {
+            console.error('Error updating contact:', error);
+        }
+    }
+
+    const updateContactButton = document.getElementById('createContactButton');
+    updateContactButton.innerText = 'Update contact';
+    updateContactButton.addEventListener('click', updateContact);
+}
+
+async function updateContactInAPI(contactId, contact) {
+    try {
+        const sanitizedContact = {
+            Name: contact.Name || '',
+            Email: contact.Email || '',
+            Phone: contact.Phone || ''
+        };
+        let response = await fetch(`${API_URL}/${contactId}.json`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(sanitizedContact)
+        });
+        if (!response.ok) {
+            throw new Error('Failed to update contact');
+        }
+
+        await loadData();
+        closeOverlay();
+    } catch (error) {
+        console.error('Error updating contact:', error);
+    }
+}
+
+async function fetchData() {
+    let response = await fetch(`${API_URL}.json`);
+    if (!response.ok) {
+        throw new Error('Error fetching contacts');
+    }
+    let data = await response.json();
+    if (typeof data !== 'object') {
+        throw new Error('Unexpected data format');
+    }
+    let result = [];
+    for (let key in data) {
+        if (data.hasOwnProperty(key)) {
+            result.push({ id: key, ...data[key] });
+        }
+    }
+    return result;
 }
 
 function init() {
