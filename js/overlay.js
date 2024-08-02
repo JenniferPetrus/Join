@@ -62,9 +62,9 @@ function setupBackgroundClick() {
 }
 
 function setupCancelButton() {
-    const cancelButton = document.querySelector('.action-button:first-of-type');
+    const cancelButton = document.getElementById('cancelButton');
     if (cancelButton) {
-        cancelButton.addEventListener('click', clearInputFields);
+        cancelButton.addEventListener('click', closeOverlay);
     } else {
         console.error('Cancel button not found');
     }
