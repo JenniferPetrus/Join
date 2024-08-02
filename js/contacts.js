@@ -120,6 +120,9 @@ async function setupEditContact() {
 
     const overlayTitle = document.querySelector('.text-bold');
     overlayTitle.innerText = 'Edit Contact';
+    
+    const overlaySubtitle = document.querySelector('.text-normal');
+    overlaySubtitle.style.display = 'none';
 
     document.getElementById('contactName').value = contact.Name;
     document.getElementById('contactEmail').value = contact.Email;
