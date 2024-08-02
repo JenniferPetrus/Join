@@ -63,9 +63,14 @@ function renderContacts(groupedContacts) {
 async function loadData() {
     try {
         contactsData = await fetchData();
-        contactsData.sort((a, b) => a.Name.localeCompare(b.Name));
-        let groupedContacts = groupContacts(contactsData);
-        renderContacts(groupedContacts);
+         if (contactsData && contactsData.length > 0) {
+            contactsData = contactsData.filter(contact => contact && contact.Name);
+            contactsData.sort((a, b) => a.Name.localeCompare(b.Name));
+            let groupedContacts = groupContacts(contactsData);
+            renderContacts(groupedContacts);
+        } else {
+            console.error('No valid contacts data found.');
+        }
     } catch (error) {
         console.error('Error:', error);
     }
