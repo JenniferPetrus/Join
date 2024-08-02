@@ -26,7 +26,8 @@ function displayOverlay(html) {
     showOverlay();
     setupCloseButton();
     setupBackgroundClick();
-    setupCancelButton(); 
+    setupCancelButton();
+    setupCreateContactButton();
 }
 
 function showOverlay() {
@@ -95,4 +96,78 @@ function clearOverlayContent() {
 
 function handleError(error) {
     console.error('Error loading overlay:', error);
+}
+
+// ADD NEW CONTACT
+async function setupCreateContactButton() {
+    const createContactButton = document.getElementById('createContactButton');
+    if (createContactButton) {
+        createContactButton.addEventListener('click', createContact);
+    } else {
+        console.error('Create contact button not found');
+    }
+}
+
+async function createContact() {
+    const name = document.getElementById('contactName').value;
+    const email = document.getElementById('contactEmail').value;
+    const phone = document.getElementById('contactPhone').value;
+
+    if (name && email && phone) {
+        const newContact = {
+            Name: name,
+            Email: email,
+            Phone: phone
+        };
+        try {
+            const contacts = await fetchData();
+            const nextId = contacts.length;
+            addContactToAPI(nextId, newContact);
+        } catch (error) {
+            console.error('Error fetching contacts:', error);
+        }
+    } else {
+        alert('Please fill in all fields');
+    }
+}
+
+function addContactToAPI(id, contact) {
+    fetch(`${API_URL}/${id}.json`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(contact)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to add contact');
+        }
+        return response.json();
+    })
+    .then(() => {
+        loadData();
+        closeOverlay();
+    })
+    .catch(error => {
+        console.error('Error adding contact:', error);
+    });
+}
+
+async function fetchData() {
+    let response = await fetch(`${API_URL}.json`);
+    if (!response.ok) {
+        throw new Error('Error fetching contacts');
+    }
+    let data = await response.json();
+    if (typeof data !== 'object') {
+        throw new Error('Unexpected data format');
+    }
+    let result = [];
+    for (let key in data) {
+        if (data.hasOwnProperty(key)) {
+            result.push({ id: key, ...data[key] });
+        }
+    }
+    return result;
 }
