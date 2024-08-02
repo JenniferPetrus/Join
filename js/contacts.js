@@ -167,6 +167,7 @@ async function updateContactInAPI(contactId, contact) {
         }
 
         await loadData();
+        showContactDetails(currentContactIndex);
         closeOverlay();
     } catch (error) {
         console.error('Error updating contact:', error);
