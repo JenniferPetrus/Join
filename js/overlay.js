@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', initialize);
 
 function initialize() {
     setupAddContactButton();
+    setupCloseIcon();
 }
 
 function setupAddContactButton() {
@@ -10,6 +11,15 @@ function setupAddContactButton() {
         addContactButton.addEventListener('click', loadOverlay);
     } else {
         console.error('Add contact button not found');
+    }
+}
+
+function setupCloseIcon() {
+    const closeIcon = document.querySelector('.close-icon');
+    if (closeIcon) {
+        closeIcon.addEventListener('click', closeOverlay);
+    } else {
+        console.error('Close icon not found');
     }
 }
 
@@ -28,6 +38,7 @@ function displayOverlay(html) {
     setupBackgroundClick();
     setupCancelButton();
     setupCreateContactButton();
+    setupCloseIcon(); 
 }
 
 function showOverlay() {
