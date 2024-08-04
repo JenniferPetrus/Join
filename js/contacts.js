@@ -63,7 +63,7 @@ function renderContacts(groupedContacts) {
 async function loadData() {
     try {
         contactsData = await fetchData();
-         if (contactsData && contactsData.length > 0) {
+        if (contactsData && contactsData.length > 0) {
             contactsData = contactsData.filter(contact => contact && contact.Name);
             contactsData.sort((a, b) => a.Name.localeCompare(b.Name));
             let groupedContacts = groupContacts(contactsData);
@@ -72,7 +72,7 @@ async function loadData() {
             console.error('No valid contacts data found.');
         }
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error loading data:', error);
     }
 }
 
@@ -212,18 +212,6 @@ function hideChosenContact() {
     let chosenContact = document.getElementById('chosenContacts');
     chosenContact.style.display = 'none';
 }
-
-// function showDeleteSuccessMessage() {
-//     let messageContainer = document.createElement('div');
-//     messageContainer.className = 'delete-success-message';
-//     messageContainer.innerText = 'Contact successfully deleted';
-    
-//     document.body.appendChild(messageContainer);
-
-//     setTimeout(() => {
-//         messageContainer.remove();
-//     }, 3000);
-// }
 
 function showSuccessMessage(message) {
     let messageContainer = document.createElement('div');

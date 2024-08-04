@@ -131,20 +131,26 @@ async function createContact() {
             Phone: phone
         };
         try {
-            const contacts = await fetchData();
-            const nextId = contacts.length;
-            addContactToAPI(nextId, newContact);
+            const newContactId = await addContactToAPI(newContact);
+            await loadData(); 
+            const index = contactsData.findIndex(contact => contact.id === newContactId);
+
+            if (index !== -1) {
+                showContactDetails(index);
+            }
+            closeOverlay();
+            showSuccessMessage('Contact successfully added');
         } catch (error) {
-            console.error('Error fetching contacts:', error);
+            console.error('Error creating contact:', error);
         }
     } else {
         alert('Please fill in all fields');
     }
 }
 
-function addContactToAPI(id, contact) {
-    fetch(`${API_URL}/${id}.json`, {
-        method: 'PUT',
+function addContactToAPI(contact) {
+    return fetch(`${API_URL}.json`, {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -156,11 +162,7 @@ function addContactToAPI(id, contact) {
         }
         return response.json();
     })
-    .then(() => {
-        loadData();
-        closeOverlay();
-        showSuccessMessage('Contact successfully added');
-    })
+    .then(data => data.name)
     .catch(error => {
         console.error('Error adding contact:', error);
     });
