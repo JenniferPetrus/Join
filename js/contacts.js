@@ -98,7 +98,6 @@ function showContactDetails(index) {
 
     document.querySelector('.contact-edit').addEventListener('click', setupEditContact);
     document.querySelector('.contact-delete').addEventListener('click', () => deleteContact(contact.id));
-
 }
 
 function getInitials(name) {
@@ -141,6 +140,7 @@ async function setupEditContact() {
 
         try {
             await updateContactInAPI(contact.id, updatedContact);
+            showSuccessMessage('Contact successfully edited');
         } catch (error) {
             console.error('Error updating contact:', error);
         }
@@ -202,7 +202,7 @@ async function deleteContact(contactId) {
         });
         await loadData();
         hideChosenContact();
-        showDeleteSuccessMessage();
+        showSuccessMessage('Contact successfully deleted');
     } catch (error) {
         console.error('Error deleting contact:', error);
     }
@@ -213,10 +213,22 @@ function hideChosenContact() {
     chosenContact.style.display = 'none';
 }
 
-function showDeleteSuccessMessage() {
+// function showDeleteSuccessMessage() {
+//     let messageContainer = document.createElement('div');
+//     messageContainer.className = 'delete-success-message';
+//     messageContainer.innerText = 'Contact successfully deleted';
+    
+//     document.body.appendChild(messageContainer);
+
+//     setTimeout(() => {
+//         messageContainer.remove();
+//     }, 3000);
+// }
+
+function showSuccessMessage(message) {
     let messageContainer = document.createElement('div');
-    messageContainer.className = 'delete-success-message';
-    messageContainer.innerText = 'Contact successfully deleted';
+    messageContainer.className = 'success-message';
+    messageContainer.innerText = message;
     
     document.body.appendChild(messageContainer);
 

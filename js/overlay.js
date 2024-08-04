@@ -159,6 +159,7 @@ function addContactToAPI(id, contact) {
     .then(() => {
         loadData();
         closeOverlay();
+        showSuccessMessage('Contact successfully added');
     })
     .catch(error => {
         console.error('Error adding contact:', error);
