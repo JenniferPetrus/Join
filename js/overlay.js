@@ -34,6 +34,8 @@ function loadAddContactOverlay() {
         })
         .then(function(html) {
             displayOverlay(html, 'Add contact');
+            setCreateContactButton();
+            setCancelButton();
         })
         .catch(handleError);
 }
@@ -64,15 +66,14 @@ function showOverlay() {
 function setOverlayInteractions() {
     setOverlayCloseButton();
     setOverlayBackgroundClick();
-    setCancelButton();
-    setCreateContactButton();
-    setCloseIcon();
 }
 
 function setOverlayCloseButton() {
     let closeButton = document.querySelector('.close-icon');
     if (closeButton) {
-        closeButton.onclick = closeOverlay;
+        closeButton.onclick = function() {
+            closeOverlay(true);
+        };
     } else {
         console.error('Close button not found');
     }
@@ -83,7 +84,7 @@ function setOverlayBackgroundClick() {
     if (overlay) {
         overlay.onclick = function(event) {
             if (event.target === overlay) {
-                closeOverlay();
+                closeOverlay(true);
             }
         };
     } else {
@@ -94,6 +95,7 @@ function setOverlayBackgroundClick() {
 function setCancelButton() {
     let cancelButton = document.getElementById('cancelButton');
     if (cancelButton) {
+        cancelButton.innerText = 'Cancel';
         cancelButton.onclick = closeOverlay;
     } else {
         console.error('Cancel button not found');
@@ -103,18 +105,24 @@ function setCancelButton() {
 function setCreateContactButton() {
     let createContactButton = document.getElementById('createContactButton');
     if (createContactButton) {
+        createContactButton.innerText = 'Create contact';
         createContactButton.onclick = createContact;
     } else {
         console.error('Create contact button not found');
     }
 }
 
-function closeOverlay() {
+function closeOverlay(updateRequired) {
     let overlay = document.querySelector('.overlay');
     if (overlay) {
         overlay.classList.remove('show');
         overlay.classList.add('hide');
-        setTimeout(clearOverlayContent, 500);
+        setTimeout(function() {
+            clearOverlayContent();
+            if (updateRequired) {
+                loadData();
+            }
+        }, 500);
     }
 }
 
@@ -157,6 +165,7 @@ function addContactToAPI(contact) {
         })
         .then(function(response) {
             if (response.ok) {
+                closeOverlay(true);
                 return nextId;
             } else {
                 throw new Error('Failed to add contact');

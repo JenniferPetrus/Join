@@ -3,26 +3,14 @@ let contactsData = [];
 let contactColors = {};
 
 const colors = [
-    '#A8A8A8', '#D1D1D1', '#CDCDCD', '#007CEE', '#FF7A00', '#FF5EB3', 
-    '#6E52FF', '#9327FF', '#00BEE8', '#1FD7C1', '#FF745E', '#FFA35E', 
+    '#A8A8A8', '#D1D1D1', '#CDCDCD', '#007CEE', '#FF7A00', '#FF5EB3',
+    '#6E52FF', '#9327FF', '#00BEE8', '#1FD7C1', '#FF745E', '#FFA35E',
     '#FC71FF', '#FFC701', '#0038FF', '#C3FF2B', '#FFE62B', '#FF4646', '#FFBB2B'
 ];
 
 function getRandomColor() {
     return colors[Math.floor(Math.random() * colors.length)];
 }
-
-// async function fetchData() {
-//     let response = await fetch(API_URL + ".json");
-//     if (!response.ok) {
-//         throw new Error('Error');
-//     }
-//     let data = await response.json();
-//     if (!Array.isArray(data)) {
-//         throw new Error('Error');
-//     }
-//     return data;
-// }
 
 function groupContacts(contacts) {
     return contacts.reduce((grouped, contact) => {
@@ -45,7 +33,7 @@ function renderContacts(groupedContacts) {
             let color = getRandomColor();
             contactColors[contactsData.indexOf(contact)] = color;
 
-            contacts.innerHTML += /*html*/ `
+            contacts.innerHTML += `
                 <div class="single-contact" onclick="showContactDetails(${contactsData.indexOf(contact)})">
                     <div class="contactIcon" style="background-color: ${color};">${initials}</div>
                     <div>
@@ -79,7 +67,7 @@ async function loadData() {
 function showContactDetails(index) {
     let contact = contactsData[index];
     let color = contactColors[index];
-    
+
     let chosenContact = document.getElementById('chosenContacts');
     chosenContact.style.display = 'block';
 
@@ -119,7 +107,7 @@ async function setupEditContact() {
 
     const overlayTitle = document.querySelector('.text-bold');
     overlayTitle.innerText = 'Edit Contact';
-    
+
     const overlaySubtitle = document.querySelector('.text-normal');
     overlaySubtitle.style.display = 'none';
 
@@ -127,28 +115,46 @@ async function setupEditContact() {
     document.getElementById('contactEmail').value = contact.Email;
     document.getElementById('contactPhone').value = contact.Phone;
 
-    setupCloseButton();
-    setupBackgroundClick();
-    setupCancelButton();
+    setEditCancelButton();
+    setSaveContactButton(contact.id);
+}
 
-    async function updateContact() {
-        const updatedContact = {
-            Name: document.getElementById('contactName').value,
-            Email: document.getElementById('contactEmail').value,
-            Phone: document.getElementById('contactPhone').value
-        };
-
-        try {
-            await updateContactInAPI(contact.id, updatedContact);
-            showSuccessMessage('Contact successfully edited');
-        } catch (error) {
-            console.error('Error updating contact:', error);
-        }
+function setEditCancelButton() {
+    let cancelButton = document.getElementById('cancelButton');
+    if (cancelButton) {
+        cancelButton.innerText = 'Delete';
+        cancelButton.onclick = clearInputFields;
+    } else {
+        console.error('Cancel button not found');
     }
+}
 
-    const updateContactButton = document.getElementById('createContactButton');
-    updateContactButton.innerText = 'Update contact';
-    updateContactButton.addEventListener('click', updateContact);
+function setSaveContactButton(contactId) {
+    let saveContactButton = document.getElementById('createContactButton');
+    if (saveContactButton) {
+        saveContactButton.innerText = 'Save';
+        saveContactButton.onclick = function() {
+            saveContact(contactId);
+        };
+    } else {
+        console.error('Save contact button not found');
+    }
+}
+
+async function saveContact(contactId) {
+    const updatedContact = {
+        Name: document.getElementById('contactName').value,
+        Email: document.getElementById('contactEmail').value,
+        Phone: document.getElementById('contactPhone').value
+    };
+
+    try {
+        await updateContactInAPI(contactId, updatedContact);
+        showSuccessMessage('Contact successfully edited');
+        closeOverlay(true);
+    } catch (error) {
+        console.error('Error updating contact:', error);
+    }
 }
 
 async function updateContactInAPI(contactId, contact) {
@@ -171,7 +177,6 @@ async function updateContactInAPI(contactId, contact) {
 
         await loadData();
         showContactDetails(currentContactIndex);
-        closeOverlay();
     } catch (error) {
         console.error('Error updating contact:', error);
     }
@@ -184,7 +189,6 @@ async function fetchData() {
             throw new Error('Error fetching contacts');
         }
         let data = await response.json();
-        console.log('Fetched data:', data);
         if (typeof data !== 'object') {
             throw new Error('Unexpected data format');
         }
@@ -223,12 +227,21 @@ function showSuccessMessage(message) {
     let messageContainer = document.createElement('div');
     messageContainer.className = 'success-message';
     messageContainer.innerText = message;
-    
+
     document.body.appendChild(messageContainer);
 
     setTimeout(() => {
         messageContainer.remove();
     }, 3000);
+}
+
+function clearInputFields() {
+    document.getElementById('contactName').value = '';
+    document.getElementById('contactEmail').value = '';
+    document.getElementById('contactPhone').value = '';
+    document.getElementById('contactName').placeholder = 'Name';
+    document.getElementById('contactEmail').placeholder = 'Email';
+    document.getElementById('contactPhone').placeholder = 'Phone';
 }
 
 function init() {
