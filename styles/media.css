@@ -196,7 +196,7 @@
     }
 
     .edit-delete-setting{
-        display: block;
+        display: flex !important;
         position: fixed;
         height: 50px;
         border-radius: 60px;
@@ -285,17 +285,18 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 100%;
-        height: auto;
+        width: 320px;
+        height: 700px;
         max-width: 50%;
-        max-height: 100%;
-        box-sizing: border-box;
+        max-height: 800px;
     }
 
     .overlay-content>.left-pane{
         border-radius: 15px 15px 0 0;
-        width: 400px;
+        width: 320px;
         height: 350px;
+        position: fixed;
+        bottom: 500px;
     }
 
     .logo-container {
@@ -307,9 +308,11 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 400px; 
+        width: 320px; 
         height: 350px;
         border-radius: 0 0 15px 15px;
+        position: fixed;
+        bottom: 170px;
     }
 
     .button-group {
@@ -318,5 +321,19 @@
         width: 100%; 
     }
 
+    .right-pane>.spacer{
+        background-color: transparent;
+        position: fixed;
+        bottom: 470px;
+        height: 120px;
+        width: 120px;
+    }
 
+    .right-pane>.close-icon{
+        position: fixed;
+        top: 60px;
+        right: 170px;
+        height: 15px;
+        content: url('/assets/img/close.svg');
+    }
 }

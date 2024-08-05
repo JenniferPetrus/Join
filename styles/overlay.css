@@ -175,7 +175,6 @@
 }
 
 #cancelButton:hover::after {
-    content: "X";
     position: absolute;
     color: white;
     font-size: 16px;

@@ -276,3 +276,7 @@ body{
 .contact-setting{
     display: none;
 }
+
+.edit-delete-setting{
+    display: none;
+}
