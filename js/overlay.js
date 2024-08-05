@@ -148,24 +148,51 @@ async function createContact() {
     }
 }
 
-function addContactToAPI(contact) {
-    return fetch(`${API_URL}.json`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(contact)
-    })
-    .then(response => {
+async function getNextId() {
+    try {
+        let response = await fetch(`${API_URL}.json`);
+        if (!response.ok) {
+            throw new Error('Error fetching contacts');
+        }
+        let data = await response.json();
+        console.log('Fetched data:', data);
+        if (typeof data !== 'object') {
+            throw new Error('Unexpected data format');
+        }
+        let ids = Object.keys(data).map(key => {
+            let num = parseInt(key, 10);
+            if (isNaN(num)) {
+                console.warn('Key is not a number:', key);
+            }
+            return num;
+        }).filter(num => !isNaN(num));
+
+        console.log('IDs:', ids);
+        return ids.length ? Math.max(...ids) + 1 : 1;
+    } catch (error) {
+        console.error('Error in getNextId:', error);
+        return 1;
+    }
+}
+
+async function addContactToAPI(contact) {
+    try {
+        const nextId = await getNextId();
+        console.log('Next ID:', nextId);
+        let response = await fetch(`${API_URL}/${nextId}.json`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(contact)
+        });
         if (!response.ok) {
             throw new Error('Failed to add contact');
         }
-        return response.json();
-    })
-    .then(data => data.name)
-    .catch(error => {
+        return nextId;
+    } catch (error) {
         console.error('Error adding contact:', error);
-    });
+    }
 }
 
 async function fetchData() {

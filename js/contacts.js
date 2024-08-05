@@ -12,17 +12,17 @@ function getRandomColor() {
     return colors[Math.floor(Math.random() * colors.length)];
 }
 
-async function fetchData() {
-    let response = await fetch(API_URL + ".json");
-    if (!response.ok) {
-        throw new Error('Error');
-    }
-    let data = await response.json();
-    if (!Array.isArray(data)) {
-        throw new Error('Error');
-    }
-    return data;
-}
+// async function fetchData() {
+//     let response = await fetch(API_URL + ".json");
+//     if (!response.ok) {
+//         throw new Error('Error');
+//     }
+//     let data = await response.json();
+//     if (!Array.isArray(data)) {
+//         throw new Error('Error');
+//     }
+//     return data;
+// }
 
 function groupContacts(contacts) {
     return contacts.reduce((grouped, contact) => {
@@ -178,21 +178,27 @@ async function updateContactInAPI(contactId, contact) {
 }
 
 async function fetchData() {
-    let response = await fetch(`${API_URL}.json`);
-    if (!response.ok) {
-        throw new Error('Error fetching contacts');
-    }
-    let data = await response.json();
-    if (typeof data !== 'object') {
-        throw new Error('Unexpected data format');
-    }
-    let result = [];
-    for (let key in data) {
-        if (data.hasOwnProperty(key)) {
-            result.push({ id: key, ...data[key] });
+    try {
+        let response = await fetch(`${API_URL}.json`);
+        if (!response.ok) {
+            throw new Error('Error fetching contacts');
         }
+        let data = await response.json();
+        console.log('Fetched data:', data);
+        if (typeof data !== 'object') {
+            throw new Error('Unexpected data format');
+        }
+        let result = [];
+        for (let key in data) {
+            if (data.hasOwnProperty(key)) {
+                result.push({ id: key, ...data[key] });
+            }
+        }
+        return result;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
     }
-    return result;
 }
 
 async function deleteContact(contactId) {
