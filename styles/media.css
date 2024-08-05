@@ -1,0 +1,137 @@
+/*FOOTER */
+@media(max-width: 700px){
+    #Navbar{
+        width: 100vw;
+        height: 12px;
+        bottom: 0;
+        top: auto;
+        display: block;
+        padding-top: 0;
+        padding-bottom: 80px;
+    }
+
+    #LogoLeft{
+        display: none;
+    }
+
+    #Impressum{
+        display: none;
+    }
+
+    #NavLeft{
+        display: flex;
+        font-size: 14px;
+    }
+
+    .NavGap{
+        display: flex;
+        flex-direction: column;
+        padding: 30px;
+    }
+
+
+}
+
+@media(max-width: 500px){
+    .NavGap{
+        padding: 15px;
+        padding-top: 20px;
+        font-size: 10px;
+    }
+
+    #Navleft{
+        font-size: 10px;
+    }
+}
+
+
+/*HEADER*/
+
+@media(max-width: 700px){
+    #header{
+        display: none;
+    }
+
+   #responsive-header{
+        width: 100vw;
+        left: 0;
+        justify-content: space-around;
+        position: absolute;
+        top: 0;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        font-size: 20px;
+        background-color: white;
+        box-shadow: 0px 4px 4px 0px #0000001A;
+        justify-content: space-around;
+   }
+
+   .header-logo-responsive img{
+        height: 50px;
+   }
+
+}
+
+/*Contacts Content*/
+@media(max-width: 700px){
+    .contact-header{
+        display: none;
+    }
+
+    .main-contactlist{
+        left: 0 ;
+        width: 100vw;
+        align-items: center;
+        height: 500px;
+    }
+
+    .add-contact-btn{
+        display: none;
+    }
+
+    .background-btn{
+        display: none;   
+    }
+
+    .contacts-section{
+        margin-top: 30px;
+       
+    }
+
+    .contact-setting{
+        display: block;
+        position: fixed;
+        height: 50px;
+        border-radius: 60px;
+        background-color: #2a3647;
+        bottom: 110px;
+        right: 30px;
+    }
+}
+
+@media(max-width: 500px){
+
+    .single-contact{
+        padding: 0;
+        margin-left: 10px;
+    }
+
+    .contact-list-name{
+        font-size: 14px;
+    }
+
+    .single-contact a{
+        font-size: 14px;
+    }
+
+    .contacts-section {
+        margin-left: 120px;
+    }
+
+    .vector {
+        width: 240px;
+    }    
+}
+
+

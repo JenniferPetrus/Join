@@ -140,3 +140,7 @@ body {
     margin-bottom: 54px;
     margin-top: 31px;
 }
+
+#responsive-header{
+    display: none;
+}
