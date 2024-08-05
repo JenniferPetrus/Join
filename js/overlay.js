@@ -1,23 +1,29 @@
-document.addEventListener('DOMContentLoaded', initialize);
+document.onload = function() {
+    initialize();
+};
 
 function initialize() {
-    setupAddContactButton();
-    setupCloseIcon();
+    setUpButtons();
 }
 
-function setupAddContactButton() {
-    const addContactButton = document.querySelector('.add-contact-btn');
+function setUpButtons() {
+    setAddContactButton();
+    setCloseIcon();
+}
+
+function setAddContactButton() {
+    var addContactButton = document.querySelector('.add-contact-btn');
     if (addContactButton) {
-        addContactButton.addEventListener('click', loadOverlay);
+        addContactButton.onclick = loadOverlay;
     } else {
         console.error('Add contact button not found');
     }
 }
 
-function setupCloseIcon() {
-    const closeIcon = document.querySelector('.close-icon');
+function setCloseIcon() {
+    var closeIcon = document.querySelector('.close-icon');
     if (closeIcon) {
-        closeIcon.addEventListener('click', closeOverlay);
+        closeIcon.onclick = closeOverlay;
     } else {
         console.error('Close icon not found');
     }
@@ -25,72 +31,80 @@ function setupCloseIcon() {
 
 function loadOverlay() {
     fetch('overlay.html')
-        .then(response => response.text())
+        .then(function(response) {
+            return response.text();
+        })
         .then(displayOverlay)
         .catch(handleError);
 }
 
 function displayOverlay(html) {
-    const overlayContainer = document.getElementById('overlay-container');
+    var overlayContainer = document.getElementById('overlay-container');
     overlayContainer.innerHTML = html;
     showOverlay();
-    setupCloseButton();
-    setupBackgroundClick();
-    setupCancelButton();
-    setupCreateContactButton();
-    setupCloseIcon(); 
 }
 
 function showOverlay() {
-    const overlay = document.querySelector('.overlay');
+    var overlay = document.querySelector('.overlay');
     if (overlay) {
         overlay.classList.remove('hide');
         overlay.classList.add('show');
+        setOverlayInteractions();
     } else {
         console.error('Overlay element not found');
     }
 }
 
-function setupCloseButton() {
-    const closeButton = document.getElementById('overlay-close-btn');
+function setOverlayInteractions() {
+    setOverlayCloseButton();
+    setOverlayBackgroundClick();
+    setCancelButton();
+    setCreateContactButton();
+    setCloseIcon();
+}
+
+function setOverlayCloseButton() {
+    var closeButton = document.getElementById('overlay-close-btn');
     if (closeButton) {
-        closeButton.addEventListener('click', closeOverlay);
+        closeButton.onclick = closeOverlay;
     } else {
         console.error('Close button not found');
     }
 }
 
-function setupBackgroundClick() {
-    const overlay = document.querySelector('.overlay');
+function setOverlayBackgroundClick() {
+    var overlay = document.querySelector('.overlay');
     if (overlay) {
-        overlay.addEventListener('click', function(event) {
+        overlay.onclick = function(event) {
             if (event.target === overlay) {
                 closeOverlay();
             }
-        });
+        };
     } else {
         console.error('Overlay element not found');
     }
 }
 
-function setupCancelButton() {
-    const cancelButton = document.getElementById('cancelButton');
+function setCancelButton() {
+    var cancelButton = document.getElementById('cancelButton');
     if (cancelButton) {
-        cancelButton.addEventListener('click', closeOverlay);
+        cancelButton.onclick = closeOverlay;
     } else {
         console.error('Cancel button not found');
     }
 }
 
-function clearInputFields() {
-    const inputFields = document.querySelectorAll('.styled-input');
-    inputFields.forEach(input => {
-        input.value = '';
-    });
+function setCreateContactButton() {
+    var createContactButton = document.getElementById('createContactButton');
+    if (createContactButton) {
+        createContactButton.onclick = createContact;
+    } else {
+        console.error('Create contact button not found');
+    }
 }
 
 function closeOverlay() {
-    const overlay = document.querySelector('.overlay');
+    var overlay = document.querySelector('.overlay');
     if (overlay) {
         overlay.classList.remove('show');
         overlay.classList.add('hide');
@@ -99,7 +113,7 @@ function closeOverlay() {
 }
 
 function clearOverlayContent() {
-    const overlayContainer = document.getElementById('overlay-container');
+    var overlayContainer = document.getElementById('overlay-container');
     if (overlayContainer) {
         overlayContainer.innerHTML = '';
     }
@@ -109,106 +123,71 @@ function handleError(error) {
     console.error('Error loading overlay:', error);
 }
 
-// ADD NEW CONTACT
-async function setupCreateContactButton() {
-    const createContactButton = document.getElementById('createContactButton');
-    if (createContactButton) {
-        createContactButton.addEventListener('click', createContact);
-    } else {
-        console.error('Create contact button not found');
-    }
-}
-
-async function createContact() {
-    const name = document.getElementById('contactName').value;
-    const email = document.getElementById('contactEmail').value;
-    const phone = document.getElementById('contactPhone').value;
+function createContact() {
+    var name = document.getElementById('contactName').value;
+    var email = document.getElementById('contactEmail').value;
+    var phone = document.getElementById('contactPhone').value;
 
     if (name && email && phone) {
-        const newContact = {
+        var newContact = {
             Name: name,
             Email: email,
             Phone: phone
         };
-        try {
-            const newContactId = await addContactToAPI(newContact);
-            await loadData(); 
-            const index = contactsData.findIndex(contact => contact.id === newContactId);
-
-            if (index !== -1) {
-                showContactDetails(index);
-            }
-            closeOverlay();
-            showSuccessMessage('Contact successfully added');
-        } catch (error) {
-            console.error('Error creating contact:', error);
-        }
+        addContactToAPI(newContact);
     } else {
         alert('Please fill in all fields');
     }
 }
 
-async function getNextId() {
-    try {
-        let response = await fetch(`${API_URL}.json`);
-        if (!response.ok) {
-            throw new Error('Error fetching contacts');
-        }
-        let data = await response.json();
-        console.log('Fetched data:', data);
-        if (typeof data !== 'object') {
-            throw new Error('Unexpected data format');
-        }
-        let ids = Object.keys(data).map(key => {
-            let num = parseInt(key, 10);
-            if (isNaN(num)) {
-                console.warn('Key is not a number:', key);
-            }
-            return num;
-        }).filter(num => !isNaN(num));
-
-        console.log('IDs:', ids);
-        return ids.length ? Math.max(...ids) + 1 : 1;
-    } catch (error) {
-        console.error('Error in getNextId:', error);
-        return 1;
-    }
-}
-
-async function addContactToAPI(contact) {
-    try {
-        const nextId = await getNextId();
-        console.log('Next ID:', nextId);
-        let response = await fetch(`${API_URL}/${nextId}.json`, {
+function addContactToAPI(contact) {
+    getNextId().then(function(nextId) {
+        fetch(`${API_URL}/${nextId}.json`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(contact)
+        })
+        .then(function(response) {
+            if (response.ok) {
+                return nextId;
+            } else {
+                throw new Error('Failed to add contact');
+            }
+        })
+        .catch(function(error) {
+            console.error('Error adding contact:', error);
         });
-        if (!response.ok) {
-            throw new Error('Failed to add contact');
-        }
-        return nextId;
-    } catch (error) {
-        console.error('Error adding contact:', error);
-    }
+    });
 }
 
-async function fetchData() {
-    let response = await fetch(`${API_URL}.json`);
-    if (!response.ok) {
-        throw new Error('Error fetching contacts');
-    }
-    let data = await response.json();
-    if (typeof data !== 'object') {
-        throw new Error('Unexpected data format');
-    }
-    let result = [];
-    for (let key in data) {
-        if (data.hasOwnProperty(key)) {
-            result.push({ id: key, ...data[key] });
-        }
-    }
-    return result;
+function getNextId() {
+    return fetch(`${API_URL}.json`)
+        .then(function(response) {
+            if (!response.ok) {
+                throw new Error('Error fetching contacts');
+            }
+            return response.json();
+        })
+        .then(function(data) {
+            if (typeof data !== 'object') {
+                throw new Error('Unexpected data format');
+            }
+            var ids = Object.keys(data).map(function(key) {
+                var num = parseInt(key, 10);
+                if (isNaN(num)) {
+                    console.warn('Key is not a number:', key);
+                }
+                return num;
+            }).filter(function(num) {
+                return !isNaN(num);
+            });
+
+            return ids.length ? Math.max(...ids) + 1 : 1;
+        })
+        .catch(function(error) {
+            console.error('Error in getNextId:', error);
+            return 1;
+        });
 }
