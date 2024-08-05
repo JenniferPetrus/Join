@@ -117,6 +117,13 @@ async function setupEditContact() {
 
     setEditCancelButton();
     setSaveContactButton(contact.id);
+
+    document.getElementById('editDeleteSetting').style.display = 'none';
+    document.querySelector('.contact-change').style.display = 'none';
+    document.getElementsByClassName('edit-delete-setting').style.display = 'none';
+
+    const cancelButton = document.getElementById('cancelButton');
+    cancelButton.addEventListener('click', closeEditContact);
 }
 
 function setEditCancelButton() {
@@ -243,6 +250,25 @@ function clearInputFields() {
     document.getElementById('contactEmail').placeholder = 'Email';
     document.getElementById('contactPhone').placeholder = 'Phone';
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const editDeleteSettingButton = document.querySelector('.edit-delete-setting');
+    const contactChangeElement = document.querySelector('.contact-change');
+    const editDeleteSettingElement = document.querySelector('#editDeleteSetting');
+    editDeleteSettingButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        if (contactChangeElement.style.display === 'none') {
+            contactChangeElement.style.display = 'flex';
+        } else {
+            contactChangeElement.style.display = 'none';
+        }
+        if (editDeleteSettingElement.style.display === 'none') {
+            editDeleteSettingElement.style.display = 'flex';
+        } else {
+            editDeleteSettingElement.style.display = 'none';
+        }
+    });
+});
 
 function init() {
     loadData();

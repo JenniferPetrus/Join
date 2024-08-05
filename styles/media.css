@@ -213,6 +213,7 @@
         bottom: 230px;
         gap: 0;
         z-index: 3;
+        display: none;
     }
 
     .contact-edit>img{
@@ -229,7 +230,7 @@
         padding: 10px 0px 0px 0px;
         border-radius: 20px 20px 0px 20px;
         box-shadow: 0px 4px 4px 0px #00000040;
-        display: flex;
+        display: none;
         flex-direction: column;
         justify-content: center;
         padding: 10px;
