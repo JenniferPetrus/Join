@@ -1,6 +1,7 @@
 let API_URL = "https://join-d67a5-default-rtdb.europe-west1.firebasedatabase.app/";
 let contactsData = [];
 let contactColors = {};
+let currentContactIndex = null;
 
 const colors = [
     '#A8A8A8', '#D1D1D1', '#CDCDCD', '#007CEE', '#FF7A00', '#FF5EB3',
@@ -86,6 +87,15 @@ function showContactDetails(index) {
 
     document.querySelector('.contact-edit').addEventListener('click', setupEditContact);
     document.querySelector('.contact-delete').addEventListener('click', () => deleteContact(contact.id));
+
+    showEditDeleteButtons();
+}
+
+function showEditDeleteButtons() {
+    const contactChangeElement = document.querySelector('.contact-change');
+    if (contactChangeElement) {
+        contactChangeElement.style.display = 'flex';
+    }
 }
 
 function getInitials(name) {
@@ -118,12 +128,26 @@ async function setupEditContact() {
     setEditCancelButton();
     setSaveContactButton(contact.id);
 
-    document.getElementById('editDeleteSetting').style.display = 'none';
     document.querySelector('.contact-change').style.display = 'none';
-    document.getElementsByClassName('edit-delete-setting').style.display = 'none';
 
     const cancelButton = document.getElementById('cancelButton');
     cancelButton.addEventListener('click', closeEditContact);
+}
+
+function closeEditContact() {
+    closeOverlay();
+    reloadPage();
+}
+
+function reloadPage() {
+    document.body.innerHTML = ''; // Entfernt den aktuellen Inhalt des Bodys
+    fetch('contacts.html') // Ruft den HTML-Inhalt der Seite neu ab
+        .then(response => response.text())
+        .then(html => {
+            document.body.innerHTML = html; // Setzt den neuen Inhalt des Bodys
+            init(); // Initialisiert die Seite erneut
+        })
+        .catch(error => console.error('Error loading contacts page:', error));
 }
 
 function setEditCancelButton() {
@@ -254,18 +278,14 @@ function clearInputFields() {
 document.addEventListener('DOMContentLoaded', function() {
     const editDeleteSettingButton = document.querySelector('.edit-delete-setting');
     const contactChangeElement = document.querySelector('.contact-change');
-    const editDeleteSettingElement = document.querySelector('#editDeleteSetting');
     editDeleteSettingButton.addEventListener('click', function(event) {
         event.preventDefault();
-        if (contactChangeElement.style.display === 'none') {
-            contactChangeElement.style.display = 'flex';
-        } else {
-            contactChangeElement.style.display = 'none';
-        }
-        if (editDeleteSettingElement.style.display === 'none') {
-            editDeleteSettingElement.style.display = 'flex';
-        } else {
-            editDeleteSettingElement.style.display = 'none';
+        if (window.innerWidth <= 700) {
+            if (contactChangeElement.style.display === 'none') {
+                contactChangeElement.style.display = 'flex';
+            } else {
+                contactChangeElement.style.display = 'none';
+            }
         }
     });
 });
