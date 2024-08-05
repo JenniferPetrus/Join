@@ -56,7 +56,6 @@
         width: 100vw;
         left: 0;
         justify-content: space-around;
-        position: absolute;
         top: 0;
         height: 90px;
         display: flex;
@@ -65,6 +64,7 @@
         background-color: white;
         box-shadow: 0px 4px 4px 0px #0000001A;
         justify-content: space-around;
+        margin-bottom: 4px;
    }
 
    .header-logo-responsive img{
@@ -135,3 +135,74 @@
 }
 
 
+/*chosen Contact*/
+
+@media(max-width: 700px){
+    .chosen-contact{
+        margin-left: 750px;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        z-index: 1000;
+        margin-left: 0;
+        background-color: #f6f7f8;
+    }
+
+    .contact-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 30px;
+        margin-left: 30px;
+    }
+
+    .contact-name {
+        font-size: 28px;
+    }
+    
+    .contact-change img{
+        height: 16px;
+        width: 16px;
+        margin-top: 16px;
+    }
+
+    .contact-information {
+        margin-left: 30px;
+    }
+
+    .contact-email {
+        margin-left: 30px;
+    }
+
+    .email-address {    
+        margin-left: 30px;
+    }
+
+    .contact-phone {        
+        margin-left: 30px;
+    }
+
+    .phone-number {
+        margin-left: 30px;
+    }
+
+    .contact-header-responsive{
+        display: block !important;
+        margin-left: 30px;
+    }
+
+    .contact-header-responsive>hr {
+        background-color: var(--main-lightblue);
+        height: 2px;
+        width: 100px;
+        border-radius: 3px;
+        border: none;
+        margin: 0;
+        margin-bottom: 30px;
+    }
+
+    .header-and-return{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
