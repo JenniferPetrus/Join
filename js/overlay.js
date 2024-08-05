@@ -6,7 +6,6 @@ function initializeOverlay() {
 
 function setUpButtons() {
     setAddContactButton();
-    setCloseIcon();
 }
 
 function setAddContactButton() {
@@ -18,15 +17,15 @@ function setAddContactButton() {
     }
 }
 
-function setCloseIcon() {
-    let closeIcon = document.querySelector('.close-icon');
-    if (closeIcon) {
-        closeIcon.onclick = closeOverlay;
-    } else {
-        console.error('Close icon not found');
-    }
-}
-
+//function setCloseIcon() {
+//    let closeIcon = document.querySelector('.close-icon');
+//    if (closeIcon) {
+//        closeIcon.onclick = closeOverlay;
+//    } else {
+//        console.error('Close icon not found');
+//    }
+//} 
+//
 function loadAddContactOverlay() {
     fetch('overlay.html')
         .then(function(response) {
