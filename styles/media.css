@@ -331,7 +331,7 @@
     .edit-delete-setting{
         position: fixed;
         height: 30px;
-        bottom: 310px;
+        top: 550px;
         right: 30px;
     }
 
@@ -339,8 +339,8 @@
         flex-direction: column;
         position: fixed;
         align-items: start;
-        left: 500px;
-        bottom: 230px;
+        left: 150px;
+        top: 570px;
         gap: 0;
         z-index: 3;
         display: none;
@@ -367,8 +367,8 @@
         padding-left: 30px;
         gap: 15px;
         position: fixed;
-        left: 460px;
-        bottom: 150px;
+        left: 120px;
+        top: 560px;
     }
     
     #editSetting>img{
