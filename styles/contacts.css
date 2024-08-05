@@ -264,7 +264,7 @@ body{
 .success-message {
     position: fixed;
     top: 320px;
-    right: 600px;
+    right: 380px;
     padding: 15px 25px;
     background-color: #2A3647;
     color: white;
