@@ -1,8 +1,6 @@
-document.onload = function() {
-    initialize();
-};
+document.addEventListener('DOMContentLoaded', initializeOverlay);
 
-function initialize() {
+function initializeOverlay() {
     setUpButtons();
 }
 
@@ -12,16 +10,16 @@ function setUpButtons() {
 }
 
 function setAddContactButton() {
-    var addContactButton = document.querySelector('.add-contact-btn');
+    let addContactButton = document.querySelector('.add-contact-btn');
     if (addContactButton) {
-        addContactButton.onclick = loadOverlay;
+        addContactButton.onclick = loadAddContactOverlay;
     } else {
         console.error('Add contact button not found');
     }
 }
 
 function setCloseIcon() {
-    var closeIcon = document.querySelector('.close-icon');
+    let closeIcon = document.querySelector('.close-icon');
     if (closeIcon) {
         closeIcon.onclick = closeOverlay;
     } else {
@@ -29,23 +27,31 @@ function setCloseIcon() {
     }
 }
 
-function loadOverlay() {
+function loadAddContactOverlay() {
     fetch('overlay.html')
         .then(function(response) {
             return response.text();
         })
-        .then(displayOverlay)
+        .then(function(html) {
+            displayOverlay(html, 'Add contact');
+        })
         .catch(handleError);
 }
 
-function displayOverlay(html) {
-    var overlayContainer = document.getElementById('overlay-container');
+function displayOverlay(html, title) {
+    let overlayContainer = document.getElementById('overlay-container');
     overlayContainer.innerHTML = html;
+
+    let overlayTitle = document.querySelector('.text-bold');
+    if (overlayTitle) {
+        overlayTitle.textContent = title;
+    }
+
     showOverlay();
 }
 
 function showOverlay() {
-    var overlay = document.querySelector('.overlay');
+    let overlay = document.querySelector('.overlay');
     if (overlay) {
         overlay.classList.remove('hide');
         overlay.classList.add('show');
@@ -64,7 +70,7 @@ function setOverlayInteractions() {
 }
 
 function setOverlayCloseButton() {
-    var closeButton = document.getElementById('overlay-close-btn');
+    let closeButton = document.querySelector('.close-icon');
     if (closeButton) {
         closeButton.onclick = closeOverlay;
     } else {
@@ -73,7 +79,7 @@ function setOverlayCloseButton() {
 }
 
 function setOverlayBackgroundClick() {
-    var overlay = document.querySelector('.overlay');
+    let overlay = document.querySelector('.overlay');
     if (overlay) {
         overlay.onclick = function(event) {
             if (event.target === overlay) {
@@ -86,7 +92,7 @@ function setOverlayBackgroundClick() {
 }
 
 function setCancelButton() {
-    var cancelButton = document.getElementById('cancelButton');
+    let cancelButton = document.getElementById('cancelButton');
     if (cancelButton) {
         cancelButton.onclick = closeOverlay;
     } else {
@@ -95,7 +101,7 @@ function setCancelButton() {
 }
 
 function setCreateContactButton() {
-    var createContactButton = document.getElementById('createContactButton');
+    let createContactButton = document.getElementById('createContactButton');
     if (createContactButton) {
         createContactButton.onclick = createContact;
     } else {
@@ -104,7 +110,7 @@ function setCreateContactButton() {
 }
 
 function closeOverlay() {
-    var overlay = document.querySelector('.overlay');
+    let overlay = document.querySelector('.overlay');
     if (overlay) {
         overlay.classList.remove('show');
         overlay.classList.add('hide');
@@ -113,7 +119,7 @@ function closeOverlay() {
 }
 
 function clearOverlayContent() {
-    var overlayContainer = document.getElementById('overlay-container');
+    let overlayContainer = document.getElementById('overlay-container');
     if (overlayContainer) {
         overlayContainer.innerHTML = '';
     }
@@ -124,12 +130,12 @@ function handleError(error) {
 }
 
 function createContact() {
-    var name = document.getElementById('contactName').value;
-    var email = document.getElementById('contactEmail').value;
-    var phone = document.getElementById('contactPhone').value;
+    let name = document.getElementById('contactName').value;
+    let email = document.getElementById('contactEmail').value;
+    let phone = document.getElementById('contactPhone').value;
 
     if (name && email && phone) {
-        var newContact = {
+        let newContact = {
             Name: name,
             Email: email,
             Phone: phone
@@ -174,8 +180,8 @@ function getNextId() {
             if (typeof data !== 'object') {
                 throw new Error('Unexpected data format');
             }
-            var ids = Object.keys(data).map(function(key) {
-                var num = parseInt(key, 10);
+            let ids = Object.keys(data).map(function(key) {
+                let num = parseInt(key, 10);
                 if (isNaN(num)) {
                     console.warn('Key is not a number:', key);
                 }
