@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board</title>
+    <link rel="icon" type="image/x-icon" href="/./assets/img/Logo for Favicon construction.svg">
+    <link rel="stylesheet" href="/styles/board.css">
+    <link rel="stylesheet" href="/assets/fonts/fonts.css">
+    <link rel="stylesheet" href="/styles/root.css">
+    <link rel="stylesheet" href="styles/media.css">
+</head>
+<body onload="init(), includeHTML()">
+    <div w3-include-html="header.html"></div>
+    <div class="wrapper-board">
+        <div class="headline-board">
+            <div class="headline">Board</div>
+            <div class="input-and-addtaskbutton">
+                <div class="input-search"><input type="text" placeholder="Find Task"><img class="vector-input" src="./assets/icons/Board-icons/Vector 3.svg" alt=""><img class="vector-input-search-item" src="./assets/icons/Board-icons/search.svg" alt=""></div>
+                <div><button class="add-task-button">Add task <span>+</span></button></div>
+            </div>
+            
+        </div>
+        <div class="board-task-manager">
+            <div class="task-wrapper">
+                <div class="to-do">To do</div>
+                <div class="in-progress">In progress</div>
+                <div class="await-feedback">Await feedback</div>
+                <div class="done">Done</div>
+            </div>
+            <div class="drag-and-drop-section">
+                <div class="draggable-to-do">DIV</div>
+                <div class="draggable-in-progress">DIV</div>
+                <div class="draggable-await-feedback">DIV</div>
+                <div class="draggable-done">DIV</div>
+            </div>
+        </div>
+    </div>
+    <div w3-include-html="footer.html"></div>
+    <script src="/js/overlay.js"></script>
+    <script src="./js/contacts.js"></script>
+    <script src="js/template.js"></script>
+    <script src="footer-header.js"></script>
+    <script src="./js/board.js"></script>
+</body>
+</html>

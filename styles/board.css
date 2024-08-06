@@ -1,0 +1,114 @@
+*{
+    font-family: "Inter";
+}
+
+body{
+    background-color: var(--main-background);
+}
+
+.wrapper-board{
+    position: fixed;
+    width: 80vw;
+    height: calc(100vh - 90px);
+    top: 96px;
+    left: 232px;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 50px;
+}
+
+.headline-board{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.headline{
+    font-size: 60px;
+    font-weight: 700;
+}
+
+.input-and-addtaskbutton{
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.add-task-button{
+    background-color: #2A3647;
+    color: white;
+    font-size: 21px;
+    height: 40px;
+    width: 140px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+}
+.add-task-button:hover{
+    background-color: #29ABE2;
+}
+
+.add-task-button>span{
+    font-size: 30px;
+    padding-left: 10px;
+}
+
+.input-search{
+    border: 1px solid black;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.input-search>input{
+    border: none;
+    padding-left: 10px;
+    font-size: 20px;
+    color: lightgrey;
+    outline: none;
+}
+
+.input-search>img{
+    height: 20px;
+    padding-right: 10px;
+}
+
+.vector-input{
+    filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(119%);
+    margin-right: 10px;
+}
+
+.task-wrapper{
+    display: flex;
+    justify-content: space-between;
+}
+
+.task-wrapper>div{
+    font-size: 20px;
+    font-weight: 700;
+    color: #42526E;
+    width: 300px;
+}
+
+.board-task-manager{
+    padding-top: 50px;
+}
+
+.drag-and-drop-section{
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
+}
+
+.drag-and-drop-section>div{
+    width: 300px;
+    height: auto;
+    border-radius: 24px;
+    box-shadow: 4px 0px 6px 0px rgba(0, 0, 0, 0.08);
+    padding: 10px;
+    background-color: white;
+}
