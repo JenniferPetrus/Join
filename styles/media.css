@@ -1,5 +1,33 @@
-
-
+/* @media(max-width: 1220px){
+    .contact-header{
+        display: none;
+    }
+    .contact-headline{
+        display: none;
+    }
+    .contact-email-adress{
+        display: none;
+    }
+    .contact-phone{
+        display: none;
+    }
+    .phone-number{
+        display: none;
+    }
+    .email-address{
+        display: none;
+    }
+    .contact-email{
+        display: none;
+    }
+    .contact-information{
+        display: none;
+    }
+    .main-contactlist{
+        width: 100%;
+    }
+}
+*/
 /*FOOTER */
 @media(max-width: 700px){
     #Navbar{
@@ -335,7 +363,7 @@
     .edit-delete-setting{
         position: fixed;
         height: 30px;
-        top: 550px;
+        top: 670px;
         right: 30px;
     }
 
@@ -486,7 +514,7 @@
         .contact-change {
             position: fixed;
             left: 30px;
-            bottom: 340px; 
+            bottom: 330px; 
             flex-direction: column;
             align-items: flex-start;
             gap: 0;
