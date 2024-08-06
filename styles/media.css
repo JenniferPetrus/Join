@@ -29,7 +29,7 @@
 }
 */
 /*FOOTER */
-@media(max-width: 700px){
+@media(max-width: 850px){
     #Navbar{
         width: 100vw;
         height: 12px;
@@ -79,7 +79,7 @@
 
 /*HEADER*/
 
-@media(max-width: 700px){
+@media(max-width: 850px){
     #header{
         display: none;
     }
@@ -106,7 +106,83 @@
 }
 
 /*Contacts Content*/
-@media(max-width: 700px){
+@media(max-width: 1255px){
+    .contact-header{
+        margin-left: 580px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .contact-header>hr{
+        display: none;
+    }
+    .contact-header>h1{
+        margin: 0;
+        font-size: 40px;
+    }
+    .contact-header>p{
+        margin-bottom: 30px;
+        margin-top: 0px;
+        font-size: 20px;
+    }
+    .chosen-contact{
+        margin-left: 580px;
+    }
+    .contact-icon{
+        width: 60px;
+        height: 60px;
+        font-size: 20px;
+        margin-right: 20px;
+    }
+    .contact-name{
+        font-size: 25px;
+    }
+    .contact-information{
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+    .background-btn{
+        width: 320px;
+        border: none;
+        left: 230px;
+    }
+    .add-contact-btn>span{
+        font-size: 16px;
+    }
+    .add-contact-btn>img{
+        height: 28px;
+    }
+    .main-contactlist{
+        width: 320px;
+    }
+    .contacts-section{
+        margin-left: 10px;
+    }
+    .single-contact{
+        width: 280px;
+        margin-top: 0;
+    }
+    .vector{
+        width: 280px;
+    }
+    .contact-list-name{
+        font-size: 16px;
+    }
+    .single-contact a{
+        font-size: 14px;
+    }
+    .first-letter{
+        width: 100px;   
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    .contactIcon{
+        font-size: 12px;
+        width: 25px;
+        height: 25px;
+    }
+}
+
+@media(max-width: 850px){
     .contact-header{
         display: none;
     }
@@ -158,16 +234,7 @@
     }    
 }
 
-/* @media(max-width: 1200px){
-    .main-contactlist{
-        height: 100%;
-    }
-} */
-
-
-/*chosen Contact*/
-
-@media(max-width: 700px){
+@media(max-width: 850px){
     .chosen-contact{
         position: absolute;
         height: 100%;
@@ -450,7 +517,7 @@
 }
 
 /* OVERLAY */
-@media(max-width: 700px){
+@media(max-width: 850px){
     .overlay-content {
         display: flex;
         flex-direction: column;
@@ -509,7 +576,7 @@
     }
 }
     
-    @media(max-width: 700px) {
+    @media(max-width: 850px) {
         .edit-delete-setting {
             position: fixed;
             bottom: 220px; 
@@ -531,7 +598,7 @@
         }
         
 }
-@media(max-width: 700px) {
+@media(max-width: 850px) {
     .left-pane .close-icon {
         position : absolute;
         top: 13px;         
