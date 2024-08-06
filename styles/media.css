@@ -155,6 +155,12 @@
     }    
 }
 
+@media(max-width: 1200px){
+    .main-contactlist{
+        height: 100%;
+    }
+}
+
 
 /*chosen Contact*/
 
