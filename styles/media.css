@@ -112,6 +112,9 @@
     }
 
     .main-contactlist{
+        flex: 1;
+        height: 80%;
+       /* overflow: auto; */
         left: 0 ;
         width: 100vw;
         align-items: center;
@@ -155,11 +158,11 @@
     }    
 }
 
-@media(max-width: 1200px){
+/* @media(max-width: 1200px){
     .main-contactlist{
         height: 100%;
     }
-}
+} */
 
 
 /*chosen Contact*/
