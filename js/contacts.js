@@ -101,7 +101,7 @@ function showEditDeleteButtons() {
 function getInitials(name) {
     let nameParts = name.split(' ');
     let initials = '';
-    for (let i = 0; i < nameParts.length; i++) {
+    for (let i = 0; i < nameParts.length && initials.length < 2; i++) {
         initials += nameParts[i].charAt(0).toUpperCase();
     }
     return initials;
@@ -128,7 +128,7 @@ async function setupEditContact() {
     setEditCancelButton();
     setSaveContactButton(contact.id);
 
-    document.querySelector('.contact-change').style.display = 'none';
+    // document.querySelector('.contact-change').style.display = 'none';
 
     const cancelButton = document.getElementById('cancelButton');
     cancelButton.addEventListener('click', closeEditContact);
