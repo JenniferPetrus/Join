@@ -2,6 +2,7 @@ let API_URL = "https://join-d67a5-default-rtdb.europe-west1.firebasedatabase.app
 let contactsData = [];
 let contactColors = {};
 let currentContactIndex = null;
+let selectedContact = null;
 
 const colors = [
     '#A8A8A8', '#D1D1D1', '#CDCDCD', '#007CEE', '#FF7A00', '#FF5EB3',
@@ -57,6 +58,9 @@ async function loadData() {
             contactsData.sort((a, b) => a.Name.localeCompare(b.Name));
             let groupedContacts = groupContacts(contactsData);
             renderContacts(groupedContacts);
+            document.querySelectorAll('.single-contact').forEach((contact, index) => {
+                contact.addEventListener('click', () => showContactDetails(index));
+            });
         } else {
             console.error('No valid contacts data found.');
         }
@@ -89,6 +93,15 @@ function showContactDetails(index) {
     document.querySelector('.contact-delete').addEventListener('click', () => deleteContact(contact.id));
 
     showEditDeleteButtons();
+    highlightSelectedContact(index);
+}
+
+function highlightSelectedContact(index) {
+    if (selectedContact !== null) {
+        selectedContact.classList.remove('selected');
+    }
+    selectedContact = document.querySelectorAll('.single-contact')[index];
+    selectedContact.classList.add('selected');
 }
 
 function showEditDeleteButtons() {
@@ -136,16 +149,15 @@ async function setupEditContact() {
 
 function closeEditContact() {
     closeOverlay();
-    reloadPage();
 }
 
 function reloadPage() {
-    document.body.innerHTML = ''; // Entfernt den aktuellen Inhalt des Bodys
-    fetch('contacts.html') // Ruft den HTML-Inhalt der Seite neu ab
+    document.body.innerHTML = '';
+    fetch('contacts.html')
         .then(response => response.text())
         .then(html => {
-            document.body.innerHTML = html; // Setzt den neuen Inhalt des Bodys
-            init(); // Initialisiert die Seite erneut
+            document.body.innerHTML = html;
+            init();
         })
         .catch(error => console.error('Error loading contacts page:', error));
 }
@@ -288,8 +300,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    document.querySelectorAll('.single-contact').forEach((contact, index) => {
+        contact.addEventListener('click', () => showContactDetails(index));
+    });
 });
 
 function init() {
-    loadData();
+    loadData().then(() => {
+        document.querySelectorAll('.single-contact').forEach((contact, index) => {
+            contact.addEventListener('click', () => showContactDetails(index));
+        });
+    });
 }

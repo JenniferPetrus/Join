@@ -94,6 +94,11 @@ body{
     margin: 0;
 }
 
+.single-contact.selected {
+    background-color: #2A3647;
+    color: white;
+}
+
 .chosen-contact{
     margin-left: 750px;
     position: absolute;

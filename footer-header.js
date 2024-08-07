@@ -33,7 +33,7 @@ function setActive(element) {
                 img.src = '/assets/icons/add-task-icon-bright.png';
                 break;
             case 'Board':
-                img.src = '/assets/icons/Board-icon-bright.png';
+                img.src = '/assets/icons/Board-bright.png';
                 break;
             case 'Contacts':
                 img.src = '/assets/icons/contacts-icon-bright.png';
