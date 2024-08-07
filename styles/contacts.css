@@ -114,6 +114,8 @@ body{
     font-size: 18px;
     color: white;
     border: 3px solid #FFFFFF;
+    flex-shrink: 0;
+    flex-grow: 0; 
 }
 
 .contact-icon{

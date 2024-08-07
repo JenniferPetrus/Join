@@ -141,9 +141,17 @@
         padding-bottom: 20px;
     }
     .background-btn{
-        width: 320px;
+        width: 318px;
         border: none;
         left: 230px;
+        display: block;
+    }
+    .add-contact-btn{
+        background-color: #2A3647;
+        width: 280px;
+        height: 55px;
+        margin-top: 20px;
+        margin-left: 20px;
     }
     .add-contact-btn>span{
         font-size: 16px;
@@ -174,6 +182,7 @@
         width: 100px;   
         margin-top: 20px;
         margin-bottom: 10px;
+        padding-left: 25px;
     }
     .contactIcon{
         font-size: 12px;

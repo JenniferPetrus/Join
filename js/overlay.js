@@ -132,16 +132,48 @@ function createContact() {
     let email = document.getElementById('contactEmail').value;
     let phone = document.getElementById('contactPhone').value;
 
-    if (name && email && phone) {
+    clearValidationErrors();
+    let isValid = validateInputs(name, email, phone);
+    if (isValid) {
         let newContact = {
             Name: name,
             Email: email,
             Phone: phone
         };
         addContactToAPI(newContact);
-    } else {
-        alert('Please fill in all fields');
     }
+}
+
+function validateInputs(name, email, phone) {
+    let isValid = true;
+    if (!/^[a-zA-Z\s]+$/.test(name)) {
+        showValidationError('contactName', 'Name should contain only letters');
+        isValid = false;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showValidationError('contactEmail', 'Please enter a valid email address');
+        isValid = false;
+    }
+    if (!/^\d+$/.test(phone)) {
+        showValidationError('contactPhone', 'Phone Number should contain only numbers');
+        isValid = false;
+    }
+    return isValid;
+}
+
+function showValidationError(inputId, message) {
+    let inputElement = document.getElementById(inputId);
+    let errorElement = document.createElement('div');
+    errorElement.className = 'validation-error';
+    errorElement.innerText = message;
+    inputElement.parentNode.appendChild(errorElement);
+}
+
+function clearValidationErrors() {
+    let errorElements = document.querySelectorAll('.validation-error');
+    errorElements.forEach(function(element) {
+        element.remove();
+    });
 }
 
 function addContactToAPI(contact) {
@@ -153,10 +185,13 @@ function addContactToAPI(contact) {
             },
             body: JSON.stringify(contact)
         })
-        .then(function(response) {
+        .then(async function(response) {
             if (response.ok) {
-                closeOverlay(true);
-                return nextId;
+                await loadData();
+                let newIndex = contactsData.findIndex(c => c.id === nextId.toString());
+                showContactDetails(newIndex);
+                showSuccessMessage('Contact successfully created');
+                closeOverlay(false);
             } else {
                 throw new Error('Failed to add contact');
             }
