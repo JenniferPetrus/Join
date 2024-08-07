@@ -395,7 +395,112 @@
     }
 }
 
+/* OVERLAY */
+@media(max-width: 850px){
+    .overlay-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 280px;
+        height: 700px;
+        max-width: 100%;
+        max-height: 800px;
+    }
+
+    .overlay-content>.left-pane{
+        border-radius: 15px 15px 0 0;
+        width: 287px;
+        height: 350px;
+        position: fixed;
+        bottom: 500px;
+    }
+
+    .logo-container {
+        display: none;
+    }
+
+    .overlay-content>.right-pane {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 280px;
+        height: 350px;
+        border-radius: 0 0 15px 15px;
+        position: fixed;
+        bottom: 170px;
+    }
+
+    .button-group {
+        align-items: center;
+        justify-content: center;
+        width: 100%; 
+    }
+
+    .right-pane>.spacer{
+        background-color: transparent;
+        position: fixed;
+        bottom: 470px;
+        height: 120px;
+        width: 120px;
+    }
+
+    .right-pane>.close-icon{
+        position: relative;
+        width: calc(10%0+50px);
+        top: -310px;
+        left: 130px;
+        height: 15px;
+        content: url('/assets/img/close.svg');
+    }
+}
+    
+    @media(max-width: 850px) {
+        .edit-delete-setting {
+            position: fixed;
+            bottom: 220px; 
+            left: 30px;
+            height: 50px;
+            border-radius: 60px;
+            background-color: #2a3647;
+        }
+    
+        .contact-change {
+            position: fixed;
+            left: 30px;
+            bottom: 330px; 
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0;
+            z-index: 3;
+            display: none; 
+        }
+        
+}
+@media(max-width: 850px) {
+    .left-pane .close-icon {
+        position : absolute;
+        top: 13px;         
+        right: 13px;       
+        left: 0;
+        height: 15px;      
+        width: auto;       
+        z-index: 1002;
+    }
+}
+
 @media(max-width: 330px){
+
+    .overlay-content {
+        width: 200px;
+    }
+    .left-pane{
+        width: 200px;
+    }
+    .rigth-pane{
+        width: 200px;
+    }
     .chosen-contact{
         position: absolute;
         height: 100%;
@@ -522,100 +627,6 @@
 
     .add-contact-btn img {
         margin: 0;
-    }
-}
-
-/* OVERLAY */
-@media(max-width: 850px){
-    .overlay-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 320px;
-        height: 700px;
-        max-width: 50%;
-        max-height: 800px;
-    }
-
-    .overlay-content>.left-pane{
-        border-radius: 15px 15px 0 0;
-        width: 320px;
-        height: 350px;
-        position: fixed;
-        bottom: 500px;
-    }
-
-    .logo-container {
-        display: none;
-    }
-
-    .overlay-content>.right-pane {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 320px; 
-        height: 350px;
-        border-radius: 0 0 15px 15px;
-        position: fixed;
-        bottom: 170px;
-    }
-
-    .button-group {
-        align-items: center;
-        justify-content: center;
-        width: 100%; 
-    }
-
-    .right-pane>.spacer{
-        background-color: transparent;
-        position: fixed;
-        bottom: 470px;
-        height: 120px;
-        width: 120px;
-    }
-
-    .right-pane>.close-icon{
-        position: fixed;
-        top: 60px;
-        right: 170px;
-        height: 15px;
-        content: url('/assets/img/close.svg');
-    }
-}
-    
-    @media(max-width: 850px) {
-        .edit-delete-setting {
-            position: fixed;
-            bottom: 220px; 
-            left: 30px;
-            height: 50px;
-            border-radius: 60px;
-            background-color: #2a3647;
-        }
-    
-        .contact-change {
-            position: fixed;
-            left: 30px;
-            bottom: 330px; 
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0;
-            z-index: 3;
-            display: none; 
-        }
-        
-}
-@media(max-width: 850px) {
-    .left-pane .close-icon {
-        position : absolute;
-        top: 13px;         
-        right: 13px;       
-        left: 0;
-        height: 15px;      
-        width: auto;       
-        z-index: 1002;
     }
 }
 
