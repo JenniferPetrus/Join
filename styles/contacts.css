@@ -287,15 +287,3 @@ body{
 .edit-delete-setting{
     display: none;
 }
-
-@media(max-width: 700px) {
-    .edit-delete-setting {
-        display: flex !important;
-        position: fixed;
-        height: 50px;
-        border-radius: 60px;
-        background-color: #2a3647;
-        bottom: 110px;
-        left: 30px; 
-    }
-}

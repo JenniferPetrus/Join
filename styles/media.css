@@ -24,6 +24,7 @@
         flex-direction: column;
         padding: 30px;
     }
+
     .contact-change {
         display: flex;
     }
@@ -197,8 +198,7 @@
     .main-contactlist{
         flex: 1;
         height: 80%;
-       /* overflow: auto; */
-        left: 0 ;
+        left: 0;
         width: 100vw;
         align-items: center;
     }
@@ -358,11 +358,8 @@
     .add-contact-btn img {
         margin: 0;
     }
-}
 
-/* OVERLAY */
-@media(max-width: 850px){
-    .overlay-content {
+     .overlay-content {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -396,7 +393,7 @@
     .button-group {
         align-items: center;
         justify-content: center;
-        width: 100%; 
+        width: 100%;
     }
     .right-pane>.spacer{
         background-color: transparent;
@@ -436,12 +433,12 @@
 }
 @media(max-width: 850px) {
     .left-pane .close-icon {
-        position : absolute;
-        top: 13px;         
-        right: 13px;       
+        position: absolute;
+        top: 13px;
+        right: 13px;
         left: 0;
-        height: 15px;      
-        width: auto;       
+        height: 15px;
+        width: auto;
         z-index: 1002;
     }
 }
@@ -449,13 +446,16 @@
     .overlay-content {
         width: 200px;
     }
-    .left-pane{
+
+    .left-pane {
         width: 200px;
     }
-    .rigth-pane{
+
+    .right-pane {
         width: 200px;
     }
-    .chosen-contact{
+
+    .chosen-contact {
         position: absolute;
         height: 100%;
         width: 100%;
@@ -566,9 +566,12 @@
 }
 @media (max-width: 320px) {
     .navGap.hover {
-        display: none; 
+        display: none;
     }
-    body, html {
-        overflow-x: hidden; 
+
+    body,
+    html {
+        overflow-x: hidden;
     }
 }
+
