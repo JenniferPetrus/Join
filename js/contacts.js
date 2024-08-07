@@ -144,7 +144,7 @@ async function setupEditContact() {
     // document.querySelector('.contact-change').style.display = 'none';
 
     const cancelButton = document.getElementById('cancelButton');
-    cancelButton.addEventListener('click', closeEditContact);
+    cancelButton.addEventListener('click', resetInputFields);
 }
 
 function closeEditContact() {
@@ -185,12 +185,18 @@ function setSaveContactButton(contactId) {
 }
 
 async function saveContact(contactId) {
+    const name = document.getElementById('contactName').value.trim();
+    const email = document.getElementById('contactEmail').value.trim();
+    const phone = document.getElementById('contactPhone').value.trim();
+    clearValidationErrors();
+    if (!validateInputs(name, email, phone)) {
+        return;
+    }
     const updatedContact = {
-        Name: document.getElementById('contactName').value,
-        Email: document.getElementById('contactEmail').value,
-        Phone: document.getElementById('contactPhone').value
+        Name: name,
+        Email: email,
+        Phone: phone
     };
-
     try {
         await updateContactInAPI(contactId, updatedContact);
         showSuccessMessage('Contact successfully edited');
@@ -198,6 +204,45 @@ async function saveContact(contactId) {
     } catch (error) {
         console.error('Error updating contact:', error);
     }
+}
+
+function validateInputs(name, email, phone) {
+    clearValidationErrors();
+    let isValid = true;
+    if (!/^[a-zA-Z\s]+$/.test(name)) {
+        showValidationError('contactName', 'Name should contain only letters');
+        isValid = false;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showValidationError('contactEmail', 'Please enter a valid email address');
+        isValid = false;
+    }
+    if (!/^\d+$/.test(phone)) {
+        showValidationError('contactPhone', 'Phone Number should contain only numbers');
+        isValid = false;
+    }
+    return isValid;
+}
+
+function showValidationError(inputId, message) {
+    let inputElement = document.getElementById(inputId);
+    if (!inputElement) return;
+    let existingError = inputElement.parentNode.querySelector('.validation-error');
+    if (!existingError) {
+        let errorElement = document.createElement('div');
+        errorElement.className = 'validation-error';
+        errorElement.innerText = message;
+        inputElement.parentNode.appendChild(errorElement);
+    } else {
+        existingError.innerText += `; ${message}`;
+    }
+}
+
+function clearValidationErrors() {
+    let errorElements = document.querySelectorAll('.validation-error');
+    errorElements.forEach(function(element) {
+        element.remove();
+    });
 }
 
 async function updateContactInAPI(contactId, contact) {
@@ -285,6 +330,7 @@ function clearInputFields() {
     document.getElementById('contactName').placeholder = 'Name';
     document.getElementById('contactEmail').placeholder = 'Email';
     document.getElementById('contactPhone').placeholder = 'Phone';
+    clearValidationErrors();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
