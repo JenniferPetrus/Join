@@ -1,0 +1,144 @@
+.overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.overlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.overlay-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.close-button {
+    cursor: pointer;
+    font-size: 24px;
+}
+
+.overlay-body {
+    display: flex;
+    position: relative;
+    gap: 20px;
+}
+
+.overlay-body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    background-color: #ccc;
+}
+
+.left-column,
+.right-column {
+    flex: 1;
+    padding: 10px;
+}
+
+.left-column {
+    padding-right: 20px;
+}
+
+.right-column {
+    padding-left: 20px;
+}
+
+.input-section {
+    margin-bottom: 20px;
+}
+
+.input-section label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-section input[type="text"],
+.input-section input[type="date"],
+.input-section textarea,
+.input-section select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.input-section textarea {
+    height: 100px;
+    resize: none;
+}
+
+.required-field {
+    font-size: 16px;
+    color: #ED7886;
+    margin-top: 10px;
+}
+
+.subtask-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.subtask-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.subtask-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.subtask-item input[type="checkbox"] {
+    margin: 0;
+}
+
+.overlay-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 10px;
+    margin-top: 20px;
+}
+
+.cancel-button,
+.create-task-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cancel-button {
+    background-color: #f0f0f0;
+}
+
+.create-task-button {
+    background-color: #007bff;
+    color: white;
+}
