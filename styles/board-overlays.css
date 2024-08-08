@@ -13,7 +13,7 @@
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-    width: 600px;
+    width: 800px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -39,17 +39,6 @@
     display: flex;
     position: relative;
     gap: 20px;
-}
-
-.overlay-body::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 1px;
-    background-color: #ccc;
 }
 
 .left-column,
@@ -94,6 +83,49 @@
     font-size: 16px;
     color: #ED7886;
     margin-top: 10px;
+}
+
+#priority{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#priority>button{
+    padding: 16px 10px 16px 10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 4px 0px #0000001A;
+    cursor: pointer;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    border: none;
+    background-color: white;
+    color: black;
+}
+
+#priority>button>img{
+    width: 20px;
+    margin-left: 5px;
+}
+
+#medium>img{
+    margin-top: 5px;
+}
+
+.active-urgent {
+    background-color: #FF3D00;
+    color: white;
+}
+
+.active-medium {
+    background-color: #FFA800;
+    color: white;
+}
+
+.active-low {
+    background-color: #7AE229;
+    color: white;
 }
 
 .subtask-input {

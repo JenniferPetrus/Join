@@ -14,7 +14,7 @@
         <div class="overlay-content">
             <div class="overlay-header">
                 <div class="overlay-title">Add Task</div>
-                <div class="close-button" onclick="closeOverlay()">X</div>
+                <div class="close-button" onclick="closeOverlay()">x</div>
             </div>
             <div class="overlay-body">
                 <div class="left-column">
@@ -39,11 +39,23 @@
                         <input type="date" id="dueDate" required>
                     </div>
                     <div class="input-section">
-                        <label for="priority">Priority</label>
-                        <select id="priority">
-                            <option value="high">High</option>
-                            <option value="medium">Medium</option>
-                            <option value="low">Low</option>
+                        <label for="priority">Prio</label>
+                        <div id="priority">
+                            <button id="urgent" class="priority-button" onclick="setActivePriority(this)"> Urgent<img src="/assets/icons/Board-icons/urgent-red.svg" alt="">
+                            </button>
+                            <button id="medium" class="priority-button" onclick="setActivePriority(this)">Medium<img src="/assets/icons/Board-icons/medium-orange.svg" alt="">
+                            </button>
+                            <button id="low" class="priority-button" onclick="setActivePriority(this)">Low<img src="/assets/icons/Board-icons/low-green.svg" alt="">
+                            </button>
+                        </div>
+                    </div>
+                    <div class="input-section">
+                        <label for="category">Category<span class="required-field">*</span></label>
+                        <select id="category">
+                            <option disabled selected>Select task category</option>
+                            <option>Select 1</option>
+                            <option>Select 2</option>
+                            <option>Select 3</option>
                         </select>
                     </div>
                     <div class="input-section">
