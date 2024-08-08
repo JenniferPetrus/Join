@@ -286,30 +286,52 @@
         align-items: center;
         justify-content: space-between;
     }
-    .edit-delete-setting{
-        display: flex !important;
+    .edit-delete-setting {
+        display: flex;
         position: fixed;
         height: 50px;
         border-radius: 60px;
         background-color: #2a3647;
-        bottom: 110px;
+        bottom: 200px;
         right: 30px;
     }
-    .contact-change{
+    .contact-change {
+        display: flex;
         flex-direction: column;
+        align-items: flex-start;
         position: fixed;
-        align-items: start;
-        left: 500px;
-        bottom: 230px;
-        gap: 0;
+        right: -90px;
+        bottom: 190px;
         z-index: 3;
-        display: none;
+        transform: translateX(150px);
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        border-bottom-left-radius: 20px;
+        height: 90px;
+        width: 100px;
+        padding: 10px;
+        transition: transform 1s ease-in-out;
+    }
+    .contact-change.move-right {
+        transform: translateX(100px);
+    }
+    .contact-change.move-left {
+        transform: translateX(-100px);
     }
     .contact-edit>img{
         margin-bottom: 5px;
+        margin-left: 15px;
+        margin-top: 10px;
     }
     .contact-edit>p{
         margin-bottom: 5px;
+        margin-top: 10px;
+    }
+    .contact-delete{
+        margin-bottom: 5px;
+        margin-left: 15px;
     }
     #editDeleteSetting{
         width: 100px;
@@ -409,26 +431,6 @@
         left: 130px;
         height: 15px;
         content: url('/assets/img/close.svg');
-    }
-}
-@media(max-width: 850px) {
-    .edit-delete-setting {
-        position: fixed;
-        bottom: 220px; 
-        left: 30px;
-        height: 50px;
-        border-radius: 60px;
-        background-color: #2a3647;
-    }
-    .contact-change {
-        position: fixed;
-        left: 30px;
-        bottom: 330px; 
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0;
-        z-index: 3;
-        display: none; 
     }
 }
 @media(max-width: 850px) {
