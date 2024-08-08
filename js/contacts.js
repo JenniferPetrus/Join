@@ -263,3 +263,20 @@ function init() {
         });
     });
 }
+// SettingButton
+document.addEventListener('DOMContentLoaded', () => {
+    const button = document.getElementById('animateSettingBtn');
+    const contactChangeDiv = document.querySelector('.contact-change');
+    button.addEventListener('click', (event) => {
+        event.preventDefault();
+        contactChangeDiv.classList.add('move-left');
+        contactChangeDiv.classList.remove('move-right');
+        event.stopPropagation();
+    });
+    document.addEventListener('click', (event) => {
+        if (!button.contains(event.target) && !contactChangeDiv.contains(event.target)) {
+            contactChangeDiv.classList.add('move-right');
+            contactChangeDiv.classList.remove('move-left');
+        }
+    });
+});
