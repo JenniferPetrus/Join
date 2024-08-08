@@ -44,7 +44,6 @@ function showOverlay() {
     let overlay = document.querySelector('.overlay');
     if (overlay) {
         overlay.classList.remove('hide');
-        // Vermeidung von Layout-Thrashing für die CSS-Transition
         void overlay.offsetWidth;
         overlay.classList.add('show');
         setOverlayInteractions();
@@ -112,7 +111,7 @@ function closeOverlay(updateRequired) {
             if (updateRequired) {
                 loadData();
             }
-        }, 500); // Zeit muss mit der CSS-Transitions-Zeit übereinstimmen
+        }, 500);
     }
 }
 
@@ -136,9 +135,9 @@ function createContact() {
     let isValid = validateInputs(name, email, phone);
     if (isValid) {
         let newContact = {
-            Name: name,
-            Email: email,
-            Phone: phone
+            fullName: name,
+            email: email,
+            phone: phone
         };
         addContactToAPI(newContact);
     }
@@ -178,7 +177,9 @@ function clearValidationErrors() {
 
 function addContactToAPI(contact) {
     getNextId().then(function(nextId) {
-        fetch(`${API_URL}/${nextId}.json`, {
+        let userId = `user${nextId}`;
+        console.log(`Creating new contact with ID: ${userId}`);
+        fetch(`${API_URL}1/users/${userId}.json`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -188,7 +189,8 @@ function addContactToAPI(contact) {
         .then(async function(response) {
             if (response.ok) {
                 await loadData();
-                let newIndex = contactsData.findIndex(c => c.id === nextId.toString());
+                let newIndex = contactsData.findIndex(c => c.id === userId);
+                console.log(`New contact added at index: ${newIndex}`);
                 showContactDetails(newIndex);
                 showSuccessMessage('Contact successfully created');
                 closeOverlay(false);
@@ -203,7 +205,7 @@ function addContactToAPI(contact) {
 }
 
 function getNextId() {
-    return fetch(`${API_URL}.json`)
+    return fetch(`${API_URL}1/users.json`)
         .then(function(response) {
             if (!response.ok) {
                 throw new Error('Error fetching contacts');
@@ -215,16 +217,15 @@ function getNextId() {
                 throw new Error('Unexpected data format');
             }
             let ids = Object.keys(data).map(function(key) {
-                let num = parseInt(key, 10);
-                if (isNaN(num)) {
-                    console.warn('Key is not a number:', key);
-                }
-                return num;
+                let match = key.match(/^user(\d+)$/);
+                return match ? parseInt(match[1], 10) : NaN;
             }).filter(function(num) {
                 return !isNaN(num);
             });
 
-            return ids.length ? Math.max(...ids) + 1 : 1;
+            let nextId = ids.length ? Math.max(...ids) + 1 : 1;
+            console.log(`Next ID: ${nextId}`);
+            return nextId;
         })
         .catch(function(error) {
             console.error('Error in getNextId:', error);
@@ -251,9 +252,9 @@ async function setupEditContact() {
     const overlaySubtitle = document.querySelector('.text-normal');
     overlaySubtitle.style.display = 'none';
 
-    document.getElementById('contactName').value = contact.Name;
-    document.getElementById('contactEmail').value = contact.Email;
-    document.getElementById('contactPhone').value = contact.Phone;
+    document.getElementById('contactName').value = contact.fullName;
+    document.getElementById('contactEmail').value = contact.email;
+    document.getElementById('contactPhone').value = contact.phone;
 
     setEditCancelButton();
     setSaveContactButton(contact.id);
@@ -303,9 +304,9 @@ function setSaveContactButton(contactId) {
 
 async function saveContact(contactId) {
     const updatedContact = {
-        Name: document.getElementById('contactName').value,
-        Email: document.getElementById('contactEmail').value,
-        Phone: document.getElementById('contactPhone').value
+        fullName: document.getElementById('contactName').value,
+        email: document.getElementById('contactEmail').value,
+        phone: document.getElementById('contactPhone').value
     };
 
     try {
@@ -320,11 +321,11 @@ async function saveContact(contactId) {
 async function updateContactInAPI(contactId, contact) {
     try {
         const sanitizedContact = {
-            Name: contact.Name || '',
-            Email: contact.Email || '',
-            Phone: contact.Phone || ''
+            fullName: contact.fullName || '',
+            email: contact.email || '',
+            phone: contact.phone || ''
         };
-        let response = await fetch(`${API_URL}/${contactId}.json`, {
+        let response = await fetch(`${API_URL}1/users/${contactId}.json`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -358,6 +359,7 @@ async function fetchData() {
                 result.push({ id: key, ...data[key] });
             }
         }
+        console.log("Fetched contacts data:", result);
         return result;
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -367,9 +369,14 @@ async function fetchData() {
 
 async function deleteContact(contactId) {
     try {
-        await fetch(`${API_URL}/${contactId}.json`, {
+        console.log(`Attempting to delete contact with ID: ${contactId}`);
+        let response = await fetch(`${API_URL}1/users/${contactId}.json`, {
             method: 'DELETE'
         });
+        if (!response.ok) {
+            throw new Error('Failed to delete contact');
+        }
+        console.log(`Deleted contact with ID: ${contactId}`);
         await loadData();
         hideChosenContact();
         showSuccessMessage('Contact successfully deleted');
