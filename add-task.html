@@ -5,10 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Task</title>
     <link rel="icon" type="image/x-icon" href="/./assets/img/Logo for Favicon construction.svg">
+    <link rel="stylesheet" href="styles/add-task.css">
 </head>
 <body onload="includeHTML()">
     <div w3-include-html="header.html"></div>
-    
+    <div class="wrapper" id="addTaskWrapper">
+        <div class="overlay-content">
+            <div class="overlay-header">
+                <div class="overlay-title">Add Task</div>
+                <div class="close-button" onclick="closeOverlay()">X</div>
+            </div>
+            <div class="overlay-body">
+                <div class="left-column">
+                    <div class="input-section">
+                        <label for="taskTitle">Title<span class="required-field">*</span></label>
+                        <input type="text" id="taskTitle" placeholder="Enter task title" required>
+                    </div>
+                    <div class="input-section">
+                        <label for="taskDescription">Description</label>
+                        <textarea id="taskDescription" placeholder="Enter task description"></textarea>
+                    </div>
+                    <div class="input-section">
+                        <label for="assignedTo">Assigned to</label>
+                        <select id="assignedTo" multiple>
+                        </select>
+                    </div>
+                    <div><span class="required-field">*</span>This field is required</div>
+                </div>
+                <div class="right-column">
+                    <div class="input-section">
+                        <label for="dueDate">Due Date<span class="required-field">*</span></label>
+                        <input type="date" id="dueDate" required>
+                    </div>
+                    <div class="input-section">
+                        <label for="priority">Priority</label>
+                        <select id="priority">
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    <div class="input-section">
+                        <label for="subtasks">Subtasks</label>
+                        <div class="subtask-input">
+                            <input type="text" id="newSubtask" placeholder="Add a subtask">
+                            <button onclick="addSubtask()">Add</button>
+                        </div>
+                        <div class="subtask-list" id="subtaskList"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="overlay-footer">
+                <button class="cancel-button" onclick="closeOverlay()">Clear</button><img src="assets/img/close.svg" alt="">
+                <button class="create-task-button">Create Task</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay-task">
 
 
     <div w3-include-html="footer.html"></div>
