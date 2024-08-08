@@ -1,0 +1,13 @@
+*{
+    font-family: "Inter";
+}
+
+body{
+    background-color: var(--main-background);
+}
+
+.wrapper{
+    margin-left: 300px;
+    margin-top: 150px;
+    margin-right: 100px;
+}

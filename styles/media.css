@@ -292,7 +292,7 @@
         height: 50px;
         border-radius: 60px;
         background-color: #2a3647;
-        bottom: 200px;
+        top: 550px;
         right: 30px;
     }
     .contact-change {
@@ -301,7 +301,7 @@
         align-items: flex-start;
         position: fixed;
         right: -90px;
-        bottom: 190px;
+        top: 500px;
         z-index: 3;
         transform: translateX(150px);
         background-color: white;
@@ -380,7 +380,6 @@
     .add-contact-btn img {
         margin: 0;
     }
-
      .overlay-content {
         display: flex;
         flex-direction: column;
@@ -448,22 +447,60 @@
     .overlay-content {
         width: 200px;
     }
-
     .left-pane {
         width: 200px;
     }
-
     .right-pane {
         width: 200px;
     }
-
-    .chosen-contact {
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        z-index: 1000;
-        margin-left: 0;
-        background-color: #f6f7f8;
+    .edit-delete-setting {
+        display: flex;
+        position: fixed;
+        height: 30px;
+        border-radius: 60px;
+        background-color: #2a3647;
+        right: 30px;
+        top: 550px;
+    }
+    .contact-change {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        position: fixed;
+        right: -90px;
+        top: 510px;
+        z-index: 3;
+        transform: translateX(150px);
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        border-bottom-left-radius: 20px;
+        height: 60px;
+        width: 80px;
+        padding: 10px;
+        transition: transform 1s ease-in-out;
+    }
+    .contact-change.move-right {
+        transform: translateX(100px);
+    }
+    .contact-change.move-left {
+        transform: translateX(-100px);
+    }
+    .contact-edit>p{
+        font-size: 14px;
+        margin-top: 2px;
+    }
+    .contact-delete>p{
+        font-size: 14px;
+        margin-top: 2px;
+    }
+    .contact-edit>.image-edit{
+        height: 14px;
+        margin-top: 2px;
+    }
+    .contact-delete>.image-delete{
+        margin-top: 2px;
     }
     .header-and-return{
         font-size: 16px;
@@ -490,27 +527,6 @@
     }
     .contact-name {
         font-size: 28px;
-    }
-    .contact-change img{
-        height: 16px;
-        width: 16px;
-        margin-top: 16px;
-    }
-    .edit-delete-setting{
-        position: fixed;
-        height: 30px;
-        top: 670px;
-        right: 30px;
-    }
-    .contact-change{
-        flex-direction: column;
-        position: fixed;
-        align-items: start;
-        left: 150px;
-        top: 570px;
-        gap: 0;
-        z-index: 3;
-        display: none;
     }
     .contact-edit>img{
         margin-bottom: 5px;
