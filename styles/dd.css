@@ -1,0 +1,17 @@
+.todo {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.drag-area-highlight {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.dragging {
+    border: 2px dashed #007BFF;
+    background-color: #E0F7FA;
+    transform: scale(1.05);
+}

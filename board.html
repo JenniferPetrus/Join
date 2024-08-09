@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/styles/root.css">
     <link rel="stylesheet" href="styles/media.css">
     <link rel="stylesheet" href="./styles/board-overlays.css">
+    <link rel="stylesheet" href="./styles/dd.css">
 </head>
 <body onload="init(), includeHTML()">
     <div w3-include-html="header.html"></div>
@@ -31,10 +32,10 @@
                 <div class="done">Done</div>
             </div>
             <div class="drag-and-drop-section">
-                <div class="draggable-to-do">DIV</div>
-                <div class="draggable-in-progress">DIV</div>
-                <div class="draggable-await-feedback">DIV</div>
-                <div class="draggable-done">DIV</div>
+                <div class="drag-area" id="todo" ondrop="moveTo('todo')" ondragleave="removeHighlight('todo')" ondragover="allowDrop(event); highlight('todo')"></div>
+                <div class="drag-area" id="in-progress" ondrop="moveTo('in-progress')" ondragleave="removeHighlight('in-progress')" ondragover="allowDrop(event); highlight('in-progress')"></div>
+                <div class="drag-area" id="await-feedback" ondrop="moveTo('await-feedback')" ondragleave="removeHighlight('await-feedback')" ondragover="allowDrop(event); highlight('await-feedback')"></div>
+                <div class="drag-area" id="done" ondrop="moveTo('done')" ondragleave="removeHighlight('done')" ondragover="allowDrop(event); highlight('done')"></div>              
             </div>
         </div>
     </div>
@@ -48,5 +49,6 @@
     <script src="footer-header.js"></script>
     <script src="./js/board.js"></script>
     <script src="./js/board-overlays.js"></script>
+    <script src="./js/dd.js"></script>
 </body>
 </html>
