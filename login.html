@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join Login</title>
+    <link rel="icon" type="image/x-icon" href="/./assets/img/Logo for Favicon construction.svg">
+    <link rel="stylesheet" href="styles/login-signup.css">
+    <link rel="stylesheet" href="/assets/fonts/fonts.css">
+</head>
+<body>
+    <img id="loading" class="logo-animate logo-animate-light" src="./assets/icons/LoginSignUp/BigJoinLogo.svg"/>
+    <img id="loading" class="logo-animate-dark" src="./assets/icons/LoginSignUp/BigJoinLogo White.svg"/>
+    <div class="bg-animate"></div><div class="bg-animate-mobile"></div>
+    <div class="wrapper">
+        <div class="sign-header" id="sign-header">
+            <span class="join-user-question">Not a Join user?</span>
+            <button onclick="navToSignIn()" class="dark-btn btn-small">Sign up</button>
+        </div>
+
+        <form class="container" id="container" onsubmit="logIn(); return false;">
+            <div class="head">
+                <h1>Log in</h1>
+                <div class="underline"></div>
+            </div>
+
+            <div class="input-container">
+                <div class="input">
+                    <input placeholder="E-Mail" type="email" id="emailInput" required>
+                    <img src="./assets/icons/LoginSignUp/mail.svg">
+                </div>
+
+                <div class="input">
+                    <input placeholder="Password" type="password" id="passwordInput" required>
+                    <img id="togglePasswordVisibility" src="./assets/icons/LoginSignUp/lock.svg">
+                </div>
+
+                <div id="failureTextInLogin" class="passwordDontMatchText"></div>
+
+                <div class="checkbox">
+                    <div><input class="checkbox-input" type="checkbox"></div>
+                    <span class="rememberMe">Remember me</span>
+                </div>
+
+                <div class="submit-btns">
+                    <button type="submit" class="dark-btn">Log in</button>
+                    <button onclick="guestLogIn()" type="button" class="light-btn">Guest Log in</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <footer>
+        <a href="./privacy-policy.html" target="_blank">Privacy Policy</a> 
+        <a href="./legal-notice.html" target="_blank">Legal notice</a>
+        <!-- mit target blank öffnet sich eine neue Seite, help seite bei SignUp? -->
+    </footer>
+    <script src="./js/login.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,269 @@
+body {
+    background-color: #F6F7F8;
+}
+
+.wrapper{
+    padding-left: 300px;
+    padding-top: 50px;
+}
+
+#renderContent {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    gap: 72px;
+    margin: 72px;
+}
+
+.headline {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+}
+
+h2 {
+    font-size: 61px;
+    margin: 0;
+}
+
+.breakline {
+    background-color: #29abe2;
+    height: 59px;
+    width: 4px;
+}
+
+.keymetrics {
+    font-size: 27px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 650px;
+}
+
+.section1 {
+    display: flex;
+    gap: 40px;
+}
+
+.box-of-section1 {
+    border-radius: 30px;
+    padding: 38px 19px 38px 19px;
+    gap: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+    height: 100px;
+    width: 50%;
+}
+
+.cycle {
+    background-color: #2a3647;
+    width: 69px;
+    height: 69px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+    font-size: 64px;
+    font-weight: 600;
+}
+
+#to-do-amount{
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+#done-amount{
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+.font-urgent-number {
+    font-size: 47px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+.font-urgent {
+    font-size: 16px;
+    font-weight: 400;
+
+}
+
+#deadline-date{
+    margin: 0;
+}
+
+.deadline {
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.section2 {
+    background-color: white;
+    border-radius: 30px;
+    padding: 28px 48px;
+    display: flex;
+    gap: 61px;
+    align-items: center;
+    justify-content: space-evenly;
+    box-sizing: border-box;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 180px;
+}
+
+.small-cycle {
+    background-color: #ff3d00;
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.1);
+}
+
+.urgent {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.breakline-grey {
+    height: 102.02px;
+    width: 3px;
+    background-color: #d1d1d1;
+}
+
+.date-section {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+h6 {
+    font-size: 21px;
+}
+
+.section3 {
+    display: flex;
+    gap: 40px;
+    text-align: center;
+    width: 100%;
+}
+
+.box-of-section3 {
+    border-radius: 30px;
+    padding: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    flex-direction: column;
+    box-sizing: border-box;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+    gap: 15px;
+    width: 100%;
+    height: 170px;
+}
+
+#tasks-amount{
+    margin: 0;
+}
+
+#progress-amount{
+    margin: 0;
+}
+
+#feedback-amount{
+    margin: 0;
+}
+
+span {
+    font-size: 20px;
+    font-weight: 400;
+    text-align: center;
+    color: #2a3647;
+}
+
+.light-blue {
+    color: #29abe2;
+}
+
+.box-of-section1:hover {
+    cursor: pointer;
+    box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.1);
+    transition: all 200ms ease-in-out;
+    background-color: #2a3647;
+    color: white;
+    transform: scale(1.1);
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+.box-of-section1:hover span {
+    color: white;
+}
+
+.box-of-section1:hover .cycle {
+    background-color: white;
+    z-index: 0;
+}
+
+/* .box-of-section1:hover .pencil {
+    content: url(./assets/icons/summary/edit dark.svg);
+}
+
+.box-of-section1:hover .check {
+    content: url(./assets/icons/summary/Vector dark.svg);
+} */
+
+.section2:hover {
+    cursor: pointer;
+    box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.2);
+    transition: all 200ms ease-in-out;
+    color: white;
+    background-color: #2a3647;
+    transform: scale(1.1);
+}
+
+.section2:hover span {
+    color: white;
+}
+
+
+.box-of-section3:hover {
+    cursor: pointer;
+    box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.2);
+    transition: all 200ms ease-in-out;
+    color: white;
+    background-color: #2a3647;
+    transform: scale(1.1);
+}
+
+.box-of-section3:hover span {
+    color: white;
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="icon" type="image/x-icon" href="/./assets/img/Logo for Favicon construction.svg">
+    <link rel="stylesheet" href="styles/login-signup.css">
+    <link rel="stylesheet" href="/assets/fonts/fonts.css">
+</head>
+<body>
+    <img class="logo" src="./assets/icons/LoginSignUp/BigJoinLogo.svg" />
+    <div class="wrapper">
+        <form class="container container-sign-in" id="container">
+            <img class="arrow" onclick="backToLogIn()" src="./assets/icons/LoginSignUp/arrow-left-line.svg">
+            <div class="head">
+                <h1>Sign up</h1>
+                <div class="underline"></div>
+            </div>
+            <div class="gap16">
+                <div class="input-container">
+                    <div class="input">
+                        <input id="inputName" placeholder="Name" type="text" required>
+                        <img src="./assets/icons/LoginSignUp/person.svg">
+                    </div>
+
+                    <div class="input">
+                        <input id="inputEmail" placeholder="E-Mail" type="email" required>
+                        <img src="./assets/icons/LoginSignUp/mail.svg">
+                    </div>
+
+                    <div class="input">
+                        <input id="inputPassword" placeholder="Password" type="password" required>
+                        <img src="./assets/icons/LoginSignUp/lock.svg" class="togglePasswordVisibility">
+                    </div>
+                    
+                    <div id="confirm-password-container" class="input">
+                        <input id="inputConfirmPassword" placeholder="Confirm password" type="password" required>
+                        <img src="./assets/icons/LoginSignUp/lock.svg" class="togglePasswordVisibility">
+                    </div>
+                                      
+                </div>
+                <div class="checkbox accept-policy">
+                    <div>
+                        <input class="checkbox-input" type="checkbox" required>
+                    </div>
+                    <span>I accept the<span class="blue"> privacy Policy</span></span>
+                </div>
+            </div>
+            <div class="style-btns">
+                <button id="registerBtn" class="dark-btn">Sign up</button>
+            </div>
+        </form>
+    </div>
+    <footer>
+        <a href="./privacy-policy.html" target="_blank">Privacy Policy</a> 
+        <a href="./legal-notice.html" target="_blank">Legal notice</a>
+    </footer>
+    <script src="./js/sign-up.js"></script>
+</body>
+</html>
