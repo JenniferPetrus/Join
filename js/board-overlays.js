@@ -1,12 +1,58 @@
-function openOverlay() {
+let targetSectionId = 'todo'; // Standardbereich beim Button Add task -> soll in todo
+function openOverlay(sectionId) {
+    if (sectionId) {
+        targetSectionId = sectionId;} // sectionID -> todo, in progress und await feedback
     document.getElementById('addTaskOverlay').style.display = 'flex';
     document.getElementById('dueDate').min = new Date().toISOString().split('T')[0];
+    resetErrorMessages();
 }
 
 function closeOverlay() {
     document.getElementById('addTaskOverlay').style.display = 'none';
 }
+// FORMVALIDATION
+function validateForm() {
+    let isValid = true;
+    document.querySelectorAll('.error-message').forEach(errorElement => {
+        errorElement.textContent = '';
+    });
+    let title = document.getElementById('taskTitle').value;
+    if (!title) {
+        document.getElementById('taskTitleError').textContent = 'Title is required';
+        isValid = false;
+    }
+    let dueDate = document.getElementById('dueDate').value;
+    if (!dueDate) {
+        document.getElementById('dueDateError').textContent = 'Due Date is required';
+        isValid = false;
+    }
+    let category = document.getElementById('category').value;
+    if (!category || category === 'Select task category') {
+        document.getElementById('categoryError').textContent = 'Category is required';
+        isValid = false;
+    }
+    return isValid;
+}
 
+// Event-Listener für Eingaben hinzufügen -> Fehlermeldungen zurücksetzen
+function setupEventListeners() {
+    document.getElementById('taskTitle').addEventListener('input', function() {
+        document.getElementById('taskTitleError').textContent = '';
+    });
+    document.getElementById('dueDate').addEventListener('input', function() {
+        document.getElementById('dueDateError').textContent = '';
+    });
+    document.getElementById('category').addEventListener('change', function() {
+        document.getElementById('categoryError').textContent = '';
+    });
+}
+
+function resetErrorMessages() {
+    document.querySelectorAll('.error-message').forEach(errorElement => {
+        errorElement.textContent = '';
+    });
+}
+// Farben der Prioritäten und ausgewählte Prio in der Task übergeben
 function setActivePriority(button) {
     const buttons = document.getElementsByClassName('priority-button');
     for (let i = 0; i < buttons.length; i++) {
@@ -49,17 +95,19 @@ function setActivePriority(button) {
 }
 
 function createTask() {
+    if (!validateForm()) {
+        return;}
     let title = document.getElementById('taskTitle').value;
     let description = document.getElementById('taskDescription').value;
     let assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
     let dueDate = document.getElementById('dueDate').value;
-
+    
     let priorityButton = document.querySelector('.priority-button.active');
     let priority = priorityButton ? priorityButton.id : 'low';
-
+    
     let category = document.getElementById('category').value;
     let subtasks = Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).map(item => item.textContent);
-
+    
     let subtasksHTML = '';
     if (subtasks.length > 0) {
         subtasksHTML = `
@@ -80,12 +128,16 @@ function createTask() {
             <div>Category: ${category}</div>
         </div>
     `;
-    let todoContainer = document.getElementById('todo');
-    if (todoContainer) {
-        todoContainer.insertAdjacentHTML('beforeend', newTaskHTML);
+    
+    let container = document.getElementById(targetSectionId);
+    if (container) {
+        container.insertAdjacentHTML('beforeend', newTaskHTML);
     } else {
-        console.error('Todo container not found');
+        console.error(`Container ${targetSectionId} not found`);
     }
+    
+    targetSectionId = null;
+    
     closeOverlay();
 }
 
@@ -107,6 +159,3 @@ function addSubtask() {
         }
     }
 }
-
-
-

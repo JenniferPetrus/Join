@@ -21,6 +21,7 @@
                     <div class="input-section">
                         <label for="taskTitle">Title<span class="required-field">*</span></label>
                         <input type="text" id="taskTitle" placeholder="Enter task title" required>
+                        <div id="taskTitleError" class="error-message"></div>
                     </div>
                     <div class="input-section">
                         <label for="taskDescription">Description</label>
@@ -31,22 +32,20 @@
                         <select id="assignedTo" multiple>
                         </select>
                     </div>
-                    <div><span class="required-field">*</span>This field is required</div>
+                    <div id="assignedToError" class="error-message"></div>
                 </div>
                 <div class="right-column">
                     <div class="input-section">
                         <label for="dueDate">Due Date<span class="required-field">*</span></label>
                         <input type="date" id="dueDate" required>
+                        <div id="dueDateError" class="error-message"></div>
                     </div>
                     <div class="input-section">
-                        <label for="priority">Prio</label>
+                        <label for="priority">Priority</label>
                         <div id="priority">
-                            <button id="urgent" class="priority-button" onclick="setActivePriority(this)"> Urgent<img src="/assets/icons/Board-icons/urgent-red.svg" alt="">
-                            </button>
-                            <button id="medium" class="priority-button" onclick="setActivePriority(this)">Medium<img src="/assets/icons/Board-icons/medium-orange.svg" alt="">
-                            </button>
-                            <button id="low" class="priority-button" onclick="setActivePriority(this)">Low<img src="/assets/icons/Board-icons/low-green.svg" alt="">
-                            </button>
+                            <button id="urgent" class="priority-button" onclick="setActivePriority(this)"> Urgent<img src="/assets/icons/Board-icons/urgent-red.svg" alt=""></button>
+                            <button id="medium" class="priority-button" onclick="setActivePriority(this)">Medium<img src="/assets/icons/Board-icons/medium-orange.svg" alt=""></button>
+                            <button id="low" class="priority-button" onclick="setActivePriority(this)">Low<img src="/assets/icons/Board-icons/low-green.svg" alt=""></button>
                         </div>
                     </div>
                     <div class="input-section">
@@ -57,6 +56,7 @@
                             <option>Select 2</option>
                             <option>Select 3</option>
                         </select>
+                        <div id="categoryError" class="error-message"></div>
                     </div>
                     <div class="input-section">
                         <label for="subtasks">Subtasks</label>
@@ -73,10 +73,7 @@
             </div>
         </div>
     </div>
-
-    <div class="overlay-task">
-        
-    </div>
+    <div class="overlay-task"></div>
 </body>
 <script src="./js/board-overlays.js"></script>
 </html>
