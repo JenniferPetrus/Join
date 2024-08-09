@@ -96,6 +96,49 @@ body{
     margin-top: 10px;
 }
 
+#priority{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#priority>button{
+    padding: 16px 10px 16px 10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 4px 0px #0000001A;
+    cursor: pointer;
+    width: 120px;
+    display: flex;
+    justify-content: center;
+    border: none;
+    background-color: white;
+    color: black;
+}
+
+#priority>button>img{
+    width: 20px;
+    margin-left: 5px;
+}
+
+#medium>img{
+    margin-top: 5px;
+}
+
+.active-urgent {
+    background-color: #FF3D00;
+    color: white;
+}
+
+.active-medium {
+    background-color: #FFA800;
+    color: white;
+}
+
+.active-low {
+    background-color: #7AE229;
+    color: white;
+}
+
 .subtask-input {
     display: flex;
     gap: 10px;
