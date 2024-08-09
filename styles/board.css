@@ -83,6 +83,14 @@ body{
     margin-right: 10px;
 }
 
+.vector-input-search-item{
+    cursor: pointer;
+}
+
+.plus-icon:hover {
+    cursor: pointer;
+}
+
 .task-wrapper{
     display: flex;
     justify-content: space-between;

@@ -150,6 +150,10 @@
     margin: 0;
 }
 
+.overlay-add-btn{
+    cursor: pointer;
+}
+
 .overlay-footer {
     display: flex;
     justify-content: flex-end;

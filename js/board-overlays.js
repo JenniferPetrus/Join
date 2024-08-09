@@ -7,34 +7,11 @@ function closeOverlay() {
     document.getElementById('addTaskOverlay').style.display = 'none';
 }
 
-function addSubtask() {
-    const subtaskInput = document.getElementById('newSubtask');
-    const subtaskText = subtaskInput.value.trim();
-
-    if (subtaskText) {
-        const subtaskList = document.getElementById('subtaskList');
-        const subtaskItem = document.createElement('div');
-        subtaskItem.className = 'subtask-item';
-
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-
-        const label = document.createElement('label');
-        label.textContent = subtaskText;
-
-        subtaskItem.appendChild(checkbox);
-        subtaskItem.appendChild(label);
-        subtaskList.appendChild(subtaskItem);
-
-        subtaskInput.value = '';
-    }
-}
-// Overlay Add Task Buttons
 function setActivePriority(button) {
     const buttons = document.getElementsByClassName('priority-button');
     for (let i = 0; i < buttons.length; i++) {
         const img = buttons[i].querySelector('img');
-        buttons[i].classList.remove('active-urgent', 'active-medium', 'active-low');
+        buttons[i].classList.remove('active', 'active-urgent', 'active-medium', 'active-low');
         buttons[i].style.backgroundColor = 'white';
         buttons[i].style.color = 'black';
         switch (buttons[i].id) {
@@ -49,7 +26,7 @@ function setActivePriority(button) {
                 break;
         }
     }
-    button.classList.add(`active-${button.id}`);
+    button.classList.add('active', `active-${button.id}`);
     const priorityColors = {
         urgent: '#FF3D00',
         medium: '#FFA800',
@@ -71,9 +48,65 @@ function setActivePriority(button) {
     }
 }
 
+function createTask() {
+    let title = document.getElementById('taskTitle').value;
+    let description = document.getElementById('taskDescription').value;
+    let assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
+    let dueDate = document.getElementById('dueDate').value;
 
+    let priorityButton = document.querySelector('.priority-button.active');
+    let priority = priorityButton ? priorityButton.id : 'low';
 
+    let category = document.getElementById('category').value;
+    let subtasks = Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).map(item => item.textContent);
 
+    let subtasksHTML = '';
+    if (subtasks.length > 0) {
+        subtasksHTML = `
+            <div><strong>Subtasks:</strong></div>
+            <ul>
+                ${subtasks.map(subtask => `<li>${subtask}</li>`).join('')}
+            </ul>
+        `;
+    }
+    let newTaskHTML = `
+        <div class="task" draggable="true" ondragstart="drag(event)">
+            <h3>${title}</h3>
+            <p>${description}</p>
+            ${subtasksHTML}
+            <div>Assigned to: ${assignedTo.join(', ')}</div>
+            <div>Due date: ${dueDate}</div>
+            <div><strong>Priority:</strong> ${priority.charAt(0).toUpperCase() + priority.slice(1)}</div>
+            <div>Category: ${category}</div>
+        </div>
+    `;
+    let todoContainer = document.getElementById('todo');
+    if (todoContainer) {
+        todoContainer.insertAdjacentHTML('beforeend', newTaskHTML);
+    } else {
+        console.error('Todo container not found');
+    }
+    closeOverlay();
+}
+
+function addSubtask() {
+    let subtaskInput = document.getElementById('newSubtask');
+    let subtaskList = document.getElementById('subtaskList');
+
+    if (subtaskInput.value.trim() !== '') {
+        let newSubtask = document.createElement('div');
+        newSubtask.className = 'subtask-list-item';
+        newSubtask.textContent = subtaskInput.value.trim();
+        subtaskList.appendChild(newSubtask);
+        subtaskInput.value = '';
+        if (!document.querySelector('.subtask-list').previousElementSibling || !document.querySelector('.subtask-list').previousElementSibling.classList.contains('subtask-title')) {
+            let subtasksHeader = document.createElement('div');
+            subtasksHeader.className = 'subtask-title';
+            subtasksHeader.innerHTML = '<strong>Subtasks:</strong>';
+            subtaskList.parentElement.insertBefore(subtasksHeader, subtaskList);
+        }
+    }
+}
 
 
 

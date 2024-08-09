@@ -16,3 +16,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+// Plus-Icon Hover Change Colour
+document.querySelectorAll('.plus-icon').forEach(function(icon) {
+    icon.addEventListener('mouseover', function() {
+        this.src = 'assets/icons/Board-icons/plus icon blue.svg';
+    });
+    icon.addEventListener('mouseout', function() {
+        this.src = 'assets/icons/Board-icons/plus icon black.svg';
+    });
+});
+// Search Icon Hover Change COlour
+let searchIcon = document.querySelector('.vector-input-search-item');
+
+searchIcon.addEventListener('mouseover', function() {
+    this.src = './assets/icons/Board-icons/search icon blue.svg';
+});
+
+searchIcon.addEventListener('mouseout', function() {
+    this.src = './assets/icons/Board-icons/search icon black.svg';
+});

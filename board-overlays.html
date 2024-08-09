@@ -61,8 +61,7 @@
                     <div class="input-section">
                         <label for="subtasks">Subtasks</label>
                         <div class="subtask-input">
-                            <input type="text" id="newSubtask" placeholder="Add a subtask">
-                            <button onclick="addSubtask()">Add</button>
+                            <input type="text" id="newSubtask" placeholder="Add a subtask"><img class="overlay-add-btn" src="assets/icons/Board-icons/Subtasks icons plus.svg" onclick="addSubtask()">
                         </div>
                         <div class="subtask-list" id="subtaskList"></div>
                     </div>
@@ -70,7 +69,7 @@
             </div>
             <div class="overlay-footer">
                 <button class="cancel-button" onclick="closeOverlay()">Cancel</button>
-                <button class="create-task-button">Create Task</button>
+                <button class="create-task-button" onclick="createTask()">Create Task</button>
             </div>
         </div>
     </div>
