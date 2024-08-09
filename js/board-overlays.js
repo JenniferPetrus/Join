@@ -159,3 +159,86 @@ function addSubtask() {
         }
     }
 }
+
+async function saveTaskToDatabase(task) {
+    try {
+        let response = await fetch(`${API_URL}/tasks.json`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(task)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save task to database');
+        }
+
+        let data = await response.json();
+        console.log('Task saved to database with ID:', data.name);
+
+        return data.name;
+    } catch (error) {
+        console.error('Error saving task to database:', error);
+        throw error;
+    }
+}
+
+async function createTask() {
+    if (!validateForm()) {
+        return;
+    }
+    let title = document.getElementById('taskTitle').value;
+    let description = document.getElementById('taskDescription').value;
+    let assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
+    let dueDate = document.getElementById('dueDate').value;
+    
+    let priorityButton = document.querySelector('.priority-button.active');
+    let priority = priorityButton ? priorityButton.id : 'low';
+    
+    let category = document.getElementById('category').value;
+    let subtasks = Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).map(item => item.textContent);
+    let newTask = {
+        title: title,
+        description: description,
+        assignedTo: assignedTo,
+        dueDate: dueDate,
+        priority: priority,
+        category: category,
+        subtasks: subtasks
+    };
+    try {
+        let taskId = await saveTaskToDatabase(newTask);
+        let subtasksHTML = '';
+        if (subtasks.length > 0) {
+            subtasksHTML = `
+                <div><strong>Subtasks:</strong></div>
+                <ul>
+                    ${subtasks.map(subtask => `<li>${subtask}</li>`).join('')}
+                </ul>
+            `;
+        }
+        let newTaskHTML = `
+            <div class="task" draggable="true" ondragstart="drag(event)" data-id="${taskId}">
+                <h3>${title}</h3>
+                <p>${description}</p>
+                ${subtasksHTML}
+                <div>Assigned to: ${assignedTo.join(', ')}</div>
+                <div>Due date: ${dueDate}</div>
+                <div><strong>Priority:</strong> ${priority.charAt(0).toUpperCase() + priority.slice(1)}</div>
+                <div>Category: ${category}</div>
+            </div>
+        `;
+        let container = document.getElementById(targetSectionId);
+        if (container) {
+            container.insertAdjacentHTML('beforeend', newTaskHTML);
+        } else {
+            console.error(`Container ${targetSectionId} not found`);
+        }
+        targetSectionId = null;
+        closeOverlay();
+    } catch (error) {
+        console.error('Error creating task:', error);
+    }
+}
+
