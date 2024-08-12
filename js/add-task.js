@@ -108,10 +108,45 @@ async function createTask() {
     const priority = getActivePriority();
     const category = document.getElementById('category').value;
     const subtasks = getSubtasks();
+    const task = {
+        title,
+        description,
+        assignedTo,
+        priority,
+        category,
+        subtasks
+    };
+    try {
+        const taskId = await saveTaskToDatabase(task); 
+        const taskHTML = generateTaskHTML(title, description, assignedTo, priority, category, subtasks);
+        insertTaskIntoContainer(taskHTML);
+        closeOverlay();
+    } catch (error) {
+        console.error('Error creating task:', error);
+    }
+}
 
-    const taskHTML = generateTaskHTML(title, description, assignedTo, priority, category, subtasks);
-    insertTaskIntoContainer(taskHTML);
-    closeOverlay();
+async function saveTaskToDatabase(task) {
+    try {
+        let response = await fetch(`${API_URL}/tasks.json`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(task)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save task to database');
+        }
+
+        let data = await response.json();
+        console.log('Task saved to database with ID:', data.name);
+        return data.name; // Returns the ID of the saved task
+    } catch (error) {
+        console.error('Error saving task to database:', error);
+        throw error;
+    }
 }
 // Holt die aktive Priorität
 function getActivePriority() {

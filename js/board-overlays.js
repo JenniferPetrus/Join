@@ -95,8 +95,7 @@ function setActivePriority(button) {
 // Hauptfunktion zum Erstellen einer Aufgabe
 async function createTask() {
     if (!validateForm()) {
-        return;
-    }
+        return;}
     const title = document.getElementById('taskTitle').value;
     const description = document.getElementById('taskDescription').value;
     const assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
@@ -104,15 +103,24 @@ async function createTask() {
     const category = document.getElementById('category').value;
     const subtasks = getSubtasks();
     const progress = calculateProgress(subtasks);
-
-    const taskHTML = generateTaskHTML(title, description, assignedTo, priority, category, subtasks, progress);
-    insertTaskIntoContainer(taskHTML);
-    closeOverlay();
+    const task = {
+        title,
+        description,
+        assignedTo,
+        priority,
+        category,
+        subtasks,
+        progress,
+    };
+    try {
+        const taskId = await saveTaskToDatabase(task); // Speichert die Aufgabe und erhält die ID
+        const taskHTML = generateTaskHTML(title, description, assignedTo, priority, category, subtasks, progress, taskId);
+        insertTaskIntoContainer(taskHTML);
+        closeOverlay();
+    } catch (error) {
+        console.error('Error creating task:', error);
+    }
 }
-
-
-
-
 // Holt die aktive Priorität
 function getActivePriority() {
     const priorityButton = document.querySelector('.priority-button.active');
@@ -170,26 +178,51 @@ function addSubtask() {
     }
 }
 
-// async function saveTaskToDatabase(task) {
-//     try {
-//         let response = await fetch(`${API_URL}/tasks.json`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify(task)
-//         });
-//         if (!response.ok) {
-//             throw new Error('Failed to save task to database');
-//         }
-//         let data = await response.json();
-//         console.log('Task saved to database with ID:', data.name);
-//         return data.name;
-//     } catch (error) {
-//         console.error('Error saving task to database:', error);
-//         throw error;
-//     }
-// }
+async function saveTaskToDatabase(task) {
+    try {
+        let response = await fetch(`${API_URL}/tasks.json`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(task)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save task to database');
+        }
+
+        let data = await response.json();
+        console.log('Task saved to database with ID:', data.name);
+        return data.name; // Gibt die ID des gespeicherten Tasks zurück
+    } catch (error) {
+        console.error('Error saving task to database:', error);
+        throw error;
+    }
+}
+
+async function loadTasksFromDatabase() {
+    try {
+        let response = await fetch(`${API_URL}/tasks.json`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch tasks');
+        }
+
+        let data = await response.json();
+        if (data) {
+            // Durchlaufe alle Tasks und füge sie in den Container ein
+            for (let key in data) {
+                if (data.hasOwnProperty(key)) {
+                    let task = data[key];
+                    const taskHTML = generateTaskHTML(task.title, task.description, task.assignedTo, task.priority, task.category, task.subtasks, task.progress, key);
+                    insertTaskIntoContainer(taskHTML);
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error loading tasks from database:', error);
+    }
+}
 // AUFGABE DETAILANSICHT
 function generateTaskHTML(title, description, assignedTo, priority, category, subtasks, progress, taskId) {
     const completedSubtasks = subtasks.filter(subtask => subtask.completed).length;
@@ -287,24 +320,33 @@ function deleteTask() {
     }
 }
 
-async function deleteTask(taskId) {
+async function deleteTask() {
+    if (!currentTaskId) {
+        console.error('No task selected for deletion.');
+        return;
+    }
     try {
-        let response = await fetch(`${API_URL}/tasks/${taskId}.json`, {
+        // Lösche die Aufgabe aus der Firebase-Datenbank
+        let response = await fetch(`${API_URL}/tasks/${currentTaskId}.json`, {
             method: 'DELETE'
         });
-
-        if (response.ok) {
-            const taskElement = document.getElementById(taskId);
-            if (taskElement) {
-                taskElement.remove();
-            } else {
-                console.error(`Task with ID ${taskId} not found in the UI.`);
-            }
-        } else {
-            console.error('Failed to delete task from the database');
+        if (!response.ok) {
+            throw new Error('Failed to delete task from database');
         }
+        // löscht die Aufgabe aus dem Board
+        removeTaskFromBoard(currentTaskId);
+        closeTaskDetailOverlay();
     } catch (error) {
         console.error('Error deleting task:', error);
     }
-    closeTaskDetailOverlay()
+}
+
+// Entfernt eine Aufgabe aus dem DOM
+function removeTaskFromBoard(taskId) {
+    const taskElement = document.getElementById(taskId);
+    if (taskElement) {
+        taskElement.remove();
+    } else {
+        console.error(`Task with ID ${taskId} not found in the UI.`);
+    }
 }
