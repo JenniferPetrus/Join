@@ -33,7 +33,6 @@ function validateForm() {
     }
     return isValid;
 }
-
 // Event-Listener für Eingaben hinzufügen -> Fehlermeldungen zurücksetzen
 function setupEventListeners() {
     document.getElementById('taskTitle').addEventListener('input', function() {
@@ -94,7 +93,7 @@ function setActivePriority(button) {
     }
 }
 // Hauptfunktion zum Erstellen einer Aufgabe
-function createTask() {
+async function createTask() {
     if (!validateForm()) {
         return;
     }
@@ -110,6 +109,10 @@ function createTask() {
     insertTaskIntoContainer(taskHTML);
     closeOverlay();
 }
+
+
+
+
 // Holt die aktive Priorität
 function getActivePriority() {
     const priorityButton = document.querySelector('.priority-button.active');
@@ -148,7 +151,7 @@ function insertTaskIntoContainer(taskHTML) {
         console.error(`Container ${targetSectionId} not found`);
     }
 }
-
+// Unteraufgaben
 function addSubtask() {
     let subtaskInput = document.getElementById('newSubtask');
     let subtaskList = document.getElementById('subtaskList');
@@ -162,36 +165,40 @@ function addSubtask() {
         if (!document.querySelector('.subtask-list').previousElementSibling || !document.querySelector('.subtask-list').previousElementSibling.classList.contains('subtask-title')) {
             let subtasksHeader = document.createElement('div');
             subtasksHeader.className = 'subtask-title';
-            subtasksHeader.innerHTML = '<strong>Subtasks:</strong>';
             subtaskList.parentElement.insertBefore(subtasksHeader, subtaskList);
         }
     }
 }
 
-async function saveTaskToDatabase(task) {
-    try {
-        let response = await fetch(`${API_URL}/tasks.json`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(task)
-        });
-        if (!response.ok) {
-            throw new Error('Failed to save task to database');
-        }
-        let data = await response.json();
-        console.log('Task saved to database with ID:', data.name);
-        return data.name;
-    } catch (error) {
-        console.error('Error saving task to database:', error);
-        throw error;
-    }
-}
+// async function saveTaskToDatabase(task) {
+//     try {
+//         let response = await fetch(`${API_URL}/tasks.json`, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify(task)
+//         });
+//         if (!response.ok) {
+//             throw new Error('Failed to save task to database');
+//         }
+//         let data = await response.json();
+//         console.log('Task saved to database with ID:', data.name);
+//         return data.name;
+//     } catch (error) {
+//         console.error('Error saving task to database:', error);
+//         throw error;
+//     }
+// }
 // AUFGABE DETAILANSICHT
 function generateTaskHTML(title, description, assignedTo, priority, category, subtasks, progress, taskId) {
-    const progressBarWidth = subtasks.length ? (subtasks.filter(subtask => subtask.completed).length / subtasks.length) * 100 : 0;
+    const completedSubtasks = subtasks.filter(subtask => subtask.completed).length;
+    const totalSubtasks = subtasks.length;
+    const progressBarWidth = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
+    const progressBarColor = progressBarWidth > 0 ? '#4589FF' : '#e0e0e0'; 
     const priorityImgSrc = getPriorityImageSrc(priority);
+    const categoryClass = category === 'User Story' ? 'user-story-background' : 
+                          category === 'Technical Task' ? 'technical-task-background' : '';
     return `
         <div class="task-card" id="${taskId}" onclick='openTaskDetailOverlay({
             title: "${title}",
@@ -202,19 +209,14 @@ function generateTaskHTML(title, description, assignedTo, priority, category, su
             subtasks: ${JSON.stringify(subtasks)},
             progress: "${progress}"
         }, "${taskId}")'>
-            <div class="task-category">${category}</div>
+            <div class="task-category ${categoryClass}">${category}</div>
             <div class="task-title">${title}</div>
             <div class="task-description">${description}</div>
             <div class="task-progress-container">
-                <div class="task-progress-bar" style="width: ${progressBarWidth}%"></div>
-                <div class="task-progress-text">${progress}</div>
+                <div class="task-progress-bar" style="width: ${progressBarWidth}%; background-color: ${progressBarColor};"></div>
+                <div class="task-progress-text">${completedSubtasks}/${totalSubtasks} Subtasks</div>
             </div>
-            <div class="task-footer">
-                <div class="task-assigned-to">Assigned to: ${assignedTo.join(', ')}</div>
-                <div class="task-priority">
-                    <img src="${priorityImgSrc}" alt="${priority} Priority">
-                </div>
-            </div>
+            <img class="task-priority-img" src="${priorityImgSrc}" alt="Priority Icon">
         </div>
     `;
 }
@@ -223,17 +225,21 @@ let currentTaskId = null;
 
 function openTaskDetailOverlay(task, taskId) {
     currentTaskId = taskId;
+    const categoryClass = task.category === 'User Story' ? 'user-story-background' : 
+                          task.category === 'Technical Task' ? 'technical-task-background' : '';
     document.getElementById('taskDetailOverlay').innerHTML = `
         <div class="task-detail-container">
-            <div class="task-detail-header"
+            <div class="task-detail-header">
                 <button class="close-button-details" onclick="closeTaskDetailOverlay()">x</button>
-                <div class="task-detail-category">${task.category}</div>
+                <div class="task-detail-category ${categoryClass}">${task.category}</div>
             </div>
             <h1 class="task-detail-title">${task.title}</h1>
             <p class="task-detail-description">${task.description}</p>
-            <p>Due Date:${task.dueDate}</p>
-            <p>Priority:${task.priority} <img src="${getPriorityImageSrc(task.priority)}" alt="${task.priority} Priority" class="priority-image"></p>
-            <p>Assigned To:${task.assignedTo.join(', ')}</p>
+            <p>Due Date: ${task.dueDate}</p>
+            <p>Priority: ${task.priority} 
+                <img src="${getPriorityImageSrc(task.priority)}" alt="${task.priority} Priority" class="priority-image">
+            </p>
+            <p>Assigned To: ${task.assignedTo.join(', ')}</p>
             <div class="task-detail-subtasks">
                 <p>Subtasks:</p>
                 <ul>
@@ -245,7 +251,7 @@ function openTaskDetailOverlay(task, taskId) {
                 </ul>
             </div>
             <div class="overlay-buttons">
-            <button onclick="deleteTask()">Delete</button>
+                <button onclick="deleteTask()">Delete</button>
                 <button onclick="editTask()">Edit</button>
             </div>
         </div>

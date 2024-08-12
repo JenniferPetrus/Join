@@ -241,7 +241,6 @@ label, input, textarea, select{
 }
 
 .task-category {
-    background-color: #007bff;
     color: white;
     font-size: 14px;
     padding: 4px 8px;
@@ -265,25 +264,15 @@ label, input, textarea, select{
 .task-progress-container {
     display: flex;
     align-items: center;
-    margin-bottom: 16px;
+    margin-top: 10px;
 }
 
 .task-progress-bar {
-    background-color: #ddd;
-    height: 8px;
+    height: 10px;
+    border-radius: 5px;
     flex-grow: 1;
-    border-radius: 4px;
-    margin-right: 8px;
-    transition: background-color 0.3s ease;
-}
-
-.task-progress-bar.completed {
-    background-color: #007bff;
-}
-
-.task-progress-text {
-    font-size: 14px;
-    color: #333;
+    margin-right: 10px;
+    transition: width 0.3s ease, background-color 0.3s ease;
 }
 
 .task-footer {
@@ -301,7 +290,14 @@ label, input, textarea, select{
     width: 24px;
     height: 24px;
 }
-
+/* User Story */
+.user-story-background {
+    background-color: #0038FF;
+}
+/* Technical Task */
+.technical-task-background {
+    background-color: #1FD7C1;
+}
 /* TASK DETAIL */
 .task-detail-container {
     background-color: #fff;
@@ -315,7 +311,6 @@ label, input, textarea, select{
 }
 
 .task-detail-category {
-    background-color: #007bff;
     color: #fff;
     padding: 5px 10px;
     border-radius: 5px;
