@@ -74,3 +74,4 @@ function removeHighlight(id) {
 function init(){
     return updateHTML();
 }
+

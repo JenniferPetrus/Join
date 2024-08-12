@@ -6,12 +6,103 @@
     margin: 5px;
 }
 
-.drag-area-highlight {
+/*.drag-area-highlight {
     background-color: rgba(0, 0, 0, 0.2);
-}
+}*/
 
 .dragging {
     border: 2px dashed #007BFF;
     background-color: #E0F7FA;
     transform: scale(1.05);
+}
+
+.todo:active {
+    cursor: grabbing;
+    background-color: lightblue;
+    border-color: blue;
+    transform: scale(1.05);
+    transform: rotate(2deg);
+}
+
+.responsive-dd-header{
+    display: flex;
+    justify-content: space-between;
+    margin-right: 15px;
+}
+
+.board-task-manager{
+    display: flex;
+}
+
+.drag-area-responsive{
+    width: 300px;
+    height: auto;
+    border-radius: 24px;
+    box-shadow: 4px 0px 6px 0px rgba(0, 0, 0, 0.03);
+    padding: 10px;
+}
+
+@media(max-width: 1570px){
+    .board-task-manager{
+        flex-wrap: wrap;
+    }
+
+    .headline-board {
+        justify-content: initial;
+        gap: 250px;
+    }
+}
+
+@media(max-width: 1250px){
+    .board-task-manager{
+        flex-direction: column;
+        margin-right: 100px;
+    }
+
+    .board-task-manager>div{
+        margin-bottom: 50px;
+    }
+
+    .input-search{
+        display: none;
+    }
+}
+
+@media(max-width: 850px){
+    .wrapper-board{
+        left: 0;
+        min-height: calc(100vh - 100px); /* 100px ist die Höhe des Footers */
+        margin-bottom: 105px;
+        }
+
+    .board-task-manager{
+        flex-direction: column;
+        margin-right: 0;
+    }
+}
+
+@media(max-width: 630px){
+    .headline-board{
+        gap: 120px;
+    }
+
+    .headline{
+        font-size: 30px;
+    }
+
+    .add-task-button {
+        font-size: 12px;
+        height: 30px;
+        width: 100px;
+    }
+}
+
+@media(max-width: 375px){
+    .headline-board{
+        gap: 70px;
+    }
+
+    .wrapper-board {
+        padding-left: 10px;
+    }
 }
