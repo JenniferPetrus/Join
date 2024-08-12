@@ -93,52 +93,60 @@ function setActivePriority(button) {
             break;
     }
 }
-
+// Hauptfunktion zum Erstellen einer Aufgabe
 function createTask() {
     if (!validateForm()) {
-        return;}
-    let title = document.getElementById('taskTitle').value;
-    let description = document.getElementById('taskDescription').value;
-    let assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
-    let dueDate = document.getElementById('dueDate').value;
-    
-    let priorityButton = document.querySelector('.priority-button.active');
-    let priority = priorityButton ? priorityButton.id : 'low';
-    
-    let category = document.getElementById('category').value;
-    let subtasks = Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).map(item => item.textContent);
-    
-    let subtasksHTML = '';
-    if (subtasks.length > 0) {
-        subtasksHTML = `
-            <div><strong>Subtasks:</strong></div>
-            <ul>
-                ${subtasks.map(subtask => `<li>${subtask}</li>`).join('')}
-            </ul>
-        `;
+        return;
     }
-    let newTaskHTML = `
-        <div class="task" draggable="true" ondragstart="drag(event)">
-            <h3>${title}</h3>
-            <p>${description}</p>
-            ${subtasksHTML}
-            <div>Assigned to: ${assignedTo.join(', ')}</div>
-            <div>Due date: ${dueDate}</div>
-            <div><strong>Priority:</strong> ${priority.charAt(0).toUpperCase() + priority.slice(1)}</div>
-            <div>Category: ${category}</div>
-        </div>
-    `;
-    
-    let container = document.getElementById(targetSectionId);
+    const title = document.getElementById('taskTitle').value;
+    const description = document.getElementById('taskDescription').value;
+    const assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
+    const priority = getActivePriority();
+    const category = document.getElementById('category').value;
+    const subtasks = getSubtasks();
+    const progress = calculateProgress(subtasks);
+
+    const taskHTML = generateTaskHTML(title, description, assignedTo, priority, category, subtasks, progress);
+    insertTaskIntoContainer(taskHTML);
+    closeOverlay();
+}
+// Holt die aktive Priorität
+function getActivePriority() {
+    const priorityButton = document.querySelector('.priority-button.active');
+    return priorityButton ? priorityButton.id : 'low';
+}
+// Holt alle Subtasks
+function getSubtasks() {
+    return Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).map(item => ({
+        text: item.textContent,
+    }));
+}
+// Berechnet den Fortschritt
+function calculateProgress(subtasks) {
+    const completedSubtasks = subtasks.filter(subtask => subtask.completed).length;
+    return `${completedSubtasks}/${subtasks.length} Subtasks`;
+}
+// Bildpfad -> Priorität
+function getPriorityImageSrc(priority) {
+    switch (priority) {
+        case 'urgent':
+            return '/assets/icons/Board-icons/urgent-red.svg';
+        case 'medium':
+            return '/assets/icons/Board-icons/medium-orange.svg';
+        case 'low':
+            return '/assets/icons/Board-icons/low-green.svg';
+        default:
+            return '/assets/icons/Board-icons/low-green.svg';
+    }
+}
+// Fügt die Aufgabe in den Container ein
+function insertTaskIntoContainer(taskHTML) {
+    const container = document.getElementById(targetSectionId);
     if (container) {
-        container.insertAdjacentHTML('beforeend', newTaskHTML);
+        container.insertAdjacentHTML('beforeend', taskHTML);
     } else {
         console.error(`Container ${targetSectionId} not found`);
     }
-    
-    targetSectionId = null;
-    
-    closeOverlay();
 }
 
 function addSubtask() {
@@ -169,76 +177,128 @@ async function saveTaskToDatabase(task) {
             },
             body: JSON.stringify(task)
         });
-
         if (!response.ok) {
             throw new Error('Failed to save task to database');
         }
-
         let data = await response.json();
         console.log('Task saved to database with ID:', data.name);
-
         return data.name;
     } catch (error) {
         console.error('Error saving task to database:', error);
         throw error;
     }
 }
-
-async function createTask() {
-    if (!validateForm()) {
-        return;
-    }
-    let title = document.getElementById('taskTitle').value;
-    let description = document.getElementById('taskDescription').value;
-    let assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
-    let dueDate = document.getElementById('dueDate').value;
-    
-    let priorityButton = document.querySelector('.priority-button.active');
-    let priority = priorityButton ? priorityButton.id : 'low';
-    
-    let category = document.getElementById('category').value;
-    let subtasks = Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).map(item => item.textContent);
-    let newTask = {
-        title: title,
-        description: description,
-        assignedTo: assignedTo,
-        dueDate: dueDate,
-        priority: priority,
-        category: category,
-        subtasks: subtasks
-    };
-    try {
-        let taskId = await saveTaskToDatabase(newTask);
-        let subtasksHTML = '';
-        if (subtasks.length > 0) {
-            subtasksHTML = `
-                <div><strong>Subtasks:</strong></div>
-                <ul>
-                    ${subtasks.map(subtask => `<li>${subtask}</li>`).join('')}
-                </ul>
-            `;
-        }
-        let newTaskHTML = `
-            <div class="task" draggable="true" ondragstart="drag(event)" data-id="${taskId}">
-                <h3>${title}</h3>
-                <p>${description}</p>
-                ${subtasksHTML}
-                <div>Assigned to: ${assignedTo.join(', ')}</div>
-                <div>Due date: ${dueDate}</div>
-                <div><strong>Priority:</strong> ${priority.charAt(0).toUpperCase() + priority.slice(1)}</div>
-                <div>Category: ${category}</div>
+// AUFGABE DETAILANSICHT
+function generateTaskHTML(title, description, assignedTo, priority, category, subtasks, progress, taskId) {
+    const progressBarWidth = subtasks.length ? (subtasks.filter(subtask => subtask.completed).length / subtasks.length) * 100 : 0;
+    const priorityImgSrc = getPriorityImageSrc(priority);
+    return `
+        <div class="task-card" id="${taskId}" onclick='openTaskDetailOverlay({
+            title: "${title}",
+            description: "${description}",
+            assignedTo: ${JSON.stringify(assignedTo)},
+            priority: "${priority}",
+            category: "${category}",
+            subtasks: ${JSON.stringify(subtasks)},
+            progress: "${progress}"
+        }, "${taskId}")'>
+            <div class="task-category">${category}</div>
+            <div class="task-title">${title}</div>
+            <div class="task-description">${description}</div>
+            <div class="task-progress-container">
+                <div class="task-progress-bar" style="width: ${progressBarWidth}%"></div>
+                <div class="task-progress-text">${progress}</div>
             </div>
-        `;
-        let container = document.getElementById(targetSectionId);
-        if (container) {
-            container.insertAdjacentHTML('beforeend', newTaskHTML);
-        } else {
-            console.error(`Container ${targetSectionId} not found`);
+            <div class="task-footer">
+                <div class="task-assigned-to">Assigned to: ${assignedTo.join(', ')}</div>
+                <div class="task-priority">
+                    <img src="${priorityImgSrc}" alt="${priority} Priority">
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+let currentTaskId = null;
+
+function openTaskDetailOverlay(task, taskId) {
+    currentTaskId = taskId;
+    document.getElementById('taskDetailOverlay').innerHTML = `
+        <div class="task-detail-container">
+            <div class="task-detail-header"
+                <button class="close-button-details" onclick="closeTaskDetailOverlay()">x</button>
+                <div class="task-detail-category">${task.category}</div>
+            </div>
+            <h1 class="task-detail-title">${task.title}</h1>
+            <p class="task-detail-description">${task.description}</p>
+            <p>Due Date:${task.dueDate}</p>
+            <p>Priority:${task.priority} <img src="${getPriorityImageSrc(task.priority)}" alt="${task.priority} Priority" class="priority-image"></p>
+            <p>Assigned To:${task.assignedTo.join(', ')}</p>
+            <div class="task-detail-subtasks">
+                <p>Subtasks:</p>
+                <ul>
+                    ${task.subtasks.map(subtask => `
+                        <li>
+                            <input type="checkbox" ${subtask.completed ? 'checked' : ''}>
+                            ${subtask.text}
+                        </li>`).join('')}
+                </ul>
+            </div>
+            <div class="overlay-buttons">
+            <button onclick="deleteTask()">Delete</button>
+                <button onclick="editTask()">Edit</button>
+            </div>
+        </div>
+    `;
+    document.getElementById('taskDetailOverlay').style.display = 'flex';
+}
+
+function closeTaskDetailOverlay() {
+    document.getElementById('taskDetailOverlay').style.display = 'none';
+    currentTaskId = null;
+}
+
+function editTask() {
+    if (currentTaskId) {
+        let task = getTaskById(currentTaskId); 
+        if (task) {
+            populateEditForm(task);
+            closeTaskDetailOverlay();
         }
-        targetSectionId = null;
-        closeOverlay();
-    } catch (error) {
-        console.error('Error creating task:', error);
     }
 }
 
+function deleteTask() {
+    if (currentTaskId) {
+        deleteTaskById(currentTaskId)
+            .then(() => {
+                removeTaskFromUI(currentTaskId);
+                closeTaskDetailOverlay();
+            })
+            .catch(error => {
+                console.error('Error deleting task:', error);
+            });
+    }
+}
+
+async function deleteTask(taskId) {
+    try {
+        let response = await fetch(`${API_URL}/tasks/${taskId}.json`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            const taskElement = document.getElementById(taskId);
+            if (taskElement) {
+                taskElement.remove();
+            } else {
+                console.error(`Task with ID ${taskId} not found in the UI.`);
+            }
+        } else {
+            console.error('Failed to delete task from the database');
+        }
+    } catch (error) {
+        console.error('Error deleting task:', error);
+    }
+    closeTaskDetailOverlay()
+}

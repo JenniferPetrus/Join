@@ -35,7 +35,6 @@
                             <option>Contact 2</option>
                             <option>Contact 3</option>
                         </select>
-                        <div id="categoryError" class="error-message"></div>
                     </div>
                 </div>
                 <hr class="middle-vector">
@@ -85,6 +84,21 @@
         </div>
     </div>
     <div class="overlay-task"></div>
+
+    <div class="task-detail-overlay" id="taskDetailOverlay">
+        <div class="task-detail-content">
+            <div class="task-detail-header">
+                <div class="task-detail-title" id="taskDetailTitle"></div>
+                <div class="task-detail-close-button" onclick="closeTaskDetailOverlay()">✖</div>
+            </div>
+            <div class="task-detail-body" id="taskDetailBody"></div>
+            <div class="task-detail-footer">
+                <button class="task-detail-delete" onclick="deleteTask()">Delete</button>
+                <button class="task-detail-edit" onclick="editTask()">Edit</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 <script src="./js/board-overlays.js"></script>
 </html>

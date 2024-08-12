@@ -1,23 +1,18 @@
 function addSubtask() {
-    const subtaskInput = document.getElementById('newSubtask');
-    const subtaskText = subtaskInput.value.trim();
+    let subtaskInput = document.getElementById('newSubtask');
+    let subtaskList = document.getElementById('subtaskList');
 
-    if (subtaskText) {
-        const subtaskList = document.getElementById('subtaskList');
-        const subtaskItem = document.createElement('div');
-        subtaskItem.className = 'subtask-item';
-
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-
-        const label = document.createElement('label');
-        label.textContent = subtaskText;
-
-        subtaskItem.appendChild(checkbox);
-        subtaskItem.appendChild(label);
-        subtaskList.appendChild(subtaskItem);
-
+    if (subtaskInput.value.trim() !== '') {
+        let newSubtask = document.createElement('div');
+        newSubtask.className = 'subtask-list-item';
+        newSubtask.textContent = subtaskInput.value.trim();
+        subtaskList.appendChild(newSubtask);
         subtaskInput.value = '';
+        if (!document.querySelector('.subtask-list').previousElementSibling || !document.querySelector('.subtask-list').previousElementSibling.classList.contains('subtask-title')) {
+            let subtasksHeader = document.createElement('div');
+            subtasksHeader.className = 'subtask-title';
+            subtaskList.parentElement.insertBefore(subtasksHeader, subtaskList);
+        }
     }
 }
 // Buttons Colour
@@ -60,4 +55,175 @@ function setActivePriority(button) {
             activeImg.src = '/assets/icons/Board-icons/low-white.svg';
             break;
     }
+}
+
+function validateForm() {
+    let isValid = true;
+    document.querySelectorAll('.error-message').forEach(errorElement => {
+        errorElement.textContent = '';
+    });
+    let title = document.getElementById('taskTitle').value;
+    if (!title) {
+        document.getElementById('taskTitleError').textContent = 'Title is required';
+        isValid = false;
+    }
+    let dueDate = document.getElementById('dueDate').value;
+    if (!dueDate) {
+        document.getElementById('dueDateError').textContent = 'Due Date is required';
+        isValid = false;
+    }
+    let category = document.getElementById('category').value;
+    if (!category || category === 'Select task category') {
+        document.getElementById('categoryError').textContent = 'Category is required';
+        isValid = false;
+    }
+    return isValid;
+}
+// Event-Listener für Eingaben hinzufügen -> Fehlermeldungen zurücksetzen
+function setupEventListeners() {
+    document.getElementById('taskTitle').addEventListener('input', function() {
+        document.getElementById('taskTitleError').textContent = '';
+    });
+    document.getElementById('dueDate').addEventListener('input', function() {
+        document.getElementById('dueDateError').textContent = '';
+    });
+    document.getElementById('category').addEventListener('change', function() {
+        document.getElementById('categoryError').textContent = '';
+    });
+}
+
+function resetErrorMessages() {
+    document.querySelectorAll('.error-message').forEach(errorElement => {
+        errorElement.textContent = '';
+    });
+}
+
+async function createTask() {
+    if (!validateForm()) {
+        return;
+    }
+    const title = document.getElementById('taskTitle').value;
+    const description = document.getElementById('taskDescription').value;
+    const assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
+    const priority = getActivePriority();
+    const category = document.getElementById('category').value;
+    const subtasks = getSubtasks();
+
+    const taskHTML = generateTaskHTML(title, description, assignedTo, priority, category, subtasks);
+    insertTaskIntoContainer(taskHTML);
+    closeOverlay();
+}
+// Holt die aktive Priorität
+function getActivePriority() {
+    const priorityButton = document.querySelector('.priority-button.active');
+    return priorityButton ? priorityButton.id : 'low';
+}
+// Holt alle Subtasks
+function getSubtasks() {
+    return Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).map(item => ({
+        text: item.textContent,
+    }));
+}
+// HTML für eine Aufgabe
+function generateTaskHTML(title, description, assignedTo, priority, category, subtasks) {
+    const progressBarWidth = subtasks.length ? (subtasks.filter(subtask => subtask.completed).length / subtasks.length) * 100 : 0;
+    const priorityImgSrc = getPriorityImageSrc(priority);
+    return `
+        <div class="task-card" id="${title.replace(/\s+/g, '-').toLowerCase()}">
+            <div class="task-category">${category}</div>
+            <div class="task-title">${title}</div>
+            <div class="task-description">${description}</div>
+            <div class="task-progress-container">
+                <div class="task-progress-bar" style="width: ${progressBarWidth}%"></div>
+                <div class="task-progress-text">${subtasks.length ? subtasks.filter(subtask => subtask.completed).length + '/' + subtasks.length + ' Subtasks' : 'No Subtasks'}</div>
+            </div>
+            <div class="task-footer">
+                <div class="task-assigned-to">Assigned to: ${assignedTo.join(', ')}</div>
+                <div class="task-priority">
+                    <img src="${priorityImgSrc}" alt="${priority} Priority">
+                </div>
+                <button class="delete-task-button" onclick="deleteTask('${title.replace(/\s+/g, '-').toLowerCase()}')">Delete</button>
+            </div>
+        </div>
+    `;
+}
+// Bildpfad -> Priorität
+function getPriorityImageSrc(priority) {
+    switch (priority) {
+        case 'urgent':
+            return '/assets/icons/Board-icons/urgent-red.svg';
+        case 'medium':
+            return '/assets/icons/Board-icons/medium-orange.svg';
+        case 'low':
+            return '/assets/icons/Board-icons/low-green.svg';
+        default:
+            return '/assets/icons/Board-icons/low-green.svg';
+    }
+}
+// Fügt die Aufgabe in den Container ein
+function insertTaskIntoContainer(taskHTML) {
+    const container = document.getElementById(targetSectionId);
+    if (container) {
+        container.insertAdjacentHTML('beforeend', taskHTML);
+    } else {
+        console.error(`Container ${targetSectionId} not found`);
+    }
+}
+// Funktion zum Löschen einer Aufgabe
+async function deleteTask(taskId) {
+    try {
+        let response = await fetch(`${API_URL}/tasks/${taskId}.json`, {
+            method: 'DELETE'
+        });
+        if (response.ok) {
+            const taskElement = document.getElementById(taskId);
+            if (taskElement) {
+                taskElement.remove();
+            } else {
+                console.error(`Task with ID ${taskId} not found in the UI.`);
+            }
+        } else {
+            console.error('Failed to delete task from the database');
+        }
+    } catch (error) {
+        console.error('Error deleting task:', error);
+    }
+}
+
+function clearOverlay() {
+    // Leeren der Texteingabefelder
+    document.getElementById('taskTitle').value = '';
+    document.getElementById('taskDescription').value = '';
+    document.getElementById('newSubtask').value = '';
+    // Zurücksetzen der Dropdowns
+    document.getElementById('assignedTo').selectedIndex = 0;
+    document.getElementById('category').selectedIndex = 0;
+    // Zurücksetzen des Datumseingabefeldes
+    document.getElementById('dueDate').value = '';
+    // Zurücksetzen der Prioritätsauswahl
+    const priorityButtons = document.getElementsByClassName('priority-button');
+    for (let button of priorityButtons) {
+        button.classList.remove('active', 'active-urgent', 'active-medium', 'active-low');
+        button.style.backgroundColor = 'white';
+        button.style.color = 'black';
+        const img = button.querySelector('img');
+        switch (button.id) {
+            case 'urgent':
+                img.src = '/assets/icons/Board-icons/urgent-red.svg';
+                break;
+            case 'medium':
+                img.src = '/assets/icons/Board-icons/medium-orange.svg';
+                break;
+            case 'low':
+                img.src = '/assets/icons/Board-icons/low-green.svg';
+                break;
+        }
+    }
+    // Leeren der Subtasks-Liste
+    const subtaskList = document.getElementById('subtaskList');
+    subtaskList.innerHTML = '';
+    if (subtasksHeader) {
+        subtasksHeader.remove();
+    }
+    resetErrorMessages();
 }

@@ -228,3 +228,150 @@ label, input, textarea, select{
     font-size: 12px;
     margin-top: 5px;
 }
+/* Single Tasks Design */
+.task-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 24px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 4px 0px 6px 0px rgba(0, 0, 0, 0.03);
+    height: auto;
+    cursor: pointer;
+}
+
+.task-category {
+    background-color: #007bff;
+    color: white;
+    font-size: 14px;
+    padding: 4px 8px;
+    display: inline-block;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.task-title {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+.task-description {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.task-progress-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.task-progress-bar {
+    background-color: #ddd;
+    height: 8px;
+    flex-grow: 1;
+    border-radius: 4px;
+    margin-right: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.task-progress-bar.completed {
+    background-color: #007bff;
+}
+
+.task-progress-text {
+    font-size: 14px;
+    color: #333;
+}
+
+.task-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-assigned-to {
+    font-size: 14px;
+    color: #333;
+}
+
+.task-priority img {
+    width: 24px;
+    height: 24px;
+}
+
+/* TASK DETAIL */
+.task-detail-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+    height: 700px;
+    width: 500px;
+}
+
+.task-detail-category {
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.task-detail-header{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+
+.close-button-details{
+    border: none;
+    background-color: white;
+}
+
+.task-detail-title {
+    font-size: 50px;
+    margin: 0;
+}
+
+.task-detail-description {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.task-detail-subtasks ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-detail-subtasks li {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.task-detail-subtasks input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.priority-image {
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+#taskDetailOverlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+}
