@@ -19,6 +19,7 @@
                     <div class="input-section">
                         <label for="taskTitle">Title<span class="required-field">*</span></label>
                         <input type="text" id="taskTitle" placeholder="Enter task title" required>
+                        <div id="taskTitleError" class="error-message"></div>
                     </div>
                     <div class="input-section">
                         <label for="taskDescription">Description</label>
@@ -26,25 +27,27 @@
                     </div>
                     <div class="input-section">
                         <label for="assignedTo">Assigned to</label>
-                        <select id="assignedTo" multiple>
+                        <select id="assignedTo">
+                            <option disabled selected>Select contacts to assign </option>
+                            <option>Contact 1</option>
+                            <option>Contact 2</option>
+                            <option>Contact 3</option>
                         </select>
                     </div>
-                    <div><span class="required-field">*</span>This field is required</div>
                 </div>
+                <hr class="middle-vector">
                 <div class="right-column">
                     <div class="input-section">
                         <label for="dueDate">Due Date<span class="required-field">*</span></label>
                         <input type="date" id="dueDate" required>
+                        <div id="dueDateError" class="error-message"></div>
                     </div>
                     <div class="input-section">
-                        <label for="priority">Prio</label>
+                        <label for="priority">Priority</label>
                         <div id="priority">
-                            <button id="urgent" class="priority-button" onclick="setActivePriority(this)"> Urgent<img src="/assets/icons/Board-icons/urgent-red.svg" alt="">
-                            </button>
-                            <button id="medium" class="priority-button" onclick="setActivePriority(this)">Medium<img src="/assets/icons/Board-icons/medium-orange.svg" alt="">
-                            </button>
-                            <button id="low" class="priority-button" onclick="setActivePriority(this)">Low<img src="/assets/icons/Board-icons/low-green.svg" alt="">
-                            </button>
+                            <button id="urgent" class="priority-button" onclick="setActivePriority(this)"> Urgent<img src="/assets/icons/Board-icons/urgent-red.svg" alt=""></button>
+                            <button id="medium" class="priority-button" onclick="setActivePriority(this)">Medium<img src="/assets/icons/Board-icons/medium-orange.svg" alt=""></button>
+                            <button id="low" class="priority-button" onclick="setActivePriority(this)">Low<img src="/assets/icons/Board-icons/low-green.svg" alt=""></button>
                         </div>
                     </div>
                     <div class="input-section">
@@ -55,26 +58,28 @@
                             <option>Select 2</option>
                             <option>Select 3</option>
                         </select>
+                        <div id="categoryError" class="error-message"></div>
                     </div>
                     <div class="input-section">
                         <label for="subtasks">Subtasks</label>
                         <div class="subtask-input">
-                            <input type="text" id="newSubtask" placeholder="Add a subtask">
-                            <button onclick="addSubtask()">Add</button>
+                            <input type="text" id="newSubtask" placeholder="Add new subtask"><img class="overlay-add-btn" src="assets/icons/Board-icons/Subtasks icons plus.svg" onclick="addSubtask()">
                         </div>
                         <div class="subtask-list" id="subtaskList"></div>
                     </div>
                 </div>
             </div>
             <div class="overlay-footer">
-                <button class="cancel-button" onclick="closeOverlay()">Clear</button><img src="assets/img/close.svg" alt="">
-                <button class="create-task-button">Create Task</button>
+                <div class="left-footer">
+                    <div class="required-section"><span class="required-field">*</span>This field is required</div>
+                </div>
+                <div class="right-footer">
+                    <button class="cancel-button" onclick="clearOverlay()">Clear<img src="assets/icons/AddTask/Cancel x.svg" alt=""></button>
+                <button class="create-task-button" onclick="createTask()">Create Task<img src="assets/icons/AddTask/create task check.svg" alt=""></button>
+                </div>
             </div>
         </div>
     </div>
-
-    <div class="overlay-task">
-
 
     <div w3-include-html="footer.html"></div>
     <script src="js/template.js"></script>
