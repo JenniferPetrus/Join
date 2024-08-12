@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Task Overlay</title>
     <link rel="stylesheet" href="./styles/board-overlays.css">
-    <link rel="stylesheet" href="/assets/fonts/fonts.css">
-    <link rel="stylesheet" href="/styles/root.css">
-    <link rel="stylesheet" href="styles/media.css">
+    <link rel="stylesheet" href="./assets/fonts/fonts.css">
+    <link rel="stylesheet" href="./styles/root.css">
+    <link rel="stylesheet" href="./styles/media.css">
 </head>
 <body>
     <div class="overlay" id="addTaskOverlay">
         <div class="overlay-content">
             <div class="overlay-header">
                 <div class="overlay-title">Add Task</div>
-                <div class="close-button" onclick="closeOverlay()"><img src="assets/icons/AddTask/Cancel x.svg" alt=""></div>
+                <div class="close-button" onclick="closeOverlay()"><img src="./assets/icons/AddTask/Cancel x.svg" alt=""></div>
             </div>
             <div class="overlay-body">
                 <div class="left-column">
@@ -48,9 +48,9 @@
                     <div class="input-section">
                         <label for="priority">Priority</label>
                         <div id="priority">
-                            <button id="urgent" class="priority-button" onclick="setActivePriority(this)"> Urgent<img src="/assets/icons/Board-icons/urgent-red.svg" alt=""></button>
-                            <button id="medium" class="priority-button" onclick="setActivePriority(this)">Medium<img src="/assets/icons/Board-icons/medium-orange.svg" alt=""></button>
-                            <button id="low" class="priority-button" onclick="setActivePriority(this)">Low<img src="/assets/icons/Board-icons/low-green.svg" alt=""></button>
+                            <button id="urgent" class="priority-button" onclick="setActivePriority(this)"> Urgent<img src="./assets/icons/Board-icons/urgent-red.svg" alt=""></button>
+                            <button id="medium" class="priority-button" onclick="setActivePriority(this)">Medium<img src="./assets/icons/Board-icons/medium-orange.svg" alt=""></button>
+                            <button id="low" class="priority-button" onclick="setActivePriority(this)">Low<img src="./assets/icons/Board-icons/low-green.svg" alt=""></button>
                         </div>
                     </div>
                     <div class="input-section">
@@ -66,7 +66,7 @@
                     <div class="input-section">
                         <label for="subtasks">Subtasks</label>
                         <div class="subtask-input">
-                            <input type="text" id="newSubtask" placeholder="Add new subtask"><img class="overlay-add-btn" src="assets/icons/Board-icons/Subtasks icons plus.svg" onclick="addSubtask()">
+                            <input type="text" id="newSubtask" placeholder="Add new subtask"><img class="overlay-add-btn" src="./assets/icons/Board-icons/Subtasks icons plus.svg" onclick="addSubtask()">
                         </div>
                         <div class="subtask-list" id="subtaskList"></div>
                     </div>
@@ -77,8 +77,8 @@
                     <div class="required-section"><span class="required-field">*</span>This field is required</div>
                 </div>
                 <div class="right-footer">
-                    <button class="cancel-button" onclick="closeOverlay()">Cancel<img src="assets/icons/AddTask/Cancel x.svg" alt=""></button>
-                <button class="create-task-button" onclick="createTask()">Create Task<img src="assets/icons/AddTask/create task check.svg" alt=""></button>
+                    <button class="cancel-button" onclick="closeOverlay()">Cancel<img src="./assets/icons/AddTask/Cancel x.svg" alt=""></button>
+                <button class="create-task-button" onclick="createTask()">Create Task<img src="./assets/icons/AddTask/create task check.svg" alt=""></button>
                 </div>
                 
             </div>

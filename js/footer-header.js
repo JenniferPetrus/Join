@@ -7,16 +7,16 @@ function setActive(element) {
         if (img) {
             switch (navItems[i].textContent.trim()) {
                 case 'Summary':
-                    img.src = '/assets/icons/summary-icon-dark.png';
+                    img.src = './assets/icons/summary-icon-dark.png';
                     break;
                 case 'Add Task':
-                    img.src = '/assets/icons/add-task-icon.png';
+                    img.src = './assets/icons/add-task-icon.png';
                     break;
                 case 'Board':
-                    img.src = '/assets/icons/Board-icon.png';
+                    img.src = './assets/icons/Board-icon.png';
                     break;
                 case 'Contacts':
-                    img.src = '/assets/icons/contacts-icon.png';
+                    img.src = './assets/icons/contacts-icon.png';
                     break;
             }
         }
@@ -27,16 +27,16 @@ function setActive(element) {
     if (img) {
         switch (element.textContent.trim()) {
             case 'Summary':
-                img.src = '/assets/icons/summary-icon-bright.png';
+                img.src = './assets/icons/summary-icon-bright.png';
                 break;
             case 'Add Task':
-                img.src = '/assets/icons/add-task-icon-bright.png';
+                img.src = './assets/icons/add-task-icon-bright.png';
                 break;
             case 'Board':
-                img.src = '/assets/icons/Board-bright.png';
+                img.src = './assets/icons/Board-bright.png';
                 break;
             case 'Contacts':
-                img.src = '/assets/icons/contacts-icon-bright.png';
+                img.src = './assets/icons/contacts-icon-bright.png';
                 break;
         }
     }
