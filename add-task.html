@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Task</title>
     <link rel="icon" type="image/x-icon" href="/./assets/img/Logo for Favicon construction.svg">
-    <link rel="stylesheet" href="styles/add-task.css">
+    <link rel="stylesheet" href="./styles/add-task.css">
 </head>
 <body onload="includeHTML()">
     <div w3-include-html="header.html"></div>
@@ -45,9 +45,9 @@
                     <div class="input-section">
                         <label for="priority">Priority</label>
                         <div id="priority">
-                            <button id="urgent" class="priority-button" onclick="setActivePriority(this)"> Urgent<img src="/assets/icons/Board-icons/urgent-red.svg" alt=""></button>
-                            <button id="medium" class="priority-button" onclick="setActivePriority(this)">Medium<img src="/assets/icons/Board-icons/medium-orange.svg" alt=""></button>
-                            <button id="low" class="priority-button" onclick="setActivePriority(this)">Low<img src="/assets/icons/Board-icons/low-green.svg" alt=""></button>
+                            <button id="urgent" class="priority-button" onclick="setActivePriority(this)"> Urgent<img src="./assets/icons/Board-icons/urgent-red.svg" alt=""></button>
+                            <button id="medium" class="priority-button" onclick="setActivePriority(this)">Medium<img src="./assets/icons/Board-icons/medium-orange.svg" alt=""></button>
+                            <button id="low" class="priority-button" onclick="setActivePriority(this)">Low<img src="./assets/icons/Board-icons/low-green.svg" alt=""></button>
                         </div>
                     </div>
                     <div class="input-section">
@@ -63,7 +63,7 @@
                     <div class="input-section">
                         <label for="subtasks">Subtasks</label>
                         <div class="subtask-input">
-                            <input type="text" id="newSubtask" placeholder="Add new subtask"><img class="overlay-add-btn" src="assets/icons/Board-icons/Subtasks icons plus.svg" onclick="addSubtask()">
+                            <input type="text" id="newSubtask" placeholder="Add new subtask"><img class="overlay-add-btn" src="./assets/icons/Board-icons/Subtasks icons plus.svg" onclick="addSubtask()">
                         </div>
                         <div class="subtask-list" id="subtaskList"></div>
                     </div>
@@ -82,8 +82,8 @@
     </div>
 
     <div w3-include-html="footer.html"></div>
-    <script src="js/template.js"></script>
-    <script src="footer-header.js"></script>
-    <script src="js/add-task.js"></script>
+    <script src="./js/template.js"></script>
+    <script src="./js/footer-header.js"></script>
+    <script src="./js/add-task.js"></script>
 </body>
 </html>

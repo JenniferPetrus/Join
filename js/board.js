@@ -19,10 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // Plus-Icon Hover Change Colour
 document.querySelectorAll('.plus-icon').forEach(function(icon) {
     icon.addEventListener('mouseover', function() {
-        this.src = 'assets/icons/Board-icons/plus icon blue.svg';
+        this.src = './assets/icons/Board-icons/plus icon blue.svg';
     });
     icon.addEventListener('mouseout', function() {
-        this.src = 'assets/icons/Board-icons/plus icon black.svg';
+        this.src = './assets/icons/Board-icons/plus icon black.svg';
     });
 });
 // Search Icon Hover Change COlour

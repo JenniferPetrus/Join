@@ -25,13 +25,13 @@ function setActivePriority(button) {
         buttons[i].style.color = 'black';
         switch (buttons[i].id) {
             case 'urgent':
-                img.src = '/assets/icons/Board-icons/urgent-red.svg';
+                img.src = './assets/icons/Board-icons/urgent-red.svg';
                 break;
             case 'medium':
-                img.src = '/assets/icons/Board-icons/medium-orange.svg';
+                img.src = './assets/icons/Board-icons/medium-orange.svg';
                 break;
             case 'low':
-                img.src = '/assets/icons/Board-icons/low-green.svg';
+                img.src = './assets/icons/Board-icons/low-green.svg';
                 break;
         }
     }
@@ -46,13 +46,13 @@ function setActivePriority(button) {
     const activeImg = button.querySelector('img');
     switch (button.id) {
         case 'urgent':
-            activeImg.src = '/assets/icons/Board-icons/urgent-white.svg';
+            activeImg.src = './assets/icons/Board-icons/urgent-white.svg';
             break;
         case 'medium':
-            activeImg.src = '/assets/icons/Board-icons/medium-white.svg';
+            activeImg.src = './assets/icons/Board-icons/medium-white.svg';
             break;
         case 'low':
-            activeImg.src = '/assets/icons/Board-icons/low-white.svg';
+            activeImg.src = './assets/icons/Board-icons/low-white.svg';
             break;
     }
 }

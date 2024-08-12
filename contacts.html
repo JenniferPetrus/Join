@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contacts</title>
     <link rel="icon" type="image/x-icon" href="/./assets/img/Logo for Favicon construction.svg">
-    <link rel="stylesheet" href="/styles/contacts.css">
-    <link rel="stylesheet" href="/assets/fonts/fonts.css">
-    <link rel="stylesheet" href="/styles/root.css">
-    <link rel="stylesheet" href="styles/media.css">
+    <link rel="stylesheet" href="./styles/contacts.css">
+    <link rel="stylesheet" href="./assets/fonts/fonts.css">
+    <link rel="stylesheet" href="./styles/root.css">
+    <link rel="stylesheet" href="./styles/media.css">
 </head>
 <body onload="init(), includeHTML()">
     <div w3-include-html="header.html"></div>
@@ -21,7 +21,7 @@
         <div class="contact-header-responsive" style="display: none;">
             <div class="header-and-return">
              <h1>Contacts</h1>
-             <a href="contacts.html"><img src="assets/icons/arrow-left-line.svg" alt="Back"></a>   
+             <a href="contacts.html"><img src="./assets/icons/arrow-left-line.svg" alt="Back"></a>   
             </div>
             <p>Better with a team</p>
             <hr>
@@ -32,10 +32,10 @@
                 <div class="contact-name">Anton Mayer</div>
                 <div class="contact-change">
                     <div class="contact-edit">
-                        <img class="image-edit" src="assets/img/edit.svg" alt=""><p>Edit</p>
+                        <img class="image-edit" src="./assets/img/edit.svg" alt=""><p>Edit</p>
                     </div>
                     <div class="contact-delete">
-                        <img class="image-delete" src="assets/img/delete.svg" alt=""><p>Delete</p>
+                        <img class="image-delete" src="./assets/img/delete.svg" alt=""><p>Delete</p>
                     </div>
                 </div>
             </div>
@@ -45,14 +45,14 @@
         <div class="email-address">anton@gmail.com</div>
         <div class="contact-phone">Phone</div>
         <div class="phone-number">+49 1111 1111 11 1</div>
-        <a href=""><img id="animateSettingBtn" class="edit-delete-setting" src="assets/img/Menu Contact options.svg" alt="Settings"></a>
+        <a href=""><img id="animateSettingBtn" class="edit-delete-setting" src="./assets/img/Menu Contact options.svg" alt="Settings"></a>
         <div id="editDeleteSetting"></div>
     </div>
     <div class="main-contactlist">
         <div class="background-btn">
             <button class="add-contact-btn">
                 <span class="btn-text">Add new contact</span>
-                <img src="assets/img/person_add.svg" alt="Add contact">
+                <img src="./assets/img/person_add.svg" alt="Add contact">
             </button>
         </div>
         <div id="contactlist" class="contacts-section"></div>
@@ -60,9 +60,9 @@
     <div w3-include-html="footer.html"></div>
 
     <div id="overlay-container"></div>
-    <script src="/js/overlay.js"></script>
+    <script src="./js/overlay.js"></script>
     <script src="./js/contacts.js"></script>
-    <script src="js/template.js"></script>
-    <script src="footer-header.js"></script>
+    <script src="./js/template.js"></script>
+    <script src="./js/footer-header.js"></script>
 </body>
 </html>
