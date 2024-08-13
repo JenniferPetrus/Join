@@ -106,6 +106,7 @@ async function createTask() {
     const task = {
         title,
         description,
+        dueDate,
         assignedTo,
         priority,
         category,
@@ -113,7 +114,7 @@ async function createTask() {
         progress,
     };
     try {
-        const taskId = await saveTaskToDatabase(task); // Speichert die Aufgabe und erhält die ID
+        const taskId = await saveTaskToDatabase(task);
         const taskHTML = generateTaskHTML(title, description, assignedTo, priority, category, subtasks, progress, taskId);
         insertTaskIntoContainer(taskHTML);
         closeOverlay();
@@ -121,6 +122,7 @@ async function createTask() {
         console.error('Error creating task:', error);
     }
 }
+
 // Holt die aktive Priorität
 function getActivePriority() {
     const priorityButton = document.querySelector('.priority-button.active');
@@ -164,7 +166,6 @@ function insertTaskIntoContainer(taskHTML) {
 function addSubtask() {
     let subtaskInput = document.getElementById('newSubtask');
     let subtaskList = document.getElementById('subtaskList');
-
     if (subtaskInput.value.trim() !== '') {
         let newSubtask = document.createElement('div');
         newSubtask.className = 'subtask-list-item';
@@ -179,23 +180,41 @@ function addSubtask() {
     }
 }
 
+async function getNextId() {
+    try {
+        const response = await fetch(`${API_URL}/2/tasks.json`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch tasks');
+        }
+        let data = await response.json();
+        if (!data) {
+            return 1;
+        }
+        let ids = Object.keys(data).map(id => parseInt(id));
+        let nextId = Math.max(...ids) + 1;
+        
+        return nextId;
+    } catch (error) {
+        console.error('Error getting next ID:', error);
+        throw error;
+    }
+}
+
 async function saveTaskToDatabase(task) {
     try {
-        let response = await fetch(`${API_URL}/tasks.json`, {
-            method: 'POST',
+        const taskId = await getNextId();
+        const response = await fetch(`${API_URL}/2/tasks/${taskId}.json`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(task)
         });
-
         if (!response.ok) {
             throw new Error('Failed to save task to database');
         }
-
-        let data = await response.json();
-        console.log('Task saved to database with ID:', data.name);
-        return data.name; // Gibt die ID des gespeicherten Tasks zurück
+        console.log('Task saved to database with ID:', taskId);
+        return taskId;
     } catch (error) {
         console.error('Error saving task to database:', error);
         throw error;
@@ -204,24 +223,64 @@ async function saveTaskToDatabase(task) {
 
 async function loadTasksFromDatabase() {
     try {
-        let response = await fetch(`${API_URL}/tasks.json`);
+        const response = await fetch(`${API_URL}/2/tasks.json`);
         if (!response.ok) {
             throw new Error('Failed to fetch tasks');
         }
-
-        let data = await response.json();
+        const data = await response.json();
         if (data) {
-            // Durchlaufe alle Tasks und füge sie in den Container ein
-            for (let key in data) {
-                if (data.hasOwnProperty(key)) {
-                    let task = data[key];
-                    const taskHTML = generateTaskHTML(task.title, task.description, task.assignedTo, task.priority, task.category, task.subtasks, task.progress, key);
+            for (let id in data) {
+                if (data.hasOwnProperty(id)) {
+                    let task = data[id];
+                    const taskHTML = generateTaskHTML(task.title, task.description, task.assignedTo, task.priority, task.category, task.subtasks, task.progress, id);
                     insertTaskIntoContainer(taskHTML);
                 }
             }
         }
     } catch (error) {
         console.error('Error loading tasks from database:', error);
+    }
+}
+
+async function saveEditedTask() {
+    const title = document.getElementById('editTitle').value;
+    const description = document.getElementById('editDescription').value;
+    const dueDate = document.getElementById('editDueDate').value;
+    const priority = document.getElementById('editPriority').value;
+    const category = document.getElementById('editCategory').value;
+    const assignedTo = Array.from(document.getElementById('editAssignedTo').selectedOptions).map(option => option.value);
+    const subtasks = Array.from(document.querySelectorAll('#editSubtasks .edit-subtask')).map(item => ({
+        text: item.querySelector('input[type="text"]').value,
+        completed: item.querySelector('input[type="checkbox"]').checked
+    }));
+    const updatedTask = {
+        title,
+        description,
+        dueDate,
+        priority,
+        category,
+        assignedTo,
+        subtasks,
+        progress: calculateProgress(subtasks)
+    };
+    try {
+        let response = await fetch(`${API_URL}/2/tasks/${currentTaskId}.json`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedTask)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update task in database');
+        }
+        console.log('Task updated successfully');
+        const taskHTML = generateTaskHTML(title, description, assignedTo, priority, category, subtasks, updatedTask.progress, currentTaskId);
+        updateTaskInUI(currentTaskId, taskHTML);
+        closeTaskDetailOverlay();
+    } catch (error) {
+        console.error('Error updating task:', error);
     }
 }
 // AUFGABE DETAILANSICHT
@@ -261,7 +320,6 @@ function openTaskDetailOverlay(task, taskId) {
     currentTaskId = taskId;
     const categoryClass = task.category === 'User Story' ? 'user-story-background' : 
                           task.category === 'Technical Task' ? 'technical-task-background' : '';
-
     document.getElementById('taskDetailOverlay').innerHTML = `
         <div class="task-detail-container">
             <div class="task-detail-header">
@@ -351,51 +409,6 @@ function createEditForm(task) {
     `;
 }
 
-async function saveEditedTask() {
-    const title = document.getElementById('editTitle').value;
-    const description = document.getElementById('editDescription').value;
-    const dueDate = document.getElementById('editDueDate').value;
-    const priority = document.getElementById('editPriority').value;
-    const category = document.getElementById('editCategory').value;
-    const assignedTo = Array.from(document.getElementById('editAssignedTo').selectedOptions).map(option => option.value);
-    const subtasks = Array.from(document.querySelectorAll('#editSubtasks .edit-subtask')).map(item => ({
-        text: item.querySelector('input[type="text"]').value,
-        completed: item.querySelector('input[type="checkbox"]').checked
-    }));
-
-    const updatedTask = {
-        title,
-        description,
-        dueDate,
-        priority,
-        category,
-        assignedTo,
-        subtasks,
-        progress: calculateProgress(subtasks) // Recalculate progress
-    };
-
-    try {
-        let response = await fetch(`${API_URL}/tasks/${currentTaskId}.json`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updatedTask)
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to update task in database');
-        }
-
-        console.log('Task updated successfully');
-        const taskHTML = generateTaskHTML(title, description, assignedTo, priority, category, subtasks, updatedTask.progress, currentTaskId);
-        updateTaskInUI(currentTaskId, taskHTML);
-        closeTaskDetailOverlay();
-    } catch (error) {
-        console.error('Error updating task:', error);
-    }
-}
-
 function updateTaskInUI(taskId, taskHTML) {
     const existingTask = document.getElementById(taskId);
     if (existingTask) {
@@ -414,11 +427,11 @@ function editTask() {
     document.getElementById('taskDetailsView').style.display = 'none';
     document.getElementById('taskEditForm').style.display = 'block';
 }
+
 function cancelEdit() {
     document.getElementById('taskDetailsView').style.display = 'block';
     document.getElementById('taskEditForm').style.display = 'none';
 }
-
 
 function deleteTask() {
     if (currentTaskId) {
@@ -439,21 +452,18 @@ async function deleteTask() {
         return;
     }
     try {
-        // Lösche die Aufgabe aus der Firebase-Datenbank
-        let response = await fetch(`${API_URL}/tasks/${currentTaskId}.json`, {
+        let response = await fetch(`${API_URL}/2/tasks/${currentTaskId}.json`, {
             method: 'DELETE'
         });
         if (!response.ok) {
             throw new Error('Failed to delete task from database');
         }
-        // löscht die Aufgabe aus dem Board
         removeTaskFromBoard(currentTaskId);
         closeTaskDetailOverlay();
     } catch (error) {
         console.error('Error deleting task:', error);
     }
 }
-
 // Entfernt eine Aufgabe aus dem DOM
 function removeTaskFromBoard(taskId) {
     const taskElement = document.getElementById(taskId);

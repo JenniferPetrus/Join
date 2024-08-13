@@ -126,25 +126,22 @@ async function createTask() {
     }
 }
 
-async function saveTaskToDatabase(task) {
+async function getNextId() {
     try {
-        let response = await fetch(`${API_URL}/tasks.json`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(task)
-        });
-
+        const response = await fetch(`${API_URL}/2/tasks.json`);
         if (!response.ok) {
-            throw new Error('Failed to save task to database');
+            throw new Error('Failed to fetch tasks');
         }
-
         let data = await response.json();
-        console.log('Task saved to database with ID:', data.name);
-        return data.name; // Returns the ID of the saved task
+        if (!data) {
+            return 1;
+        }
+        let ids = Object.keys(data).map(id => parseInt(id));
+        let nextId = Math.max(...ids) + 1;
+        
+        return nextId;
     } catch (error) {
-        console.error('Error saving task to database:', error);
+        console.error('Error getting next ID:', error);
         throw error;
     }
 }
