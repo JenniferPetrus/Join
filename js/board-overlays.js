@@ -136,8 +136,7 @@ function getSubtasks() {
 // Berechnet den Fortschritt
 function calculateProgress(subtasks) {
     const completedSubtasks = subtasks.filter(subtask => subtask.completed).length;
-    const totalSubtasks = subtasks.length;
-    return totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
+    return `${completedSubtasks}/${subtasks.length} Subtasks`;
 }
 // Bildpfad -> Priorität
 function getPriorityImageSrc(priority) {
@@ -302,148 +301,36 @@ function openTaskDetailOverlay(task, taskId) {
     currentTaskId = taskId;
     const categoryClass = task.category === 'User Story' ? 'user-story-background' : 
                           task.category === 'Technical Task' ? 'technical-task-background' : '';
-
     document.getElementById('taskDetailOverlay').innerHTML = `
         <div class="task-detail-container">
             <div class="task-detail-header">
                 <button class="close-button-details" onclick="closeTaskDetailOverlay()">x</button>
                 <div class="task-detail-category ${categoryClass}">${task.category}</div>
             </div>
-            <div id="taskDetailsView">
-                <h1 class="task-detail-title">${task.title}</h1>
-                <p class="task-detail-description">${task.description}</p>
-                <p>Due Date: ${task.dueDate}</p>
-                <p>Priority: ${task.priority} 
-                    <img src="${getPriorityImageSrc(task.priority)}" alt="${task.priority} Priority" class="priority-image">
-                </p>
-                <p>Assigned To: ${task.assignedTo.join(', ')}</p>
-                <div class="task-detail-subtasks">
-                    <p>Subtasks:</p>
-                    <ul>
-                        ${task.subtasks.map(subtask => `
-                            <li>
-                                <input type="checkbox" ${subtask.completed ? 'checked' : ''}>
-                                ${subtask.text}
-                            </li>`).join('')}
-                    </ul>
-                </div>
-                <div class="overlay-buttons">
-                    <button onclick="editTask()">Edit</button>
-                    <button onclick="deleteTask()">Delete</button>
-                </div>
+            <h1 class="task-detail-title">${task.title}</h1>
+            <p class="task-detail-description">${task.description}</p>
+            <p>Due Date: ${task.dueDate}</p>
+            <p>Priority: ${task.priority} 
+                <img src="${getPriorityImageSrc(task.priority)}" alt="${task.priority} Priority" class="priority-image">
+            </p>
+            <p>Assigned To: ${task.assignedTo.join(', ')}</p>
+            <div class="task-detail-subtasks">
+                <p>Subtasks:</p>
+                <ul>
+                    ${task.subtasks.map(subtask => `
+                        <li>
+                            <input type="checkbox" ${subtask.completed ? 'checked' : ''}>
+                            ${subtask.text}
+                        </li>`).join('')}
+                </ul>
             </div>
-            ${createEditForm(task)}
+            <div class="overlay-buttons">
+                <button onclick="deleteTask()">Delete</button>
+                <button onclick="editTask()">Edit</button>
+            </div>
         </div>
     `;
     document.getElementById('taskDetailOverlay').style.display = 'flex';
-}
-
-function createEditForm(task) {
-    return `
-        <form id="taskEditForm" style="display: none;">
-            <div>
-                <label for="editTitle">Title:</label>
-                <input type="text" id="editTitle" value="${task.title}">
-            </div>
-            <div>
-                <label for="editDescription">Description:</label>
-                <textarea id="editDescription">${task.description}</textarea>
-            </div>
-            <div>
-                <label for="editDueDate">Due Date:</label>
-                <input type="date" id="editDueDate" value="${task.dueDate}">
-            </div>
-            <div>
-                <label for="editPriority">Priority:</label>
-                <select id="editPriority">
-                    <option value="urgent" ${task.priority === 'urgent' ? 'selected' : ''}>Urgent</option>
-                    <option value="medium" ${task.priority === 'medium' ? 'selected' : ''}>Medium</option>
-                    <option value="low" ${task.priority === 'low' ? 'selected' : ''}>Low</option>
-                </select>
-            </div>
-            <div>
-                <label for="editCategory">Category:</label>
-                <select id="editCategory">
-                    <option value="User Story" ${task.category === 'User Story' ? 'selected' : ''}>User Story</option>
-                    <option value="Technical Task" ${task.category === 'Technical Task' ? 'selected' : ''}>Technical Task</option>
-                </select>
-            </div>
-            <div>
-                <label for="editAssignedTo">Assigned To:</label>
-                <select id="editAssignedTo" multiple>
-                    <!-- Populate with options as needed -->
-                </select>
-            </div>
-            <div>
-                <label for="editSubtasks">Subtasks:</label>
-                <div id="editSubtasks">
-                    ${task.subtasks.map(subtask => `
-                        <div class="edit-subtask">
-                            <input type="checkbox" ${subtask.completed ? 'checked' : ''}>
-                            <input type="text" value="${subtask.text}">
-                        </div>`).join('')}
-                </div>
-            </div>
-            <div class="overlay-buttons">
-                <button type="button" onclick="saveEditedTask()">Save</button>
-                <button type="button" onclick="cancelEdit()">Cancel</button>
-            </div>
-        </form>
-    `;
-}
-
-async function saveEditedTask() {
-    const title = document.getElementById('editTitle').value;
-    const description = document.getElementById('editDescription').value;
-    const dueDate = document.getElementById('editDueDate').value;
-    const priority = document.getElementById('editPriority').value;
-    const category = document.getElementById('editCategory').value;
-    const assignedTo = Array.from(document.getElementById('editAssignedTo').selectedOptions).map(option => option.value);
-    const subtasks = Array.from(document.querySelectorAll('#editSubtasks .edit-subtask')).map(item => ({
-        text: item.querySelector('input[type="text"]').value,
-        completed: item.querySelector('input[type="checkbox"]').checked
-    }));
-
-    const updatedTask = {
-        title,
-        description,
-        dueDate,
-        priority,
-        category,
-        assignedTo,
-        subtasks,
-        progress: calculateProgress(subtasks) // Recalculate progress
-    };
-
-    try {
-        let response = await fetch(`${API_URL}/tasks/${currentTaskId}.json`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updatedTask)
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to update task in database');
-        }
-
-        console.log('Task updated successfully');
-        const taskHTML = generateTaskHTML(title, description, assignedTo, priority, category, subtasks, updatedTask.progress, currentTaskId);
-        updateTaskInUI(currentTaskId, taskHTML);
-        closeTaskDetailOverlay();
-    } catch (error) {
-        console.error('Error updating task:', error);
-    }
-}
-
-function updateTaskInUI(taskId, taskHTML) {
-    const existingTask = document.getElementById(taskId);
-    if (existingTask) {
-        existingTask.innerHTML = taskHTML;
-    } else {
-        console.error(`Task with ID ${taskId} not found in the UI.`);
-    }
 }
 
 function closeTaskDetailOverlay() {
@@ -452,14 +339,14 @@ function closeTaskDetailOverlay() {
 }
 
 function editTask() {
-    document.getElementById('taskDetailsView').style.display = 'none';
-    document.getElementById('taskEditForm').style.display = 'block';
+    if (currentTaskId) {
+        let task = getTaskById(currentTaskId); 
+        if (task) {
+            populateEditForm(task);
+            closeTaskDetailOverlay();
+        }
+    }
 }
-function cancelEdit() {
-    document.getElementById('taskDetailsView').style.display = 'block';
-    document.getElementById('taskEditForm').style.display = 'none';
-}
-
 
 function deleteTask() {
     if (currentTaskId) {
