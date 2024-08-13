@@ -2,13 +2,26 @@
     background-color: white;
     border: 1px solid black;
     border-radius: 5px;
-    padding: 5px;
     margin: 5px;
-    
+    padding: 20px;
+}
+
+.todo div{
+    padding: 3px; 
 }
 
 .todo p{
     font-size: 10;
+}
+
+.progress-dd{
+    display: flex;
+    justify-content: space-between;  
+}
+
+.bottom-dd{
+    display: flex;
+    justify-content: space-between;
 }
 
 .drag-area-highlight {
@@ -50,10 +63,6 @@
     flex-wrap: wrap;
 }
 
-.board-task-manager div{
-    padding: 20px;
-}
-
 .drag-area-responsive{
     width: 300px;
     height: auto;
@@ -75,12 +84,13 @@
 
 .wrapper-board{
     overflow: auto;
-    scrollbar: 
 }
 
 .wrapper-board::-webkit-scrollbar {
     display: none; 
 }
+
+
 
 @media(max-width: 1570px){
     .board-task-manager{

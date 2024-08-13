@@ -75,7 +75,21 @@ function updateHTML() {
 }
 
 function generateTodoHTML(element) {
-    return `<div draggable="true" ondragstart="startDragging(${element['id']})" class="todo">${element['title']}</div>`;
+    return `<div draggable="true" ondragstart="startDragging(${element['id']})" class="todo">
+    <div>
+        <div class="category-dd">Cat</div>
+        <div class="titel-dd">Titel</div>
+        <div class="description-dd">Descr</div>
+        <div class="progress-dd">
+            <div class="progressBar-dd">---</div>
+            <div class="progressNumber-dd">1/2</div>
+        </div>
+        <div class="bottom-dd">
+            <div class="user-dd">PP</div>
+            <div class="prio-dd">||</div>
+        </div>
+    </div>
+</div>`;
 }
 
 function allowDrop(ev) {
