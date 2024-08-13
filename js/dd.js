@@ -50,8 +50,46 @@ function startDragging(id) {
     currentDraggedElement = id;
 }
 
+function updateHTML() {
+    const phaseTexts = {
+        'todo': 'No tasks to do',
+        'in-progress': 'No tasks in progress',
+        'await-feedback': 'No tasks awaiting feedback',
+        'done': 'No tasks completed'
+    };
+    
+    Object.keys(phaseTexts).forEach(phase => {
+        const tasks = todos.filter(t => t['phase'] === phase);
+        const container = document.getElementById(phase);
+        
+        container.innerHTML = '';  // Clear the container
+
+        if (tasks.length === 0) {
+            container.innerHTML = `<p class="placeholder-text">${phaseTexts[phase]}</p>`;
+        } else {
+            tasks.forEach(task => {
+                container.innerHTML += generateTodoHTML(task);
+            });
+        }
+    });
+}
+
 function generateTodoHTML(element) {
-    return `<div draggable="true" ondragstart="startDragging(${element['id']})" class="todo">${element['title']}</div>`;
+    return `<div draggable="true" ondragstart="startDragging(${element['id']})" class="todo">
+    <div>
+        <div class="category-dd">Cat</div>
+        <div class="titel-dd">Titel</div>
+        <div class="description-dd">Descr</div>
+        <div class="progress-dd">
+            <div class="progressBar-dd">---</div>
+            <div class="progressNumber-dd">1/2</div>
+        </div>
+        <div class="bottom-dd">
+            <div class="user-dd">PP</div>
+            <div class="prio-dd">||</div>
+        </div>
+    </div>
+</div>`;
 }
 
 function allowDrop(ev) {
