@@ -61,13 +61,13 @@ function setActivePriority(button) {
         buttons[i].style.color = 'black';
         switch (buttons[i].id) {
             case 'urgent':
-                img.src = './assets/icons/Board-icons/urgent-red.svg';
+                img.src = '/assets/icons/Board-icons/urgent-red.svg';
                 break;
             case 'medium':
-                img.src = './assets/icons/Board-icons/medium-orange.svg';
+                img.src = '/assets/icons/Board-icons/medium-orange.svg';
                 break;
             case 'low':
-                img.src = './assets/icons/Board-icons/low-green.svg';
+                img.src = '/assets/icons/Board-icons/low-green.svg';
                 break;
         }
     }
@@ -82,20 +82,21 @@ function setActivePriority(button) {
     const activeImg = button.querySelector('img');
     switch (button.id) {
         case 'urgent':
-            activeImg.src = './assets/icons/Board-icons/urgent-white.svg';
+            activeImg.src = '/assets/icons/Board-icons/urgent-white.svg';
             break;
         case 'medium':
-            activeImg.src = './assets/icons/Board-icons/medium-white.svg';
+            activeImg.src = '/assets/icons/Board-icons/medium-white.svg';
             break;
         case 'low':
-            activeImg.src = './assets/icons/Board-icons/low-white.svg';
+            activeImg.src = '/assets/icons/Board-icons/low-white.svg';
             break;
     }
 }
-// Hauptfunktion zum Erstellen einer Aufgabe
-async function createTask() {
+
+function createTask() {
     if (!validateForm()) {
         return;}
+<<<<<<< Updated upstream
     const title = document.getElementById('taskTitle').value;
     const description = document.getElementById('taskDescription').value;
     const assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
@@ -154,11 +155,50 @@ function getPriorityImageSrc(priority) {
 // Fügt die Aufgabe in den Container ein
 function insertTaskIntoContainer(taskHTML) {
     const container = document.getElementById(targetSectionId);
+=======
+    let title = document.getElementById('taskTitle').value;
+    let description = document.getElementById('taskDescription').value;
+    let assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
+    let dueDate = document.getElementById('dueDate').value;
+    
+    let priorityButton = document.querySelector('.priority-button.active');
+    let priority = priorityButton ? priorityButton.id : 'low';
+    
+    let category = document.getElementById('category').value;
+    let subtasks = Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).map(item => item.textContent);
+    
+    let subtasksHTML = '';
+    if (subtasks.length > 0) {
+        subtasksHTML = `
+            <div><strong>Subtasks:</strong></div>
+            <ul>
+                ${subtasks.map(subtask => `<li>${subtask}</li>`).join('')}
+            </ul>
+        `;
+    }
+    let newTaskHTML = `
+        <div class="task" draggable="true" ondragstart="drag(event)">
+            <h3>${title}</h3>
+            <p>${description}</p>
+            ${subtasksHTML}
+            <div>Assigned to: ${assignedTo.join(', ')}</div>
+            <div>Due date: ${dueDate}</div>
+            <div><strong>Priority:</strong> ${priority.charAt(0).toUpperCase() + priority.slice(1)}</div>
+            <div>Category: ${category}</div>
+        </div>
+    `;
+    
+    let container = document.getElementById(targetSectionId);
+>>>>>>> Stashed changes
     if (container) {
-        container.insertAdjacentHTML('beforeend', taskHTML);
+        container.insertAdjacentHTML('beforeend', newTaskHTML);
     } else {
         console.error(`Container ${targetSectionId} not found`);
     }
+    
+    targetSectionId = null;
+    
+    closeOverlay();
 }
 // Unteraufgaben
 function addSubtask() {
@@ -180,6 +220,7 @@ function addSubtask() {
 }
 
 async function saveTaskToDatabase(task) {
+<<<<<<< Updated upstream
     try {
         let response = await fetch(`${API_URL}/tasks.json`, {
             method: 'POST',
@@ -449,11 +490,32 @@ async function deleteTask() {
         // löscht die Aufgabe aus dem Board
         removeTaskFromBoard(currentTaskId);
         closeTaskDetailOverlay();
+=======
+    try {
+        let response = await fetch(`${API_URL}/tasks.json`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(task)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save task to database');
+        }
+
+        let data = await response.json();
+        console.log('Task saved to database with ID:', data.name);
+
+        return data.name;
+>>>>>>> Stashed changes
     } catch (error) {
-        console.error('Error deleting task:', error);
+        console.error('Error saving task to database:', error);
+        throw error;
     }
 }
 
+<<<<<<< Updated upstream
 // Entfernt eine Aufgabe aus dem DOM
 function removeTaskFromBoard(taskId) {
     const taskElement = document.getElementById(taskId);
@@ -463,3 +525,63 @@ function removeTaskFromBoard(taskId) {
         console.error(`Task with ID ${taskId} not found in the UI.`);
     }
 }
+=======
+async function createTask() {
+    if (!validateForm()) {
+        return;
+    }
+    let title = document.getElementById('taskTitle').value;
+    let description = document.getElementById('taskDescription').value;
+    let assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
+    let dueDate = document.getElementById('dueDate').value;
+    
+    let priorityButton = document.querySelector('.priority-button.active');
+    let priority = priorityButton ? priorityButton.id : 'low';
+    
+    let category = document.getElementById('category').value;
+    let subtasks = Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).map(item => item.textContent);
+    let newTask = {
+        title: title,
+        description: description,
+        assignedTo: assignedTo,
+        dueDate: dueDate,
+        priority: priority,
+        category: category,
+        subtasks: subtasks
+    };
+    try {
+        let taskId = await saveTaskToDatabase(newTask);
+        let subtasksHTML = '';
+        if (subtasks.length > 0) {
+            subtasksHTML = `
+                <div><strong>Subtasks:</strong></div>
+                <ul>
+                    ${subtasks.map(subtask => `<li>${subtask}</li>`).join('')}
+                </ul>
+            `;
+        }
+        let newTaskHTML = `
+            <div class="task" draggable="true" ondragstart="drag(event)" data-id="${taskId}">
+                <h3>${title}</h3>
+                <p>${description}</p>
+                ${subtasksHTML}
+                <div>Assigned to: ${assignedTo.join(', ')}</div>
+                <div>Due date: ${dueDate}</div>
+                <div><strong>Priority:</strong> ${priority.charAt(0).toUpperCase() + priority.slice(1)}</div>
+                <div>Category: ${category}</div>
+            </div>
+        `;
+        let container = document.getElementById(targetSectionId);
+        if (container) {
+            container.insertAdjacentHTML('beforeend', newTaskHTML);
+        } else {
+            console.error(`Container ${targetSectionId} not found`);
+        }
+        targetSectionId = null;
+        closeOverlay();
+    } catch (error) {
+        console.error('Error creating task:', error);
+    }
+}
+
+>>>>>>> Stashed changes
