@@ -61,13 +61,13 @@ function setActivePriority(button) {
         buttons[i].style.color = 'black';
         switch (buttons[i].id) {
             case 'urgent':
-                img.src = '/assets/icons/Board-icons/urgent-red.svg';
+                img.src = './assets/icons/Board-icons/urgent-red.svg';
                 break;
             case 'medium':
-                img.src = '/assets/icons/Board-icons/medium-orange.svg';
+                img.src = './assets/icons/Board-icons/medium-orange.svg';
                 break;
             case 'low':
-                img.src = '/assets/icons/Board-icons/low-green.svg';
+                img.src = './assets/icons/Board-icons/low-green.svg';
                 break;
         }
     }
@@ -82,21 +82,20 @@ function setActivePriority(button) {
     const activeImg = button.querySelector('img');
     switch (button.id) {
         case 'urgent':
-            activeImg.src = '/assets/icons/Board-icons/urgent-white.svg';
+            activeImg.src = './assets/icons/Board-icons/urgent-white.svg';
             break;
         case 'medium':
-            activeImg.src = '/assets/icons/Board-icons/medium-white.svg';
+            activeImg.src = './assets/icons/Board-icons/medium-white.svg';
             break;
         case 'low':
-            activeImg.src = '/assets/icons/Board-icons/low-white.svg';
+            activeImg.src = './assets/icons/Board-icons/low-white.svg';
             break;
     }
 }
-
-function createTask() {
+// Hauptfunktion zum Erstellen einer Aufgabe
+async function createTask() {
     if (!validateForm()) {
         return;}
-<<<<<<< Updated upstream
     const title = document.getElementById('taskTitle').value;
     const description = document.getElementById('taskDescription').value;
     const assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
@@ -136,7 +135,8 @@ function getSubtasks() {
 // Berechnet den Fortschritt
 function calculateProgress(subtasks) {
     const completedSubtasks = subtasks.filter(subtask => subtask.completed).length;
-    return `${completedSubtasks}/${subtasks.length} Subtasks`;
+    const totalSubtasks = subtasks.length;
+    return totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
 }
 // Bildpfad -> Priorität
 function getPriorityImageSrc(priority) {
@@ -154,50 +154,11 @@ function getPriorityImageSrc(priority) {
 // Fügt die Aufgabe in den Container ein
 function insertTaskIntoContainer(taskHTML) {
     const container = document.getElementById(targetSectionId);
-=======
-    let title = document.getElementById('taskTitle').value;
-    let description = document.getElementById('taskDescription').value;
-    let assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
-    let dueDate = document.getElementById('dueDate').value;
-    
-    let priorityButton = document.querySelector('.priority-button.active');
-    let priority = priorityButton ? priorityButton.id : 'low';
-    
-    let category = document.getElementById('category').value;
-    let subtasks = Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).map(item => item.textContent);
-    
-    let subtasksHTML = '';
-    if (subtasks.length > 0) {
-        subtasksHTML = `
-            <div><strong>Subtasks:</strong></div>
-            <ul>
-                ${subtasks.map(subtask => `<li>${subtask}</li>`).join('')}
-            </ul>
-        `;
-    }
-    let newTaskHTML = `
-        <div class="task" draggable="true" ondragstart="drag(event)">
-            <h3>${title}</h3>
-            <p>${description}</p>
-            ${subtasksHTML}
-            <div>Assigned to: ${assignedTo.join(', ')}</div>
-            <div>Due date: ${dueDate}</div>
-            <div><strong>Priority:</strong> ${priority.charAt(0).toUpperCase() + priority.slice(1)}</div>
-            <div>Category: ${category}</div>
-        </div>
-    `;
-    
-    let container = document.getElementById(targetSectionId);
->>>>>>> Stashed changes
     if (container) {
-        container.insertAdjacentHTML('beforeend', newTaskHTML);
+        container.insertAdjacentHTML('beforeend', taskHTML);
     } else {
         console.error(`Container ${targetSectionId} not found`);
     }
-    
-    targetSectionId = null;
-    
-    closeOverlay();
 }
 // Unteraufgaben
 function addSubtask() {
@@ -219,7 +180,6 @@ function addSubtask() {
 }
 
 async function saveTaskToDatabase(task) {
-<<<<<<< Updated upstream
     try {
         let response = await fetch(`${API_URL}/tasks.json`, {
             method: 'POST',
@@ -301,36 +261,148 @@ function openTaskDetailOverlay(task, taskId) {
     currentTaskId = taskId;
     const categoryClass = task.category === 'User Story' ? 'user-story-background' : 
                           task.category === 'Technical Task' ? 'technical-task-background' : '';
+
     document.getElementById('taskDetailOverlay').innerHTML = `
         <div class="task-detail-container">
             <div class="task-detail-header">
                 <button class="close-button-details" onclick="closeTaskDetailOverlay()">x</button>
                 <div class="task-detail-category ${categoryClass}">${task.category}</div>
             </div>
-            <h1 class="task-detail-title">${task.title}</h1>
-            <p class="task-detail-description">${task.description}</p>
-            <p>Due Date: ${task.dueDate}</p>
-            <p>Priority: ${task.priority} 
-                <img src="${getPriorityImageSrc(task.priority)}" alt="${task.priority} Priority" class="priority-image">
-            </p>
-            <p>Assigned To: ${task.assignedTo.join(', ')}</p>
-            <div class="task-detail-subtasks">
-                <p>Subtasks:</p>
-                <ul>
-                    ${task.subtasks.map(subtask => `
-                        <li>
-                            <input type="checkbox" ${subtask.completed ? 'checked' : ''}>
-                            ${subtask.text}
-                        </li>`).join('')}
-                </ul>
+            <div id="taskDetailsView">
+                <h1 class="task-detail-title">${task.title}</h1>
+                <p class="task-detail-description">${task.description}</p>
+                <p>Due Date: ${task.dueDate}</p>
+                <p>Priority: ${task.priority} 
+                    <img src="${getPriorityImageSrc(task.priority)}" alt="${task.priority} Priority" class="priority-image">
+                </p>
+                <p>Assigned To: ${task.assignedTo.join(', ')}</p>
+                <div class="task-detail-subtasks">
+                    <p>Subtasks:</p>
+                    <ul>
+                        ${task.subtasks.map(subtask => `
+                            <li>
+                                <input type="checkbox" ${subtask.completed ? 'checked' : ''}>
+                                ${subtask.text}
+                            </li>`).join('')}
+                    </ul>
+                </div>
+                <div class="overlay-buttons">
+                    <button onclick="editTask()">Edit</button>
+                    <button onclick="deleteTask()">Delete</button>
+                </div>
             </div>
-            <div class="overlay-buttons">
-                <button onclick="deleteTask()">Delete</button>
-                <button onclick="editTask()">Edit</button>
-            </div>
+            ${createEditForm(task)}
         </div>
     `;
     document.getElementById('taskDetailOverlay').style.display = 'flex';
+}
+
+function createEditForm(task) {
+    return `
+        <form id="taskEditForm" style="display: none;">
+            <div>
+                <label for="editTitle">Title:</label>
+                <input type="text" id="editTitle" value="${task.title}">
+            </div>
+            <div>
+                <label for="editDescription">Description:</label>
+                <textarea id="editDescription">${task.description}</textarea>
+            </div>
+            <div>
+                <label for="editDueDate">Due Date:</label>
+                <input type="date" id="editDueDate" value="${task.dueDate}">
+            </div>
+            <div>
+                <label for="editPriority">Priority:</label>
+                <select id="editPriority">
+                    <option value="urgent" ${task.priority === 'urgent' ? 'selected' : ''}>Urgent</option>
+                    <option value="medium" ${task.priority === 'medium' ? 'selected' : ''}>Medium</option>
+                    <option value="low" ${task.priority === 'low' ? 'selected' : ''}>Low</option>
+                </select>
+            </div>
+            <div>
+                <label for="editCategory">Category:</label>
+                <select id="editCategory">
+                    <option value="User Story" ${task.category === 'User Story' ? 'selected' : ''}>User Story</option>
+                    <option value="Technical Task" ${task.category === 'Technical Task' ? 'selected' : ''}>Technical Task</option>
+                </select>
+            </div>
+            <div>
+                <label for="editAssignedTo">Assigned To:</label>
+                <select id="editAssignedTo" multiple>
+                    <!-- Populate with options as needed -->
+                </select>
+            </div>
+            <div>
+                <label for="editSubtasks">Subtasks:</label>
+                <div id="editSubtasks">
+                    ${task.subtasks.map(subtask => `
+                        <div class="edit-subtask">
+                            <input type="checkbox" ${subtask.completed ? 'checked' : ''}>
+                            <input type="text" value="${subtask.text}">
+                        </div>`).join('')}
+                </div>
+            </div>
+            <div class="overlay-buttons">
+                <button type="button" onclick="saveEditedTask()">Save</button>
+                <button type="button" onclick="cancelEdit()">Cancel</button>
+            </div>
+        </form>
+    `;
+}
+
+async function saveEditedTask() {
+    const title = document.getElementById('editTitle').value;
+    const description = document.getElementById('editDescription').value;
+    const dueDate = document.getElementById('editDueDate').value;
+    const priority = document.getElementById('editPriority').value;
+    const category = document.getElementById('editCategory').value;
+    const assignedTo = Array.from(document.getElementById('editAssignedTo').selectedOptions).map(option => option.value);
+    const subtasks = Array.from(document.querySelectorAll('#editSubtasks .edit-subtask')).map(item => ({
+        text: item.querySelector('input[type="text"]').value,
+        completed: item.querySelector('input[type="checkbox"]').checked
+    }));
+
+    const updatedTask = {
+        title,
+        description,
+        dueDate,
+        priority,
+        category,
+        assignedTo,
+        subtasks,
+        progress: calculateProgress(subtasks) // Recalculate progress
+    };
+
+    try {
+        let response = await fetch(`${API_URL}/tasks/${currentTaskId}.json`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedTask)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update task in database');
+        }
+
+        console.log('Task updated successfully');
+        const taskHTML = generateTaskHTML(title, description, assignedTo, priority, category, subtasks, updatedTask.progress, currentTaskId);
+        updateTaskInUI(currentTaskId, taskHTML);
+        closeTaskDetailOverlay();
+    } catch (error) {
+        console.error('Error updating task:', error);
+    }
+}
+
+function updateTaskInUI(taskId, taskHTML) {
+    const existingTask = document.getElementById(taskId);
+    if (existingTask) {
+        existingTask.innerHTML = taskHTML;
+    } else {
+        console.error(`Task with ID ${taskId} not found in the UI.`);
+    }
 }
 
 function closeTaskDetailOverlay() {
@@ -339,14 +411,14 @@ function closeTaskDetailOverlay() {
 }
 
 function editTask() {
-    if (currentTaskId) {
-        let task = getTaskById(currentTaskId); 
-        if (task) {
-            populateEditForm(task);
-            closeTaskDetailOverlay();
-        }
-    }
+    document.getElementById('taskDetailsView').style.display = 'none';
+    document.getElementById('taskEditForm').style.display = 'block';
 }
+function cancelEdit() {
+    document.getElementById('taskDetailsView').style.display = 'block';
+    document.getElementById('taskEditForm').style.display = 'none';
+}
+
 
 function deleteTask() {
     if (currentTaskId) {
@@ -377,32 +449,11 @@ async function deleteTask() {
         // löscht die Aufgabe aus dem Board
         removeTaskFromBoard(currentTaskId);
         closeTaskDetailOverlay();
-=======
-    try {
-        let response = await fetch(`${API_URL}/tasks.json`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(task)
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to save task to database');
-        }
-
-        let data = await response.json();
-        console.log('Task saved to database with ID:', data.name);
-
-        return data.name;
->>>>>>> Stashed changes
     } catch (error) {
-        console.error('Error saving task to database:', error);
-        throw error;
+        console.error('Error deleting task:', error);
     }
 }
 
-<<<<<<< Updated upstream
 // Entfernt eine Aufgabe aus dem DOM
 function removeTaskFromBoard(taskId) {
     const taskElement = document.getElementById(taskId);
@@ -412,63 +463,3 @@ function removeTaskFromBoard(taskId) {
         console.error(`Task with ID ${taskId} not found in the UI.`);
     }
 }
-=======
-async function createTask() {
-    if (!validateForm()) {
-        return;
-    }
-    let title = document.getElementById('taskTitle').value;
-    let description = document.getElementById('taskDescription').value;
-    let assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
-    let dueDate = document.getElementById('dueDate').value;
-    
-    let priorityButton = document.querySelector('.priority-button.active');
-    let priority = priorityButton ? priorityButton.id : 'low';
-    
-    let category = document.getElementById('category').value;
-    let subtasks = Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).map(item => item.textContent);
-    let newTask = {
-        title: title,
-        description: description,
-        assignedTo: assignedTo,
-        dueDate: dueDate,
-        priority: priority,
-        category: category,
-        subtasks: subtasks
-    };
-    try {
-        let taskId = await saveTaskToDatabase(newTask);
-        let subtasksHTML = '';
-        if (subtasks.length > 0) {
-            subtasksHTML = `
-                <div><strong>Subtasks:</strong></div>
-                <ul>
-                    ${subtasks.map(subtask => `<li>${subtask}</li>`).join('')}
-                </ul>
-            `;
-        }
-        let newTaskHTML = `
-            <div class="task" draggable="true" ondragstart="drag(event)" data-id="${taskId}">
-                <h3>${title}</h3>
-                <p>${description}</p>
-                ${subtasksHTML}
-                <div>Assigned to: ${assignedTo.join(', ')}</div>
-                <div>Due date: ${dueDate}</div>
-                <div><strong>Priority:</strong> ${priority.charAt(0).toUpperCase() + priority.slice(1)}</div>
-                <div>Category: ${category}</div>
-            </div>
-        `;
-        let container = document.getElementById(targetSectionId);
-        if (container) {
-            container.insertAdjacentHTML('beforeend', newTaskHTML);
-        } else {
-            console.error(`Container ${targetSectionId} not found`);
-        }
-        targetSectionId = null;
-        closeOverlay();
-    } catch (error) {
-        console.error('Error creating task:', error);
-    }
-}
-
->>>>>>> Stashed changes

@@ -47,6 +47,7 @@
 
 .board-task-manager{
     display: flex;
+    flex-wrap: wrap;
 }
 
 .board-task-manager div{

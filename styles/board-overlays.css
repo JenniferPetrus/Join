@@ -231,11 +231,11 @@ label, input, textarea, select{
 /* Single Tasks Design */
 .task-card {
     background-color: #fff;
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
     border-radius: 24px;
     padding: 16px;
     margin-bottom: 16px;
-    box-shadow: 4px 0px 6px 0px rgba(0, 0, 0, 0.03);
+    /* box-shadow: 4px 0px 6px 0px rgba(0, 0, 0, 0.03); */
     height: auto;
     cursor: pointer;
 }
@@ -268,11 +268,27 @@ label, input, textarea, select{
 }
 
 .task-progress-bar {
-    height: 10px;
-    border-radius: 5px;
+    height: 20px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    position: relative;
     flex-grow: 1;
-    margin-right: 10px;
-    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.task-progress-bar::after {
+    content: '';
+    display: block;
+    height: 100%;
+    background-color: #4589FF; 
+    border-radius: 10px;
+    width: 0;
+}
+
+.task-progress-text {
+    margin-left: 10px;
+    color: #333;
+    font-weight: bold;
+    white-space: nowrap;
 }
 
 .task-footer {
