@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./styles/summary.css">
     <link rel="stylesheet" href="./styles/fonts.css">
 </head>
-<body onload="includeHTML()">
+<body onload="includeHTML(), updateSummary()">
     <div w3-include-html="header.html"></div>
     <div class="wrapper">
         <div id="renderContent">
@@ -25,14 +25,14 @@
                         <a href="./board.html" class="box-of-section1">
                             <div class="cycle pencil"><img src="./assets/icons/summary/edit.svg" alt=""></div>
                             <div class="flex-column">
-                                <h3 id="to-do-amount">3</h3>
+                                <h3 id="to-do-amount">0</h3>
                                 <span>To-do</span>
                             </div>
                         </a>
                         <a href="./board.html" class="box-of-section1">
                             <div class="cycle check"><img src="./assets/icons/summary/Vector.svg" alt=""></div>
                             <div class="flex-column">
-                                <h3 id="done-amount">2</h3>
+                                <h3 id="done-amount">0</h3>
                                 <span>Done</span>
                             </div>
                         </a>
@@ -43,7 +43,7 @@
                                 <img class="d-block" src="./assets/icons/summary/urgent.svg"/>
                             </div>
                             <div class="flex-column">
-                                <h3 id="font-urgent-number" class="font-urgent-number">1</h3>
+                                <h3 id="font-urgent-number" class="font-urgent-number">0</h3>
                                 <span class="font-urgent">Urgent</span>
                             </div>
                         </div>
@@ -55,22 +55,21 @@
                     </a>
                     <div class="section3">
                         <a href="./board.html" class="box-of-section3">
-                            <h3 id="tasks-amount">5</h3>
-                            <span>Tasks in<br />Board</span>
+                            <h3 id="tasks-amount">0</h3>
+                            <span>Tasks in<br/>Board</span>
                         </a>
                         <a href="./board.html" class="box-of-section3">
-                            <h3 id="progress-amount">3</h3>
-                            <span>Tasks in<br />Progress</span>
+                            <h3 id="progress-amount">0</h3>
+                            <span>Tasks in<br/>Progress</span>
                         </a>
                         <a href="./board.html" class="box-of-section3">
-                            <h3 id="feedback-amount">2</h3>
-                            <span>Awaiting<br />Feedback</span>
+                            <h3 id="feedback-amount">0</h3>
+                            <span>Awaiting<br/>Feedback</span>
                         </a>
                     </div>
                 </div>
                 <div class="greeting">
-                    <h5 id="greet-time"></h5>
-                    <!-- In der früh Good Morning mittag Good day und evening abends??? -->
+                    <h5 id="greet-time" class="greeting"></h5>
                     <h3 id="greet-user" class="light-blue greeting"></h3>
                 </div>
             </div>
@@ -78,6 +77,7 @@
     </div>
     <div w3-include-html="footer.html"></div>
     <script src="./js/summary.js"></script>
+    <script src="./js/board-data-crawler.js"></script>
     <script src="js/template.js"></script>
     <script src="footer-header.js"></script>
 </body>

@@ -1,3 +1,5 @@
+let targetSectionId = 'todo'; 
+
 function addSubtask() {
     let subtaskInput = document.getElementById('newSubtask');
     let subtaskList = document.getElementById('subtaskList');
@@ -120,9 +122,58 @@ async function createTask() {
         const taskId = await saveTaskToDatabase(task); 
         const taskHTML = generateTaskHTML(title, description, assignedTo, priority, category, subtasks);
         insertTaskIntoContainer(taskHTML);
-        closeOverlay();
     } catch (error) {
         console.error('Error creating task:', error);
+    }
+}
+
+async function saveTaskToDatabase(task) {
+    try {
+        const taskId = await getNextId();
+        const response = await fetch(`${API_URL}/2/tasks/${taskId}.json`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(task)
+        });
+        if (!response.ok) {
+            throw new Error('Failed to save task to database');
+        }
+        console.log('Task saved to database with ID:', taskId);
+        return taskId;
+    } catch (error) {
+        console.error('Error saving task to database:', error);
+        throw error;
+    }
+}
+
+async function loadTasksFromDatabase() {
+    try {
+        const response = await fetch(`${API_URL}/2/tasks.json`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch tasks');
+        }
+        const data = await response.json();
+        Object.entries(data || {}).forEach(([id, task]) => {
+            if (task) {
+                const taskHTML = generateTaskHTML(
+                    task.title || 'No title',
+                    task.description || 'No description',
+                    task.assignedTo || [],
+                    task.priority || 'low',
+                    task.category || 'uncategorized',
+                    task.subtasks || [],
+                    task.progress || 0,
+                    id
+                );
+                insertTaskIntoContainer(taskHTML, task.phase);
+            } else {
+                console.warn(`Task with id ${id} is null or undefined`);
+            }
+        });
+    } catch (error) {
+        console.error('Error loading tasks from database:', error);
     }
 }
 

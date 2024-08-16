@@ -95,7 +95,8 @@ function setActivePriority(button) {
 // Hauptfunktion zum Erstellen einer Aufgabe
 async function createTask() {
     if (!validateForm()) {
-        return;}
+        return;
+    }
     const title = document.getElementById('taskTitle').value;
     const description = document.getElementById('taskDescription').value;
     const assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
@@ -103,6 +104,7 @@ async function createTask() {
     const category = document.getElementById('category').value;
     const subtasks = getSubtasks();
     const progress = calculateProgress(subtasks);
+    const dueDate = document.getElementById('dueDate').value;
     const task = {
         title,
         description,
@@ -112,6 +114,7 @@ async function createTask() {
         category,
         subtasks,
         progress,
+        phase: targetSectionId
     };
     try {
         const taskId = await saveTaskToDatabase(task);
@@ -122,7 +125,6 @@ async function createTask() {
         console.error('Error creating task:', error);
     }
 }
-
 // Holt die aktive Priorität
 function getActivePriority() {
     const priorityButton = document.querySelector('.priority-button.active');
@@ -154,12 +156,12 @@ function getPriorityImageSrc(priority) {
     }
 }
 // Fügt die Aufgabe in den Container ein
-function insertTaskIntoContainer(taskHTML) {
-    const container = document.getElementById(targetSectionId);
+function insertTaskIntoContainer(taskHTML, sectionId) {
+    const container = document.getElementById(sectionId);
     if (container) {
         container.insertAdjacentHTML('beforeend', taskHTML);
     } else {
-        console.error(`Container ${targetSectionId} not found`);
+        console.error(`Container ${sectionId} not found`);
     }
 }
 // Unteraufgaben
@@ -228,19 +230,28 @@ async function loadTasksFromDatabase() {
             throw new Error('Failed to fetch tasks');
         }
         const data = await response.json();
-        if (data) {
-            for (let id in data) {
-                if (data.hasOwnProperty(id)) {
-                    let task = data[id];
-                    const taskHTML = generateTaskHTML(task.title, task.description, task.assignedTo, task.priority, task.category, task.subtasks, task.progress, id);
-                    insertTaskIntoContainer(taskHTML);
-                }
+        Object.entries(data || {}).forEach(([id, task]) => {
+            if (task) {
+                const taskHTML = generateTaskHTML(
+                    task.title || 'No title',
+                    task.description || 'No description',
+                    task.assignedTo || [],
+                    task.priority || 'low',
+                    task.category || 'uncategorized',
+                    task.subtasks || [],
+                    task.progress || 0,
+                    id
+                );
+                insertTaskIntoContainer(taskHTML, task.phase);
+            } else {
+                console.warn(`Task with id ${id} is null or undefined`);
             }
-        }
+        });
     } catch (error) {
         console.error('Error loading tasks from database:', error);
     }
 }
+
 
 async function saveEditedTask() {
     const title = document.getElementById('editTitle').value;
