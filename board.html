@@ -19,7 +19,7 @@
             <div class="headline">Board</div>
             <div class="input-and-addtaskbutton">
                 <div class="input-and-addtaskbutton">
-                    <div class="input-search"><input type="text" placeholder="Find Task"><img class="vector-input" src="./assets/icons/Board-icons/Vector 3.svg" alt=""><img class="vector-input-search-item" src="./assets/icons/Board-icons/search icon black.svg" alt=""></div>
+                    <div class="input-search"><input id="user-input" type="text" placeholder="Find Task" oninput="handleSearchInput()"><img class="vector-input" src="./assets/icons/Board-icons/Vector 3.svg" alt=""><img class="vector-input-search-item" src="./assets/icons/Board-icons/search icon black.svg" alt=""></div>
                     <div><button class="add-task-button" onclick="openOverlay()">Add task <span>+</span></button></div>
                 </div>
             </div>
@@ -55,6 +55,7 @@
         </div>
     </div>
 
+    <div id="phase-overlay" class="overlay" style="display: none;"></div>
 
     <div id="overlay-container"></div>
 
@@ -68,5 +69,6 @@
     <script src="./js/board-overlays.js"></script>
     <script src="./js/dd.js"></script>
     <script src="./js/board-data-crawler.js"></script>
+    <script src="./js/search.js"></script>
 </body>
 </html>

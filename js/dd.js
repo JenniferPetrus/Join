@@ -69,6 +69,7 @@ function updateHTML() {
 function generateTodoHTML(element) {
     return `<div draggable="true" ondragstart="startDragging(${element['id']})" class="todo">
     <div>
+        <div class="choose-phase" ><img draggable="false" src="./assets/img/Menu Contact options.svg" alt="Phase" onclick="openPhaseOverlay(${element['id']})"></div>
         <div class="category-dd">Cat</div>
         <div class="titel-dd">Titel</div>
         <div class="description-dd">Descr</div>
@@ -82,6 +83,69 @@ function generateTodoHTML(element) {
         </div>
     </div>
 </div>`;
+}
+
+// Öffne das Phase-Overlay
+function openPhaseOverlay(id) {
+    const task = todoso.find(t => t.id === id);
+    const availablePhases = ['todo', 'in-progress', 'await-feedback', 'done'].filter(phase => phase !== task.phase);
+    
+    let overlayContent = `<div class="phase-options">`;
+    availablePhases.forEach(phase => {
+        overlayContent += `<div onclick="moveTaskToPhase(${id}, '${phase}')">${phase}</div>`;
+    });
+    overlayContent += `</div>`;
+
+    const overlay = document.getElementById('phase-overlay');
+    overlay.innerHTML = overlayContent;
+    overlay.style.display = 'block';
+
+    window.addEventListener('scroll', closePhaseOverlay);
+    window.addEventListener('resize', closePhaseOverlay);
+}
+
+// Verschiebe den Task in eine andere Phase
+function moveTaskToPhase(id, phase) {
+    const task = todoso.find(t => t.id === id);
+    task.phase = phase;
+
+    updateHTML(); // Aktualisiere das HTML, um die Änderung anzuzeigen
+
+    closePhaseOverlay(); // Schließe das Overlay
+}
+
+// Schließe das Phase-Overlay
+function closePhaseOverlay() {
+    const overlay = document.getElementById('phase-overlay');
+    overlay.style.display = 'none';
+
+    window.removeEventListener('scroll', closePhaseOverlay);
+    window.removeEventListener('resize', closePhaseOverlay);
+}
+
+// Initialisiert die HTML-Inhalte auf der Seite
+function updateHTML() {
+    const phaseTexts = {
+        'todo': 'No tasks to do',
+        'in-progress': 'No tasks in progress',
+        'await-feedback': 'No tasks awaiting feedback',
+        'done': 'No tasks completed'
+    };
+
+    Object.keys(phaseTexts).forEach(phase => {
+        const tasks = todoso.filter(t => t.phase === phase);
+        const container = document.getElementById(phase);
+
+        container.innerHTML = '';  // Container leeren
+
+        if (tasks.length === 0) {
+            container.innerHTML = `<p class="placeholder-text">${phaseTexts[phase]}</p>`;
+        } else {
+            tasks.forEach(task => {
+                container.innerHTML += generateTodoHTML(task);
+            });
+        }
+    });
 }
 
 function allowDrop(ev) {

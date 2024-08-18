@@ -136,6 +136,11 @@
         flex-direction: column;
         margin-right: 0;
     }
+
+    .drag-area-responsive{
+        display: flex;
+        overflow-x: auto;
+    }
 }
 
 @media(max-width: 630px){
@@ -181,4 +186,39 @@
         padding: 0;
         margin-bottom: 20px;
     }
+}
+
+.choose-phase {
+    padding-left: 220px !important;
+    padding-top: 10px !important;
+}
+.choose-phase img{
+    height: 30px;
+}
+
+.choose-phase img:hover{
+    cursor: pointer;
+}
+
+.overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    height: 100px;
+    width: 100px;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1000;
+    display: none;
+}
+
+.phase-options div {
+    margin: 5px 0;
+    cursor: pointer;
+}
+
+.phase-options div:hover {
+    background-color: #f0f0f0;
 }
