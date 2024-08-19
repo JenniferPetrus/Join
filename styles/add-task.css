@@ -48,7 +48,6 @@ label, input, textarea, select{
 .left-column,
 .right-column {
     flex: 1;
-    padding: 10px;
 }
 
 .left-column {
@@ -223,11 +222,125 @@ label, input, textarea, select{
 
 .create-task-button>img{
     padding-left: 10px;
-
 }
 
 .error-message {
     color: red;
     font-size: 12px;
     margin-top: 5px;
+}
+
+@media (max-width: 1500px) {
+    .overlay-content {
+        max-width: 90%;
+    }
+    .overlay-title {
+        font-size: 40px;
+    }
+    label, input, textarea, select {
+        font-size: 18px;
+    }
+    #priority>button {
+        width: 100px;
+        font-size: 18px;
+    }
+    #priority>button>img{
+        width: 18px;
+    }
+    .create-task-button{
+        width: auto;
+    }
+    .cancel-button {
+        width: 110px;
+        height: 50px;
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .overlay-content {
+        max-width: 80%;
+    }
+    .overlay-title {
+        font-size: 35px;
+    }
+    label, input, textarea, select {
+        font-size: 14px;
+    }
+    #priority>button {
+        width: 70px;
+        font-size: 14px;
+    }
+    #priority>button>img{
+        width: 12px;
+    }
+    .cancel-button,
+    .create-task-button {
+        font-size: 16px;
+        padding: 6px 12px;
+        height: 45px;
+    }
+    .middle-vector{
+        margin: 15px;
+    }
+    .right-column{
+        padding-left: 0px;
+    }
+    #medium>img{
+        margin-top: 8px;
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .wrapper {
+        width: auto;
+        height: auto;
+        padding-left: 50px;
+        left: 0;
+        right: 0;
+        overflow-y: auto;
+        display: flex;
+        justify-content: center;
+    }
+    .overlay-content{
+        margin-top: 150px;
+        width: auto;
+        height: auto;
+    }
+    .overlay-title {
+        font-size: 36px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .overlay-body {
+        flex-direction: column;
+        gap: 20px;
+        width: 70vw;
+    }
+    .left-column,
+    .right-column {
+        width: 100%;
+        padding: 0;
+    }
+    .middle-vector{
+        display: none;
+    }
+    .input-section input[type="text"],
+    .input-section input[type="date"],
+    .input-section textarea,
+    .input-section select {
+        width: 100%;
+        font-size: 18px;
+        padding: 12px;
+    }
+    #priority>button {
+        width: 30%;
+        font-size: 14px;
+    }
+    #priority>button>img{
+        width: 12px;
+    }
+    .overlay-footer {
+        margin-top: 20px;
+    }
 }
