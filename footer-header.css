@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Inter';
-    src: url('/fonts/Inter-VariableFont_slnt,wght.woff2') format('woff2');
+    src: url('./fonts/Inter-VariableFont_slnt,wght.woff2') format('woff2');
     font-weight: 100 900;
     font-style: normal;
 }
@@ -25,12 +25,12 @@ body {
 }
 
 .NavGap.active img {
-    content: url('/assets/icons/summary-icon-bright.png');
+    content: url('./assets/icons/summary-icon-bright.png');
     color: #fff; 
 }
 
 .NavGap:not(.active) img {
-    content: url('/assets/icons/summary-icon-dark.png');
+    content: url('./assets/icons/summary-icon-dark.png');
 }
 
 #Impressum div {

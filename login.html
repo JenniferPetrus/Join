@@ -1,23 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Join Login</title>
-    <link rel="icon" type="image/x-icon" href="/./assets/img/Logo for Favicon construction.svg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
     <link rel="stylesheet" href="./styles/login-signup.css">
     <link rel="stylesheet" href="./assets/fonts/fonts.css">
 </head>
 <body>
-    <img id="loading" class="logo-animate logo-animate-light" src="./assets/icons/LoginSignUp/BigJoinLogo.svg"/>
-    <img id="loading" class="logo-animate-dark" src="./assets/icons/LoginSignUp/BigJoinLogo White.svg"/>
-    <div class="bg-animate"></div><div class="bg-animate-mobile"></div>
+    <img class="logo" src="./assets/icons/LoginSignUp/BigJoinLogo.svg" />
     <div class="wrapper">
-        <div class="sign-header" id="sign-header">
-            <span class="join-user-question">Not a Join user?</span>
-            <button onclick="navToSignIn()" class="dark-btn btn-small">Sign up</button>
-        </div>
-
         <form class="container" id="container" onsubmit="logIn(); return false;">
             <div class="head">
                 <h1>Log in</h1>
@@ -52,9 +44,11 @@
     <footer>
         <a href="./privacy-policy.html" target="_blank">Privacy Policy</a> 
         <a href="./legal-notice.html" target="_blank">Legal notice</a>
-        <!-- mit target blank öffnet sich eine neue Seite, help seite bei SignUp? -->
     </footer>
     <script src="./js/login.js"></script>
+    <script>
+        // Reset localStorage when login.html is loaded
+        localStorage.clear();
+    </script>
 </body>
-
 </html>

@@ -109,7 +109,14 @@ function closeOverlay(updateRequired) {
         setTimeout(function() {
             clearOverlayContent();
             if (updateRequired) {
-                loadData();
+                loadData().then(function() {
+                    setupContactClickHandlers(); 
+                    setupEditDeleteButtons(); 
+                    showEditDeleteButtons(); 
+                });
+            } else {
+                showEditDeleteButtons(); 
+                setupEditDeleteButtons(); 
             }
         }, 500);
     }

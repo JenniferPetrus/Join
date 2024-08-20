@@ -14,6 +14,42 @@ function getRandomColor() {
     return colors[Math.floor(Math.random() * colors.length)];
 }
 
+function getInitials(name) {
+    let nameParts = name.split(' ');
+    let initials = '';
+    for (let i = 0; i < nameParts.length && initials.length < 2; i++) {
+        initials += nameParts[i].charAt(0).toUpperCase();
+    }
+    return initials;
+}
+
+function assignColorIfNeeded(contact) {
+    if (!contact.color || contact.color === "null") {
+        contact.color = getRandomColor();
+        saveColorToDatabase(contact.id, contact.color);
+    }
+}
+
+function saveColorToDatabase(contactId, color) {
+    fetch(`${API_URL}1/users/${contactId}/color.json`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(color)
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to save color to database');
+        }
+    }).catch(error => {
+        console.error('Error saving color:', error);
+    });
+}
+
+function applyColor(contact) {
+    return contact.color;
+}
+
 async function fetchData() {
     try {
         let response = await fetch(`${API_URL}.json`);
@@ -27,10 +63,11 @@ async function fetchData() {
         let result = [];
         for (let key in data[1].users) {
             if (data[1].users.hasOwnProperty(key)) {
-                result.push({ id: key, ...data[1].users[key] });
+                let user = { id: key, ...data[1].users[key] };
+                assignColorIfNeeded(user);
+                result.push(user);
             }
         }
-        console.log("Fetched contacts data:", result);
         return result;
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -43,14 +80,13 @@ async function loadData() {
         contactsData = await fetchData();
         if (contactsData && contactsData.length > 0) {
             contactsData = contactsData.filter(contact => contact && contact.fullName);
-            contactsData.sort((a, b) => a.fullName.localeCompare(b.fullName));
-            console.log("Loaded contacts data:", contactsData);
+            contactsData.sort(function(a, b) {
+                return a.fullName.localeCompare(b.fullName);
+            });
             let groupedContacts = groupContacts(contactsData);
             renderContacts(groupedContacts);
-            document.querySelectorAll('.single-contact').forEach((contact, index) => {
-                contact.removeEventListener('click', handleContactClick);
-                contact.addEventListener('click', handleContactClick);
-            });
+            setupContactClickHandlers();
+            setupEditDeleteButtons(); 
         } else {
             console.error('No valid contacts data found.');
         }
@@ -59,66 +95,16 @@ async function loadData() {
     }
 }
 
-async function addContact(contact) {
-    try {
-        let nextId = await getNextId();
-        let userId = `user${nextId}`;
-        let response = await fetch(`${API_URL}1/users/${userId}.json`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(contact)
-        });
-        if (!response.ok) {
-            throw new Error('Failed to add contact');
-        }
-        console.log(`Added contact with ID: ${userId}`, contact);
-        await loadData();
-    } catch (error) {
-        console.error('Error adding contact:', error);
-    }
-}
-
-async function updateContact(contactId, contact) {
-    try {
-        let response = await fetch(`${API_URL}1/users/${contactId}.json`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(contact)
-        });
-        if (!response.ok) {
-            throw new Error('Failed to update contact');
-        }
-        console.log(`Updated contact with ID: ${contactId}`, contact);
-        await loadData();
-    } catch (error) {
-        console.error('Error updating contact:', error);
-    }
-}
-
-async function deleteContact(contactId) {
-    try {
-        console.log(`Attempting to delete contact with ID: ${contactId}`);
-        let response = await fetch(`${API_URL}1/users/${contactId}.json`, {
-            method: 'DELETE'
-        });
-        if (!response.ok) {
-            throw new Error('Failed to delete contact');
-        }
-        console.log(`Deleted contact with ID: ${contactId}`);
-        await loadData();
-        hideChosenContact();
-        showSuccessMessage('Contact successfully deleted');
-    } catch (error) {
-        console.error('Error deleting contact:', error);
+function setupContactClickHandlers() {
+    let contacts = document.querySelectorAll('.single-contact');
+    for (let i = 0; i < contacts.length; i++) {
+        contacts[i].removeEventListener('click', handleContactClick);
+        contacts[i].addEventListener('click', handleContactClick);
     }
 }
 
 function groupContacts(contacts) {
-    return contacts.reduce((grouped, contact) => {
+    return contacts.reduce(function(grouped, contact) {
         let firstLetter = contact.fullName[0].toUpperCase();
         if (!grouped[firstLetter]) {
             grouped[firstLetter] = [];
@@ -135,8 +121,7 @@ function renderContacts(groupedContacts) {
         contacts.innerHTML += `<h3 class="first-letter">${letter}</h3><div class="vector">`;
         for (let contact of groupedContacts[letter]) {
             let initials = getInitials(contact.fullName);
-            let color = getRandomColor();
-            contactColors[contactsData.indexOf(contact)] = color;
+            let color = applyColor(contact);
 
             contacts.innerHTML += `
                 <div class="single-contact" data-index="${contactsData.indexOf(contact)}">
@@ -160,47 +145,37 @@ function handleContactClick(event) {
 
 function showContactDetails(index) {
     let contact = contactsData[index];
-    let color = contactColors[index];
-    console.log(`Showing details for contact with index: ${index}`, contact);
-
+    let color = contact.color;
     let chosenContact = document.getElementById('chosenContacts');
     chosenContact.style.display = 'block';
-
     let contactIcon = chosenContact.querySelector('.contact-icon');
     let contactName = chosenContact.querySelector('.contact-name');
     let emailAddress = chosenContact.querySelector('.email-address');
     let phoneNumber = chosenContact.querySelector('.phone-number');
-
     contactIcon.innerText = getInitials(contact.fullName);
     contactIcon.style.backgroundColor = color;
     contactName.innerText = contact.fullName;
     emailAddress.innerText = contact.email;
     phoneNumber.innerText = contact.phone;
-
     currentContactIndex = index;
-
-    document.querySelector('.contact-edit').removeEventListener('click', setupEditContact);
-    document.querySelector('.contact-delete').removeEventListener('click', handleDeleteContact);
-
-    document.querySelector('.contact-edit').addEventListener('click', setupEditContact);
-    document.querySelector('.contact-delete').addEventListener('click', handleDeleteContact);
-    
-    showEditDeleteButtons();
+    setupEditDeleteButtons(); 
     highlightSelectedContact(index);
 }
 
-function handleDeleteContact() {
-    let contactId = contactsData[currentContactIndex].id;
-    deleteContact(contactId);
-}
+function setupEditDeleteButtons() {
+    let editButton = document.querySelector('.contact-edit');
+    let deleteButton = document.querySelector('.contact-delete');
 
-function getInitials(name) {
-    let nameParts = name.split(' ');
-    let initials = '';
-    for (let i = 0; i < nameParts.length && initials.length < 2; i++) {
-        initials += nameParts[i].charAt(0).toUpperCase();
+    if (editButton && deleteButton) {
+        editButton.style.display = 'block';  
+        deleteButton.style.display = 'block';
+
+        editButton.removeEventListener('click', setupEditContact);
+        deleteButton.removeEventListener('click', handleDeleteContact);
+
+        editButton.addEventListener('click', setupEditContact);
+        deleteButton.addEventListener('click', handleDeleteContact);
     }
-    return initials;
 }
 
 function highlightSelectedContact(index) {
@@ -212,9 +187,9 @@ function highlightSelectedContact(index) {
 }
 
 function showEditDeleteButtons() {
-    const contactChangeElement = document.querySelector('.contact-change');
+    let contactChangeElement = document.querySelector('.contact-change');
     if (contactChangeElement) {
-        contactChangeElement.style.display = 'flex';
+        contactChangeElement.style.display = 'flex';  
     }
 }
 
@@ -230,14 +205,96 @@ function showSuccessMessage(message) {
 
     document.body.appendChild(messageContainer);
 
-    setTimeout(() => {
+    setTimeout(function() {
         messageContainer.remove();
     }, 3000);
 }
 
+function handleDeleteContact() {
+    let contactId = contactsData[currentContactIndex].id;
+    deleteContact(contactId);
+}
+
+async function deleteContact(contactId) {
+    try {
+        let response = await fetch(`${API_URL}1/users/${contactId}.json`, {
+            method: 'DELETE'
+        });
+        if (!response.ok) {
+            throw new Error('Failed to delete contact');
+        }
+        console.log(`Deleted contact with ID: ${contactId}`);
+        await loadData();
+        hideChosenContact();
+        showSuccessMessage('Contact successfully deleted');
+    } catch (error) {
+        console.error('Error deleting contact:', error);
+    }
+}
+
+function setupEditContact() {
+    let contact = contactsData[currentContactIndex];
+    
+    fetch('overlay.html')
+        .then(response => response.text())
+        .then(html => {
+           let overlayContainer = document.getElementById('overlay-container');
+            overlayContainer.innerHTML = html;
+
+            let contactNameInput = document.getElementById('contactName');
+            let contactEmailInput = document.getElementById('contactEmail');
+            let contactPhoneInput = document.getElementById('contactPhone');
+            let saveButton = document.getElementById('createContactButton');
+
+            if (contactNameInput && contactEmailInput && contactPhoneInput) {
+                contactNameInput.value = contact.fullName;
+                contactEmailInput.value = contact.email;
+                contactPhoneInput.value = contact.phone;
+            }
+            if (saveButton) {
+                saveButton.innerText = "Save";
+                saveButton.onclick = function () {
+                    saveContact(contact.id);
+                };
+            }
+           showOverlay();
+        })
+        .catch(error => {
+            console.error('Error loading overlay:', error);
+        });
+}
+
+async function saveContact(contactId) {
+    let updatedContact = {
+        fullName: document.getElementById('contactName').value,
+        email: document.getElementById('contactEmail').value,
+        phone: document.getElementById('contactPhone').value
+    };
+
+    try {
+        let response = await fetch(`${API_URL}1/users/${contactId}.json`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedContact)
+        });
+        if (!response.ok) {
+            throw new Error('Failed to save contact');
+        }
+        await loadData();
+        showContactDetails(currentContactIndex);
+        showSuccessMessage('Contact successfully updated');
+        closeOverlay();
+    } catch (error) {
+        console.error('Error saving contact:', error);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    const editDeleteSettingButton = document.querySelector('.edit-delete-setting');
-    const contactChangeElement = document.querySelector('.contact-change');
+    let editDeleteSettingButton = document.querySelector('.edit-delete-setting');
+    let contactChangeElement = document.querySelector('.contact-change');
+    
     editDeleteSettingButton.addEventListener('click', function(event) {
         event.preventDefault();
         if (window.innerWidth <= 700) {
@@ -249,31 +306,29 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    document.querySelectorAll('.single-contact').forEach((contact, index) => {
-        contact.removeEventListener('click', handleContactClick);
-        contact.addEventListener('click', handleContactClick);
-    });
+    setupContactClickHandlers();
+    setupEditDeleteButtons(); 
+    showEditDeleteButtons(); 
 });
 
 function init() {
-    loadData().then(() => {
-        document.querySelectorAll('.single-contact').forEach((contact, index) => {
-            contact.removeEventListener('click', handleContactClick);
-            contact.addEventListener('click', handleContactClick);
-        });
+    loadData().then(function() {
+        setupContactClickHandlers();
+        setupEditDeleteButtons(); 
+        showEditDeleteButtons(); 
     });
 }
-// SettingButton
-document.addEventListener('DOMContentLoaded', () => {
-    const button = document.getElementById('animateSettingBtn');
-    const contactChangeDiv = document.querySelector('.contact-change');
-    button.addEventListener('click', (event) => {
+
+document.addEventListener('DOMContentLoaded', function() {
+    let button = document.getElementById('animateSettingBtn');
+    let contactChangeDiv = document.querySelector('.contact-change');
+    button.addEventListener('click', function(event) {
         event.preventDefault();
         contactChangeDiv.classList.add('move-left');
         contactChangeDiv.classList.remove('move-right');
         event.stopPropagation();
     });
-    document.addEventListener('click', (event) => {
+    document.addEventListener('click', function(event) {
         if (!button.contains(event.target) && !contactChangeDiv.contains(event.target)) {
             contactChangeDiv.classList.add('move-right');
             contactChangeDiv.classList.remove('move-left');

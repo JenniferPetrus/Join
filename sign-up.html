@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
-    <link rel="icon" type="image/x-icon" href="/./assets/img/Logo for Favicon construction.svg">
+    <link rel="icon" type="image/x-icon" href="./assets/img/Logo for Favicon construction.svg">
     <link rel="stylesheet" href="./styles/login-signup.css">
     <link rel="stylesheet" href="./assets/fonts/fonts.css">
 </head>
@@ -22,21 +22,25 @@
                     <div class="input">
                         <input id="inputName" placeholder="Name" type="text" required>
                         <img src="./assets/icons/LoginSignUp/person.svg">
+                        <div class="error-message" id="nameError"></div>
                     </div>
 
                     <div class="input">
                         <input id="inputEmail" placeholder="E-Mail" type="email" required>
                         <img src="./assets/icons/LoginSignUp/mail.svg">
+                        <div class="error-message" id="emailError"></div>
                     </div>
 
                     <div class="input">
                         <input id="inputPassword" placeholder="Password" type="password" required>
                         <img src="./assets/icons/LoginSignUp/lock.svg" class="togglePasswordVisibility">
+                        <div class="error-message" id="passwordError"></div>
                     </div>
                     
                     <div id="confirm-password-container" class="input">
                         <input id="inputConfirmPassword" placeholder="Confirm password" type="password" required>
                         <img src="./assets/icons/LoginSignUp/lock.svg" class="togglePasswordVisibility">
+                        <div class="error-message" id="confirmPasswordError"></div>
                     </div>
                                       
                 </div>

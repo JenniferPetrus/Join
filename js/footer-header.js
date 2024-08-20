@@ -1,5 +1,10 @@
+const colors = [
+    '#A8A8A8', '#D1D1D1', '#CDCDCD', '#007CEE', '#FF7A00', '#FF5EB3',
+    '#6E52FF', '#9327FF', '#00BEE8', '#1FD7C1', '#FF745E', '#FFA35E',
+    '#FC71FF', '#FFC701', '#0038FF', '#C3FF2B', '#FFE62B', '#FF4646', '#FFBB2B'
+];
+
 function setActive(element) {
-    // Entfernt die Klasse 'active' von allen Elementen
     const navItems = document.getElementsByClassName('NavGap');
     for (let i = 0; i < navItems.length; i++) {
         navItems[i].classList.remove('active');
@@ -41,3 +46,48 @@ function setActive(element) {
         }
     }
 }
+
+function waitForUserElementAndLoad() {
+    const userElement = document.getElementById('user');
+    if (userElement) {
+        loadActiveUser();  
+    } else {
+        setTimeout(waitForUserElementAndLoad, 100);  
+    }
+}
+
+function loadActiveUser() {
+    const user = JSON.parse(localStorage.getItem('activeUser'));
+    const userElement = document.getElementById('user');
+
+    if (user && user.fullName !== 'Guest') {
+        displayUserInHeader(user);
+    } else {
+        userElement.innerText = 'G';  
+        userElement.style.backgroundColor = '';  
+    }
+}
+
+function getInitials(fullName) {
+    let nameParts = fullName.split(' ');
+    let initials = '';
+    for (let i = 0; i < nameParts.length && initials.length < 2; i++) {
+        initials += nameParts[i].charAt(0).toUpperCase();
+    }
+    return initials;
+}
+
+function displayUserInHeader(user) {
+    const userElement = document.getElementById('user');
+    const initials = getInitials(user.fullName);
+    const color = user.color || getRandomColor();
+
+    userElement.innerText = initials;
+    userElement.style.backgroundColor = color;
+}
+
+function getRandomColor() {
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+document.addEventListener('DOMContentLoaded', waitForUserElementAndLoad);
