@@ -45,6 +45,17 @@ function displayErrorMessage(message) {
     errorText.innerText = message;
 }
 
+function guestLogIn() {
+    const guestUser = {
+        fullName: 'Guest',
+        email: '',
+        color: '#A8A8A8' // Standardfarbe für den Gastbenutzer
+    };
+    localStorage.setItem('activeUser', JSON.stringify(guestUser));
+    window.location.href = "./summary.html";
+}
+
+
 document.getElementById('togglePasswordVisibility').addEventListener('click', function() {
     let passwordInput = document.getElementById('passwordInput');
     if (passwordInput.type === 'password') {

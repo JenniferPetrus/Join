@@ -1,3 +1,4 @@
+let API_URL = "https://join-d67a5-default-rtdb.europe-west1.firebasedatabase.app";
 let targetSectionId = 'todo'; 
 
 function addSubtask() {
