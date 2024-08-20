@@ -64,3 +64,8 @@ document.getElementById('togglePasswordVisibility').addEventListener('click', fu
         passwordInput.type = 'password';
     }
 });
+
+function navToSignUp() {
+    window.location.href = 'sign-up.html';
+}
+

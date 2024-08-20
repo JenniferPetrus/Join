@@ -10,6 +10,10 @@
 <body>
     <img class="logo" src="./assets/icons/LoginSignUp/BigJoinLogo.svg" />
     <div class="wrapper">
+        <div class="sign-header">
+            <span class="join-user-question">Not a Join user?</span>
+            <button onclick="navToSignUp()" class="dark-btn btn-small">Sign Up</button>
+        </div>
         <form class="container" id="container" onsubmit="logIn(); return false;">
             <div class="head">
                 <h1>Log in</h1>
@@ -49,6 +53,10 @@
     <script>
         // Reset localStorage when login.html is loaded
         localStorage.clear();
+
+        function navToSignUp() {
+            window.location.href = 'sign-up.html';
+        }
     </script>
 </body>
 </html>
