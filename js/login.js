@@ -32,6 +32,8 @@ function authenticateUser(email, password) {
             } else {
                 console.log('User not found or password incorrect');
                 displayErrorMessage("Invalid login credentials. Please try again.");
+                document.getElementById('emailInputError').innerText = 'Invalid email or password.'; // Fehlermeldung für E-Mail
+                document.getElementById('passwordInputError').innerText = 'Invalid email or password.'; // Fehlermeldung für Passwort
             }
         })
         .catch(function (error) {
@@ -43,6 +45,7 @@ function authenticateUser(email, password) {
 function displayErrorMessage(message) {
     let errorText = document.getElementById('failureTextInLogin');
     errorText.innerText = message;
+    errorText.style.color = 'red'; // Setzt die Farbe auf rot
 }
 
 function guestLogIn() {
@@ -54,7 +57,6 @@ function guestLogIn() {
     localStorage.setItem('activeUser', JSON.stringify(guestUser));
     window.location.href = "./summary.html";
 }
-
 
 document.getElementById('togglePasswordVisibility').addEventListener('click', function() {
     let passwordInput = document.getElementById('passwordInput');

@@ -298,8 +298,11 @@ async function saveEditedTask() {
 function generateTaskHTML(title, description, assignedTo, priority, category, subtasks, progress, taskId) {
     const completedSubtasks = subtasks.filter(subtask => subtask.completed).length;
     const totalSubtasks = subtasks.length;
-    const progressBarWidth = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
-    const progressBarColor = progressBarWidth > 0 ? '#4589FF' : '#e0e0e0'; 
+    const progressPercentage = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
+    const progressBarBackground = '#e0e0e0';
+    const progressBarColor = '#4589FF';
+    const progressBarWidth = `${progressPercentage}%`;
+
     const priorityImgSrc = getPriorityImageSrc(priority);
     const categoryClass = category === 'User Story' ? 'user-story-background' : 
                           category === 'Technical Task' ? 'technical-task-background' : '';
@@ -317,7 +320,13 @@ function generateTaskHTML(title, description, assignedTo, priority, category, su
             <div class="task-title">${title}</div>
             <div class="task-description">${description}</div>
             <div class="task-progress-container">
-                <div class="task-progress-bar" style="width: ${progressBarWidth}%; background-color: ${progressBarColor};"></div>
+                <div class="task-progress-bar" style="
+                    background: linear-gradient(
+                        to right,
+                        ${progressBarColor} ${progressBarWidth},
+                        ${progressBarBackground} ${progressBarWidth}
+                    );
+                "></div>
                 <div class="task-progress-text">${completedSubtasks}/${totalSubtasks} Subtasks</div>
             </div>
             <img class="task-priority-img" src="${priorityImgSrc}" alt="Priority Icon">
