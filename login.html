@@ -15,34 +15,29 @@
             <span class="join-user-question">Not a Join user?</span>
             <button onclick="navToSignUp()" class="dark-btn btn-small">Sign Up</button>
         </div>
-        <form class="container" id="container" onsubmit="logIn(); return false;">
-            <div class="head">
-                <h1>Log in</h1>
-                <div class="underline"></div>
+        <form class="container" id="container" onsubmit="logIn(); return false;" novalidate>
+            <div class="input">
+                <input placeholder="E-Mail" type="email" id="emailInput" required>
+                <img src="./assets/icons/LoginSignUp/mail.svg">
             </div>
-
-            <div class="input-container">
-                <div class="input">
-                    <input placeholder="E-Mail" type="email" id="emailInput" required>
-                    <img src="./assets/icons/LoginSignUp/mail.svg">
-                </div>
-
-                <div class="input">
-                    <input placeholder="Password" type="password" id="passwordInput" required>
-                    <img id="togglePasswordVisibility" src="./assets/icons/LoginSignUp/lock.svg">
-                </div>
-
-                <div id="failureTextInLogin" class="passwordDontMatchText"></div>
-
-                <div class="checkbox">
-                    <div><input class="checkbox-input" type="checkbox"></div>
-                    <span class="rememberMe">Remember me</span>
-                </div>
-
-                <div class="submit-btns">
-                    <button type="submit" class="dark-btn">Log in</button>
-                    <button onclick="guestLogIn()" type="button" class="light-btn">Guest Log in</button>
-                </div>
+            <div class="error-message" id="emailError"></div>
+        
+            <div class="input">
+                <input placeholder="Password" type="password" id="passwordInput" required>
+                <img id="togglePasswordVisibility" src="./assets/icons/LoginSignUp/lock.svg">
+            </div>
+            <div class="error-message" id="passwordError"></div>
+        
+            <div id="failureTextInLogin" class="passwordDontMatchText"></div>
+        
+            <div class="checkbox">
+                <div><input class="checkbox-input" type="checkbox"></div>
+                <span class="rememberMe">Remember me</span>
+            </div>
+        
+            <div class="submit-btns">
+                <button type="submit" class="dark-btn">Log in</button>
+                <button onclick="guestLogIn()" type="button" class="light-btn">Guest Log in</button>
             </div>
         </form>
     </div>
@@ -52,7 +47,6 @@
     </footer>
     <script src="./js/login.js"></script>
     <script>
-        // Reset localStorage when login.html is loaded
         localStorage.clear();
 
         function navToSignUp() {

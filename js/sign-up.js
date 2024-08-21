@@ -24,31 +24,22 @@ document.getElementById("registerBtn").addEventListener("click", function (event
 
 function validateForm(fullName, email, password, confirmPassword) {
     let isValid = true;
-
-    // Überprüfen, ob der Name leer ist oder Programmiercode enthält
     if (fullName === "" || containsCode(fullName)) {
         displayErrorMessage("Name cannot be empty or contain code.", "nameError");
         isValid = false;
     }
-
-    // Überprüfen des E-Mail-Formats und auf Programmiercode
     if (!validateEmail(email)) {
         displayErrorMessage("Invalid email format.", "emailError");
         isValid = false;
     }
-
-    // Überprüfen, ob das Passwort leer ist oder Programmiercode enthält
     if (password === "" || containsCode(password)) {
         displayErrorMessage("Password cannot be empty or contain code.", "passwordError");
         isValid = false;
     }
-
-    // Überprüfen, ob das Passwort mit dem Bestätigungspasswort übereinstimmt
     if (password !== confirmPassword) {
         displayErrorMessage("Passwords do not match.", "confirmPasswordError");
         isValid = false;
     }
-
     return isValid;
 }
 
@@ -65,16 +56,17 @@ function containsCode(input) {
 function displayErrorMessage(message, elementId) {
     let errorElement = document.getElementById(elementId);
     errorElement.innerText = message;
-    errorElement.style.display = "block";
+    errorElement.classList.add('visible');
 }
 
 function clearErrorMessages() {
     let errorElements = document.getElementsByClassName("error-message");
     for (let i = 0; i < errorElements.length; i++) {
-        errorElements[i].style.display = "none";
+        errorElements[i].classList.remove('visible');
         errorElements[i].innerText = "";
     }
 }
+
 
 function registerUser(fullName, email, password) {
     fetch(`${API_URL}/1/users.json`)

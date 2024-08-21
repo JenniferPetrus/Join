@@ -3,7 +3,40 @@ let API_URL = "https://join-d67a5-default-rtdb.europe-west1.firebasedatabase.app
 function logIn() {
     let email = document.getElementById('emailInput').value;
     let password = document.getElementById('passwordInput').value;
-    authenticateUser(email, password);
+    if (validateForm(email, password)) {
+        authenticateUser(email, password);
+    }
+}
+// Eingabevalidierung
+function validateForm(email, password) {
+    let isValid = true;
+    clearErrorMessages();
+    if (!validateEmail(email)) {
+        displayErrorMessage("Invalid email format.", "emailError");
+        isValid = false;
+    }
+    if (password === "") {
+        displayErrorMessage("Password cannot be empty.", "passwordError");
+        isValid = false;
+    }
+    return isValid;
+}
+// Funktion zum Zurücksetzen der Fehlermeldungen
+function clearErrorMessages() {
+    document.getElementById('emailError').innerText = "";
+    document.getElementById('passwordError').innerText = "";
+    document.getElementById('failureTextInLogin').innerText = "";
+}
+function displayErrorMessage(message, elementId) {
+    let errorElement = document.getElementById(elementId);
+    errorElement.innerText = message;
+    errorElement.classList.add('visible');
+}
+
+function clearErrorMessage(elementId) {
+    let errorElement = document.getElementById(elementId);
+    errorElement.innerText = "";
+    errorElement.classList.remove('visible');
 }
 
 function authenticateUser(email, password) {
@@ -18,36 +51,29 @@ function authenticateUser(email, password) {
             if (!data) {
                 throw new Error('No data returned from the database');
             }
-            console.log('Fetched user data:', data);
 
-            // Durchlaufen der Benutzerdaten und Suche nach der Übereinstimmung
             let user = Object.values(data).find(function (user) {
                 return user.email === email && user.password === password;
             });
 
             if (user) {
-                console.log('User authenticated:', user);
                 localStorage.setItem('activeUser', JSON.stringify(user));
                 window.location.href = "./summary.html";
             } else {
-                console.log('User not found or password incorrect');
-                displayErrorMessage("Invalid login credentials. Please try again.");
-                document.getElementById('emailInputError').innerText = 'Invalid email or password.'; // Fehlermeldung für E-Mail
-                document.getElementById('passwordInputError').innerText = 'Invalid email or password.'; // Fehlermeldung für Passwort
+                displayErrorMessage("Invalid login. Please try again.", "failureTextInLogin");
             }
         })
         .catch(function (error) {
             console.error('Error during authentication:', error);
-            displayErrorMessage("An error occurred. Please try again.");
+            displayErrorMessage("An error occurred. Please try again.", "failureTextInLogin");
         });
 }
-
-function displayErrorMessage(message) {
-    let errorText = document.getElementById('failureTextInLogin');
-    errorText.innerText = message;
-    errorText.style.color = 'red'; // Setzt die Farbe auf rot
+// Email-Validierungsfunktion
+function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
 }
-
+// Funktion für Gast-Login
 function guestLogIn() {
     const guestUser = {
         fullName: 'Guest',
@@ -58,7 +84,7 @@ function guestLogIn() {
     window.location.href = "./summary.html";
 }
 
-document.getElementById('togglePasswordVisibility').addEventListener('click', function() {
+document.getElementById('togglePasswordVisibility').addEventListener('click', function () {
     let passwordInput = document.getElementById('passwordInput');
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
@@ -70,4 +96,3 @@ document.getElementById('togglePasswordVisibility').addEventListener('click', fu
 function navToSignUp() {
     window.location.href = 'sign-up.html';
 }
-

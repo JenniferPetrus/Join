@@ -71,7 +71,7 @@ function validateForm() {
         isValid = false;
     }
     let dueDate = document.getElementById('dueDate').value;
-    if (!dueDate) {
+    if (!dueDate || new Date(dueDate) == "Invalid Date") {
         document.getElementById('dueDateError').textContent = 'Due Date is required';
         isValid = false;
     }
@@ -105,20 +105,24 @@ async function createTask() {
     if (!validateForm()) {
         return;
     }
+    
     const title = document.getElementById('taskTitle').value;
     const description = document.getElementById('taskDescription').value;
     const assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
     const priority = getActivePriority();
     const category = document.getElementById('category').value;
     const subtasks = getSubtasks();
+    const dueDate = document.getElementById('dueDate').value;
     const task = {
         title,
         description,
         assignedTo,
         priority,
         category,
-        subtasks
+        subtasks,
+        dueDate 
     };
+
     try {
         const taskId = await saveTaskToDatabase(task); 
         const taskHTML = generateTaskHTML(title, description, assignedTo, priority, category, subtasks);
@@ -209,14 +213,16 @@ function getSubtasks() {
     }));
 }
 // HTML für eine Aufgabe
-function generateTaskHTML(title, description, assignedTo, priority, category, subtasks) {
+function generateTaskHTML(title, description, assignedTo, priority, category, subtasks, dueDate) {
     const progressBarWidth = subtasks.length ? (subtasks.filter(subtask => subtask.completed).length / subtasks.length) * 100 : 0;
     const priorityImgSrc = getPriorityImageSrc(priority);
+    const formattedDueDate = new Date(dueDate).toLocaleDateString('de-DE');
     return `
         <div class="task-card" id="${title.replace(/\s+/g, '-').toLowerCase()}">
             <div class="task-category">${category}</div>
             <div class="task-title">${title}</div>
             <div class="task-description">${description}</div>
+            <div class="task-due-date">Due Date: ${formattedDueDate}</div> <!-- Show formatted date -->
             <div class="task-progress-container">
                 <div class="task-progress-bar" style="width: ${progressBarWidth}%"></div>
                 <div class="task-progress-text">${subtasks.length ? subtasks.filter(subtask => subtask.completed).length + '/' + subtasks.length + ' Subtasks' : 'No Subtasks'}</div>
@@ -231,6 +237,7 @@ function generateTaskHTML(title, description, assignedTo, priority, category, su
         </div>
     `;
 }
+
 // Bildpfad -> Priorität
 function getPriorityImageSrc(priority) {
     switch (priority) {

@@ -87,6 +87,10 @@ body{
     cursor: pointer;
 }
 
+.plus-icon{
+    position: relative;
+}
+
 .plus-icon:hover {
     cursor: pointer;
 }

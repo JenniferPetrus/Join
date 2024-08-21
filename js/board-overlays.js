@@ -1,4 +1,10 @@
 let targetSectionId = 'todo'; // Standardbereich beim Button Add task -> soll in todo
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString(undefined, options);
+}
+
 function openOverlay(sectionId) {
     if (sectionId) {
         targetSectionId = sectionId;} // sectionID -> todo, in progress und await feedback
@@ -340,6 +346,7 @@ function openTaskDetailOverlay(task, taskId) {
     currentTaskId = taskId;
     const categoryClass = task.category === 'User Story' ? 'user-story-background' : 
                           task.category === 'Technical Task' ? 'technical-task-background' : '';
+
     document.getElementById('taskDetailOverlay').innerHTML = `
         <div class="task-detail-container">
             <div class="task-detail-header">
@@ -349,7 +356,7 @@ function openTaskDetailOverlay(task, taskId) {
             <div id="taskDetailsView">
                 <h1 class="task-detail-title">${task.title}</h1>
                 <p class="task-detail-description">${task.description}</p>
-                <p>Due Date: ${task.dueDate}</p>
+                <p>Due Date: ${formatDate(task.dueDate)}</p>
                 <p>Priority: ${task.priority} 
                     <img src="${getPriorityImageSrc(task.priority)}" alt="${task.priority} Priority" class="priority-image">
                 </p>
@@ -388,7 +395,7 @@ function createEditForm(task) {
             </div>
             <div>
                 <label for="editDueDate">Due Date:</label>
-                <input type="date" id="editDueDate" value="${task.dueDate}">
+                <input type="text" id="editDueDate" value="${formatDate(task.dueDate)}">
             </div>
             <div>
                 <label for="editPriority">Priority:</label>

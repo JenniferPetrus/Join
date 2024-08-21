@@ -43,7 +43,6 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 32px;
     padding: 48px 115px 48px 115px;
     box-sizing: border-box;
     position: relative;
@@ -74,6 +73,7 @@ h1 {
     height: 3px;
     background-color: #29abe2;
     width: 150px;
+    margin-bottom: 15px;
 }
 
 input {
@@ -113,7 +113,6 @@ input {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 24px;
 }
 
 button {
@@ -231,6 +230,18 @@ a:hover {
     margin-left: 50px;
     margin-top: 61px;
     z-index: 2;
+}
+
+.error-message {
+    color: red;
+    min-height: 20px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    visibility: hidden;
+}
+
+.error-message.visible {
+    visibility: visible;
 }
 
 @keyframes moveAndFreeze {
