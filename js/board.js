@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    function addEventListenersToPlusIcons() {
+    function addEventListenersToButtons() {
         document.querySelectorAll('.plus-icon').forEach(icon => {
             icon.addEventListener('mouseover', () => {
                 icon.src = './assets/icons/Board-icons/plus icon blue.svg';
@@ -13,19 +13,22 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
     function loadOverlay() {
         fetch('./board-overlays.html')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('overlay-container').innerHTML = data;
-                addEventListenersToPlusIcons();
+                addEventListenersToButtons();
             })
             .catch(error => console.error('Error loading the overlay:', error));
     }
+
     function openOverlay(sectionId) {
         loadOverlay(); 
         document.getElementById('addTaskOverlay').style.display = 'flex';
     }
+
     const addTaskButton = document.querySelector('.add-task-button');
     if (addTaskButton) {
         addTaskButton.addEventListener('click', () => {
@@ -33,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('addTaskOverlay').style.display = 'flex';
         });
     }
+
     const searchIcon = document.querySelector('.vector-input-search-item');
     if (searchIcon) {
         searchIcon.addEventListener('mouseover', () => {
@@ -42,5 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
             searchIcon.src = './assets/icons/Board-icons/search icon black.svg';
         });
     }
-    addEventListenersToPlusIcons();
+
+    addEventListenersToButtons();
 });
