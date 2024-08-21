@@ -13,7 +13,20 @@ function getGreetingTime() {
 }
 
 document.getElementById('greet-time').innerText = getGreetingTime();
-document.getElementById('greet-user').innerText = "Username oder Guest?"; 
+
+// Get the active user from localStorage and update the greeting
+function updateGreeting() {
+    const user = JSON.parse(localStorage.getItem('activeUser'));
+    const greetUserElement = document.getElementById('greet-user');
+
+    if (user && user.fullName) {
+        greetUserElement.innerText = user.fullName;
+    } else {
+        greetUserElement.innerText = 'Guest';
+    }
+}
+
+updateGreeting();
 
 // SUMMARY COUNTERS
 const API_URL = "https://join-d67a5-default-rtdb.europe-west1.firebasedatabase.app/";
@@ -48,7 +61,6 @@ async function updateSummary() {
     const awaitingFeedbackCount = tasks.filter(task => task && task.status === 'awaiting-feedback').length;
     const urgentCount = tasks.filter(task => task && task.priority === 'urgent').length;
     const totalTasks = tasks.length - 1;
-    // Minus 1 weil Verzeichnis-Titel mitgezählt wird
 
     document.getElementById('to-do-amount').innerText = toDoCount;
     document.getElementById('done-amount').innerText = doneCount;
