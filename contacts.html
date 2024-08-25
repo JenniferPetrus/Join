@@ -9,20 +9,29 @@
     <link rel="stylesheet" href="./assets/fonts/fonts.css">
     <link rel="stylesheet" href="./styles/root.css">
     <link rel="stylesheet" href="./styles/media.css">
+    
+    <!-- Einbindung der Skripte mit defer -->
     <script src="./js/global.js" defer></script>
+    <script src="./js/overlay.js" defer></script>
+    <script src="./js/contacts.js" defer></script>
+    <script src="./js/template.js" defer></script>
+    <script src="./js/footer-header.js" defer></script>
+    <script src="./js/mutationObserver.js" defer></script>
 </head>
-<body onload="init(), includeHTML()">
+<body>
     <div w3-include-html="header.html"></div>
+
     <div class="contact-header">
         <h1>Contacts</h1>
         <hr>
         <p>Better with a team</p>
     </div>
+
     <div id="chosenContacts" class="chosen-contact" style="display: none;">
         <div class="contact-header-responsive" style="display: none;">
             <div class="header-and-return">
-             <h1>Contacts</h1>
-             <a href="contacts.html"><img src="./assets/icons/arrow-left-line.svg" alt="Back"></a>   
+                <h1>Contacts</h1>
+                <a href="contacts.html"><img src="./assets/icons/arrow-left-line.svg" alt="Back"></a>   
             </div>
             <p>Better with a team</p>
             <hr>
@@ -49,6 +58,7 @@
         <a href=""><img id="animateSettingBtn" class="edit-delete-setting" src="./assets/img/Menu Contact options.svg" alt="Settings"></a>
         <div id="editDeleteSetting"></div>
     </div>
+
     <div class="main-contactlist">
         <div class="background-btn">
             <button class="add-contact-btn">
@@ -58,13 +68,9 @@
         </div>
         <div id="contactlist" class="contacts-section"></div>
     </div>
-    <div w3-include-html="footer.html"></div>
 
+    <div w3-include-html="footer.html"></div>
     <div id="overlay-container"></div>
-    <script src="./js/overlay.js"></script>
-    <script src="./js/contacts.js"></script>
-    <script src="./js/template.js"></script>
-    <script src="./js/footer-header.js"></script>
-    <script src="./js/mutationObserver.js"></script> 
-  </body>
+
+</body>
 </html>

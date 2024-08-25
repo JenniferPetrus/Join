@@ -50,10 +50,15 @@ document.addEventListener('DOMContentLoaded', () => {
     addEventListenersToButtons();
 });
 
-// Debuggin Krempel, löschen am schluß !
+// Debugging: Struktur und Inhalte der Datenbank ausgeben
 async function logDatabaseStructureAndContent() {
     try {
-        const response = await fetch(`${API_URL}/2/tasks.json`);
+        const rootKey = await getTaskRootKey();  // Root-Schlüssel für Tasks abrufen
+        if (!rootKey) {
+            throw new Error('Root key for tasks not found');
+        }
+
+        const response = await fetch(`${API_URL}/${rootKey}/tasks.json`);
         if (!response.ok) {
             throw new Error('Failed to fetch tasks');
         }

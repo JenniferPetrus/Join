@@ -182,66 +182,79 @@ function clearValidationErrors() {
     });
 }
 
-function addContactToAPI(contact) {
-    getNextId().then(function(nextId) {
-        let userId = `user${nextId}`;
+async function addContactToAPI(contact) {
+    try {
+        const rootKey = await getUserRootKey(); // Root-Schlüssel für Users abrufen
+        if (!rootKey) {
+            throw new Error('Root key for users not found');
+        }
+
+        const nextId = await getNextId();
+        const userId = `user${nextId}`;
         console.log(`Creating new contact with ID: ${userId}`);
-        fetch(`${API_URL}1/users/${userId}.json`, {
+
+        const response = await fetch(`${API_URL}/${rootKey}/users/${userId}.json`, {  // Verwendung des Root-Schlüssels
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(contact)
-        })
-        .then(async function(response) {
-            if (response.ok) {
-                await loadData();
-                let newIndex = contactsData.findIndex(c => c.id === userId);
-                console.log(`New contact added at index: ${newIndex}`);
-                showContactDetails(newIndex);
-                showSuccessMessage('Contact successfully created');
-                closeOverlay(false);
-            } else {
-                throw new Error('Failed to add contact');
-            }
-        })
-        .catch(function(error) {
-            console.error('Error adding contact:', error);
         });
-    });
+
+        if (!response.ok) {
+            throw new Error('Failed to add contact');
+        }
+
+        await loadData();
+        let newIndex = contactsData.findIndex(c => c.id === userId);
+        console.log(`New contact added at index: ${newIndex}`);
+        showContactDetails(newIndex);
+        showSuccessMessage('Contact successfully created');
+        closeOverlay(false);
+    } catch (error) {
+        console.error('Error adding contact:', error);
+    }
 }
 
-function getNextId() {
-    return fetch(`${API_URL}1/users.json`)
-        .then(function(response) {
-            if (!response.ok) {
-                throw new Error('Error fetching contacts');
-            }
-            return response.json();
-        })
-        .then(function(data) {
-            if (typeof data !== 'object') {
-                throw new Error('Unexpected data format');
-            }
-            let ids = Object.keys(data).map(function(key) {
-                let match = key.match(/^user(\d+)$/);
-                return match ? parseInt(match[1], 10) : NaN;
-            }).filter(function(num) {
-                return !isNaN(num);
-            });
+async function getNextId() {
+    try {
+        const rootKey = await getUserRootKey(); // Root-Schlüssel für Users abrufen
+        if (!rootKey) {
+            throw new Error('Root key for users not found');
+        }
 
-            let nextId = ids.length ? Math.max(...ids) + 1 : 1;
-            console.log(`Next ID: ${nextId}`);
-            return nextId;
-        })
-        .catch(function(error) {
-            console.error('Error in getNextId:', error);
-            return 1;
+        const response = await fetch(`${API_URL}/${rootKey}/users.json`);
+        if (!response.ok) {
+            throw new Error('Error fetching contacts');
+        }
+        const data = await response.json();
+        if (typeof data !== 'object') {
+            throw new Error('Unexpected data format');
+        }
+        const ids = Object.keys(data).map(function(key) {
+            const match = key.match(/^user(\d+)$/);
+            return match ? parseInt(match[1], 10) : NaN;
+        }).filter(function(num) {
+            return !isNaN(num);
         });
+
+        const nextId = ids.length ? Math.max(...ids) + 1 : 1;
+        console.log(`Next ID: ${nextId}`);
+        return nextId;
+    } catch (error) {
+        console.error('Error in getNextId:', error);
+        return 1;
+    }
 }
 
 async function setupEditContact() {
     const contact = contactsData[currentContactIndex];
+    if (!contact) {
+        console.error('No contact found for editing');
+        return;
+    }
+    console.log('Editing contact:', contact);
+
     const overlayHTML = await fetch('overlay.html').then(response => response.text());
 
     const overlayContainer = document.getElementById('overlay-container');
@@ -254,22 +267,35 @@ async function setupEditContact() {
     });
 
     const overlayTitle = document.querySelector('.text-bold');
-    overlayTitle.innerText = 'Edit Contact';
+    if (overlayTitle) {
+        overlayTitle.innerText = 'Edit Contact';
+    }
 
     const overlaySubtitle = document.querySelector('.text-normal');
-    overlaySubtitle.style.display = 'none';
+    if (overlaySubtitle) {
+        overlaySubtitle.style.display = 'none';
+    }
 
-    document.getElementById('contactName').value = contact.fullName;
-    document.getElementById('contactEmail').value = contact.email;
-    document.getElementById('contactPhone').value = contact.phone;
+    const contactNameInput = document.getElementById('contactName');
+    const contactEmailInput = document.getElementById('contactEmail');
+    const contactPhoneInput = document.getElementById('contactPhone');
+
+    if (contactNameInput) contactNameInput.value = contact.fullName;
+    if (contactEmailInput) contactEmailInput.value = contact.email;
+    if (contactPhoneInput) contactPhoneInput.value = contact.phone;
 
     setEditCancelButton();
     setSaveContactButton(contact.id);
 
-    document.querySelector('.contact-change').style.display = 'none';
+    const contactChangeElement = document.querySelector('.contact-change');
+    if (contactChangeElement) {
+        contactChangeElement.style.display = 'none';
+    }
 
     const cancelButton = document.getElementById('cancelButton');
-    cancelButton.addEventListener('click', closeEditContact);
+    if (cancelButton) {
+        cancelButton.addEventListener('click', closeEditContact);
+    }
 }
 
 function closeEditContact() {
@@ -310,10 +336,19 @@ function setSaveContactButton(contactId) {
 }
 
 async function saveContact(contactId) {
+    const contactNameInput = document.getElementById('contactName');
+    const contactEmailInput = document.getElementById('contactEmail');
+    const contactPhoneInput = document.getElementById('contactPhone');
+
+    if (!contactNameInput || !contactEmailInput || !contactPhoneInput) {
+        console.error('Contact input fields not found');
+        return;
+    }
+
     const updatedContact = {
-        fullName: document.getElementById('contactName').value,
-        email: document.getElementById('contactEmail').value,
-        phone: document.getElementById('contactPhone').value
+        fullName: contactNameInput.value,
+        email: contactEmailInput.value,
+        phone: contactPhoneInput.value
     };
 
     try {
@@ -327,18 +362,25 @@ async function saveContact(contactId) {
 
 async function updateContactInAPI(contactId, contact) {
     try {
+        const rootKey = await getUserRootKey(); // Root-Schlüssel für Users abrufen
+        if (!rootKey) {
+            throw new Error('Root key for users not found');
+        }
+
         const sanitizedContact = {
             fullName: contact.fullName || '',
             email: contact.email || '',
             phone: contact.phone || ''
         };
-        let response = await fetch(`${API_URL}1/users/${contactId}.json`, {
+
+        const response = await fetch(`${API_URL}/${rootKey}/users/${contactId}.json`, {  // Verwendung des Root-Schlüssels
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(sanitizedContact)
         });
+
         if (!response.ok) {
             throw new Error('Failed to update contact');
         }
@@ -352,20 +394,28 @@ async function updateContactInAPI(contactId, contact) {
 
 async function fetchData() {
     try {
-        let response = await fetch(`${API_URL}.json`);
+        const rootKey = await getUserRootKey(); // Root-Schlüssel für Users abrufen
+        if (!rootKey) {
+            throw new Error('Root key for users not found');
+        }
+
+        const response = await fetch(`${API_URL}/${rootKey}/users.json`);
         if (!response.ok) {
             throw new Error('Error fetching contacts');
         }
-        let data = await response.json();
+
+        const data = await response.json();
         if (typeof data !== 'object') {
             throw new Error('Unexpected data format');
         }
-        let result = [];
+
+        const result = [];
         for (let key in data) {
             if (data.hasOwnProperty(key)) {
                 result.push({ id: key, ...data[key] });
             }
         }
+
         console.log("Fetched contacts data:", result);
         return result;
     } catch (error) {
@@ -376,13 +426,20 @@ async function fetchData() {
 
 async function deleteContact(contactId) {
     try {
+        const rootKey = await getUserRootKey(); // Root-Schlüssel für Users abrufen
+        if (!rootKey) {
+            throw new Error('Root key for users not found');
+        }
+
         console.log(`Attempting to delete contact with ID: ${contactId}`);
-        let response = await fetch(`${API_URL}1/users/${contactId}.json`, {
+        const response = await fetch(`${API_URL}/${rootKey}/users/${contactId}.json`, {  // Verwendung des Root-Schlüssels
             method: 'DELETE'
         });
+
         if (!response.ok) {
             throw new Error('Failed to delete contact');
         }
+
         console.log(`Deleted contact with ID: ${contactId}`);
         await loadData();
         hideChosenContact();

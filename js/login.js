@@ -5,6 +5,7 @@ function logIn() {
         authenticateUser(email, password);
     }
 }
+
 // Eingabevalidierung
 function validateForm(email, password) {
     let isValid = true;
@@ -19,12 +20,14 @@ function validateForm(email, password) {
     }
     return isValid;
 }
+
 // Funktion zum Zurücksetzen der Fehlermeldungen
 function clearErrorMessages() {
     document.getElementById('emailError').innerText = "";
     document.getElementById('passwordError').innerText = "";
     document.getElementById('failureTextInLogin').innerText = "";
 }
+
 function displayErrorMessage(message, elementId) {
     let errorElement = document.getElementById(elementId);
     errorElement.innerText = message;
@@ -37,40 +40,45 @@ function clearErrorMessage(elementId) {
     errorElement.classList.remove('visible');
 }
 
-function authenticateUser(email, password) {
-    fetch(API_URL)
-        .then(function (response) {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(function (data) {
-            if (!data) {
-                throw new Error('No data returned from the database');
-            }
+async function authenticateUser(email, password) {
+    try {
+        const rootKey = await getUserRootKey();  // Root-Schlüssel für Users abrufen
+        if (!rootKey) {
+            throw new Error('Root key for users not found');
+        }
 
-            let user = Object.values(data).find(function (user) {
-                return user.email === email && user.password === password;
-            });
+        const response = await fetch(`${API_URL}/${rootKey}/users.json`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
 
-            if (user) {
-                localStorage.setItem('activeUser', JSON.stringify(user));
-                window.location.href = "./summary.html";
-            } else {
-                displayErrorMessage("Invalid login. Please try again.", "failureTextInLogin");
-            }
-        })
-        .catch(function (error) {
-            console.error('Error during authentication:', error);
-            displayErrorMessage("An error occurred. Please try again.", "failureTextInLogin");
+        const data = await response.json();
+        if (!data) {
+            throw new Error('No data returned from the database');
+        }
+
+        let user = Object.values(data).find(function (user) {
+            return user.email === email && user.password === password;
         });
+
+        if (user) {
+            localStorage.setItem('activeUser', JSON.stringify(user));
+            window.location.href = "./summary.html";
+        } else {
+            displayErrorMessage("Invalid login. Please try again.", "failureTextInLogin");
+        }
+    } catch (error) {
+        console.error('Error during authentication:', error);
+        displayErrorMessage("An error occurred. Please try again.", "failureTextInLogin");
+    }
 }
+
 // Email-Validierungsfunktion
 function validateEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 }
+
 // Funktion für Gast-Login
 function guestLogIn() {
     const guestUser = {

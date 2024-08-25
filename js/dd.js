@@ -40,7 +40,7 @@ function init() {
     return updateHTML();
 }
 
-function updateTaskPosition(taskId, newStatus) {
+async function updateTaskPosition(taskId, newStatus) {
     const taskElement = document.getElementById(`task-${taskId}`);
     const task = todos.find(t => t.id === taskId);
     task.status = newStatus;
@@ -48,30 +48,33 @@ function updateTaskPosition(taskId, newStatus) {
     // Update the status in the UI
     moveTo(newStatus, taskElement);
 
-    // Update the task in Firebase
-    const taskData = { 
-        status: newStatus 
-        // Weitere Felder hier hinzufügen, wenn notwendig, aber keine Arrays
-    };
-    fetch(`${API_URL}/2/tasks/${taskId}.json`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(taskData)
-    })
-    .then(response => {
+    try {
+        const rootKey = await getTaskRootKey();  // Root-Schlüssel für Tasks abrufen
+        if (!rootKey) {
+            throw new Error('Root key for tasks not found');
+        }
+
+        // Update the task in Firebase
+        const taskData = { 
+            status: newStatus 
+            // Weitere Felder hier hinzufügen, wenn notwendig, aber keine Arrays
+        };
+        const response = await fetch(`${API_URL}/${rootKey}/tasks/${taskId}.json`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(taskData)
+        });
+
         if (!response.ok) {
             throw new Error('Failed to update task in Firebase');
         }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Task updated successfully in Firebase:', data);
-    })
-    .catch(error => {
-        console.error('Error updating task in Firebase:', error);
-    });
-}
 
+        const data = await response.json();
+        console.log('Task updated successfully in Firebase:', data);
+    } catch (error) {
+        console.error('Error updating task in Firebase:', error);
+    }
+}
 
 function moveTo(status) {
     const taskElement = document.getElementById(`task-${currentDraggedElement}`);

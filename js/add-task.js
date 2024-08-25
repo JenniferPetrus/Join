@@ -1,6 +1,6 @@
 let targetSectionId = 'todo'; 
 
-function addSubtask() {
+async function addSubtask() {
     let subtaskInput = document.getElementById('newSubtask');
     let subtaskList = document.getElementById('subtaskList');
 
@@ -136,8 +136,13 @@ async function createTask() {
 
 async function saveTaskToDatabase(task) {
     try {
-        const taskId = await getNextId();
-        const response = await fetch(`${API_URL}/2/tasks/${taskId}.json`, {
+        const rootKey = await getTasksRootKey();  // Korrigierter Funktionsname
+        if (!rootKey) {
+            throw new Error('Root key for tasks not found');
+        }
+
+        const taskId = await getNextId(rootKey);
+        const response = await fetch(`${API_URL}/${rootKey}/tasks/${taskId}.json`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -157,7 +162,12 @@ async function saveTaskToDatabase(task) {
 
 async function loadTasksFromDatabase() {
     try {
-        const response = await fetch(`${API_URL}/2/tasks.json`);
+        const rootKey = await getTasksRootKey();  // Korrigierter Funktionsname
+        if (!rootKey) {
+            throw new Error('Root key for tasks not found');
+        }
+
+        const response = await fetch(`${API_URL}/${rootKey}/tasks.json`);
         if (!response.ok) {
             throw new Error('Failed to fetch tasks');
         }
@@ -184,9 +194,10 @@ async function loadTasksFromDatabase() {
     }
 }
 
-async function getNextId() {
+
+async function getNextId(rootKey) {
     try {
-        const response = await fetch(`${API_URL}/2/tasks.json`);
+        const response = await fetch(`${API_URL}/${rootKey}/tasks.json`);
         if (!response.ok) {
             throw new Error('Failed to fetch tasks');
         }
@@ -268,9 +279,15 @@ function insertTaskIntoContainer(taskHTML, status = 'toDo') {
 }
 
 // Funktion zum Löschen einer Aufgabe
+
 async function deleteTask(taskId) {
     try {
-        let response = await fetch(`${API_URL}/2/tasks/${taskId}.json`, {
+        const rootKey = await getTasksRootKey();  // Korrigierter Funktionsname
+        if (!rootKey) {
+            throw new Error('Root key for tasks not found');
+        }
+
+        let response = await fetch(`${API_URL}/${rootKey}/tasks/${taskId}.json`, {
             method: 'DELETE'
         });
         if (response.ok) {

@@ -59,27 +59,29 @@ function clearErrorMessages() {
     }
 }
 
+async function registerUser(fullName, email, password) {
+    try {
+        const rootKey = await getUserRootKey(); // Abrufen des dynamischen Root-Schlüssels
+        if (!rootKey) {
+            throw new Error('Root key for users not found');
+        }
 
-function registerUser(fullName, email, password) {
-    fetch(`${API_URL}/1/users.json`)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-            let userExists = Object.values(data || {}).some(function (user) {
-                return user.email === email;
-            });
+        const response = await fetch(`${API_URL}/${rootKey}/users.json`);
+        const data = await response.json();
 
-            if (userExists) {
-                displayErrorMessage("E-Mail already in use. Please try another.", "emailError");
-            } else {
-                let newUserId = getNextUserId(data || {});
-                createUser(newUserId, fullName, email, password);
-            }
-        })
-        .catch(function (error) {
-            displayErrorMessage("An error occurred. Please try again.", "nameError");
+        let userExists = Object.values(data || {}).some(function (user) {
+            return user.email === email;
         });
+
+        if (userExists) {
+            displayErrorMessage("E-Mail already in use. Please try another.", "emailError");
+        } else {
+            let newUserId = getNextUserId(data || {});
+            createUser(rootKey, newUserId, fullName, email, password); // Root-Schlüssel mitgeben
+        }
+    } catch (error) {
+        displayErrorMessage("An error occurred. Please try again.", "nameError");
+    }
 }
 
 function getNextUserId(users) {
@@ -92,7 +94,7 @@ function getNextUserId(users) {
     return userIds.length > 0 ? Math.max(...userIds) + 1 : 1;
 }
 
-function createUser(userId, fullName, email, password) {
+function createUser(rootKey, userId, fullName, email, password) {
     let newUser = {
         id: `user${userId}`,
         fullName: fullName,
@@ -102,7 +104,7 @@ function createUser(userId, fullName, email, password) {
         color: getRandomColor()
     };
 
-    fetch(`${API_URL}/1/users/user${userId}.json`, {
+    fetch(`${API_URL}/${rootKey}/users/user${userId}.json`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"

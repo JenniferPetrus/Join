@@ -1,6 +1,11 @@
 async function loadTasksFromDatabase() {
     try {
-        const response = await fetch(`${API_URL}/2/tasks.json`);
+        const rootKey = await getTaskRootKey();  // Root-Schlüssel für Tasks abrufen
+        if (!rootKey) {
+            throw new Error('Root key for tasks not found');
+        }
+
+        const response = await fetch(`${API_URL}/${rootKey}/tasks.json`);
         if (!response.ok) {
             throw new Error('Failed to fetch tasks');
         }
@@ -50,7 +55,6 @@ function rebindEventListeners() {
 document.addEventListener('DOMContentLoaded', () => {
     rebindEventListeners(); // Sicherstellen, dass die Event-Listener zu Beginn gebunden sind
 });
-
 
 function generateTaskHTML(task) {
     if (!task) {

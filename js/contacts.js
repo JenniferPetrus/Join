@@ -16,27 +16,34 @@ function getInitials(name) {
     return initials;
 }
 
-function assignColorIfNeeded(contact) {
+async function assignColorIfNeeded(contact) {
     if (!contact.color || contact.color === "null") {
         contact.color = getRandomColor();
-        saveColorToDatabase(contact.id, contact.color);
+        await saveColorToDatabase(contact.id, contact.color);
     }
 }
 
-function saveColorToDatabase(contactId, color) {
-    fetch(`${API_URL}1/users/${contactId}/color.json`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(color)
-    }).then(response => {
+async function saveColorToDatabase(contactId, color) {
+    try {
+        const rootKey = await getUserRootKey();  // Root-Schlüssel für Users abrufen
+        if (!rootKey) {
+            throw new Error('Root key for users not found');
+        }
+
+        const response = await fetch(`${API_URL}/${rootKey}/users/${contactId}/color.json`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(color)
+        });
+
         if (!response.ok) {
             throw new Error('Failed to save color to database');
         }
-    }).catch(error => {
+    } catch (error) {
         console.error('Error saving color:', error);
-    });
+    }
 }
 
 function applyColor(contact) {
@@ -45,28 +52,50 @@ function applyColor(contact) {
 
 async function fetchData() {
     try {
-        let response = await fetch(`${API_URL}.json`);
+        const rootKey = await getUserRootKey();  // Root-Schlüssel für Users abrufen
+        if (!rootKey) {
+            throw new Error('Root key for users not found');
+        }
+
+        let response = await fetch(`${API_URL}/${rootKey}/users.json`);
         if (!response.ok) {
             throw new Error('Error fetching contacts');
         }
+
         let data = await response.json();
-        if (!data || !data[1] || !data[1].users) {
+
+        // Debugging: Daten loggen, um zu sehen, was zurückgegeben wird
+        console.log('Fetched data:', data);
+
+        if (!data || typeof data !== 'object') {
             throw new Error('No data found or unexpected data format');
         }
+
+        // Überprüfe, ob die Daten tatsächlich Benutzer enthalten
+        if (!Object.keys(data).length) {
+            throw new Error('No users found in the database');
+        }
+
         let result = [];
-        for (let key in data[1].users) {
-            if (data[1].users.hasOwnProperty(key)) {
-                let user = { id: key, ...data[1].users[key] };
-                assignColorIfNeeded(user);
+        for (let key in data) {
+            if (data.hasOwnProperty(key)) {
+                let user = { id: key, ...data[key] };
+                await assignColorIfNeeded(user);
                 result.push(user);
             }
         }
+
+        // Debugging: Ergebnis loggen
+        console.log('Processed contacts:', result);
+
         return result;
     } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching data:', error.message);
         return [];
     }
 }
+
+
 
 async function loadData() {
     try {
@@ -82,11 +111,14 @@ async function loadData() {
             setupEditDeleteButtons(); 
         } else {
             console.error('No valid contacts data found.');
+            // Debugging: Loggen, wenn keine gültigen Kontakte gefunden wurden
+            console.log('Fetched contacts data:', contactsData);
         }
     } catch (error) {
-        console.error('Error loading data:', error);
+        console.error('Error loading data:', error.message);
     }
 }
+
 
 function setupContactClickHandlers() {
     let contacts = document.querySelectorAll('.single-contact');
@@ -210,7 +242,12 @@ function handleDeleteContact() {
 
 async function deleteContact(contactId) {
     try {
-        let response = await fetch(`${API_URL}1/users/${contactId}.json`, {
+        const rootKey = await getUserRootKey();  // Root-Schlüssel für Users abrufen
+        if (!rootKey) {
+            throw new Error('Root key for users not found');
+        }
+
+        let response = await fetch(`${API_URL}/${rootKey}/users/${contactId}.json`, {
             method: 'DELETE'
         });
         if (!response.ok) {
@@ -265,7 +302,12 @@ async function saveContact(contactId) {
     };
 
     try {
-        let response = await fetch(`${API_URL}1/users/${contactId}.json`, {
+        const rootKey = await getUserRootKey();  // Root-Schlüssel für Users abrufen
+        if (!rootKey) {
+            throw new Error('Root key for users not found');
+        }
+
+        let response = await fetch(`${API_URL}/${rootKey}/users/${contactId}.json`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

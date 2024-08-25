@@ -1,13 +1,18 @@
-//let todos = [];
+// let todos = [];
 
 async function loadTasksFromDatabase() {
     try {
-        const response = await fetch(`${API_URL}/2/tasks.json`);
+        const rootKey = await getTaskRootKey(); // Root-Schlüssel für Tasks abrufen
+        if (!rootKey) {
+            throw new Error('Root key for tasks not found');
+        }
+
+        const response = await fetch(`${API_URL}/${rootKey}/tasks.json`);
         if (!response.ok) {
             throw new Error('Failed to fetch tasks');
         }
         const data = await response.json();
-        console.log("Loaded tasks:", data); 
+        console.log("Loaded tasks:", data);
 
         Object.entries(data || {}).forEach(([id, task]) => {
             if (id === "0" && !task) { // Spezifische Überprüfung für ungültige ID "0"
@@ -66,27 +71,34 @@ function updateTaskInDatabase(taskId, newStatus) {
         // Weitere Felder hier hinzufügen, wenn notwendig, aber keine Arrays
     };
 
-    fetch(`${API_URL}/2/tasks/${taskId}.json`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(taskData)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to update task in Firebase');
+    getTaskRootKey().then(rootKey => {
+        if (!rootKey) {
+            throw new Error('Root key for tasks not found');
         }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Task updated successfully in Firebase:', data);
-    })
-    .catch(error => {
-        console.error('Error updating task in Firebase:', error);
+        
+        fetch(`${API_URL}/${rootKey}/tasks/${taskId}.json`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(taskData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update task in Firebase');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Task updated successfully in Firebase:', data);
+        })
+        .catch(error => {
+            console.error('Error updating task in Firebase:', error);
+        });
+    }).catch(error => {
+        console.error('Error getting root key:', error);
     });
 }
-
 
 function generateTaskHTML(element) {
     return `<div draggable="true" ondragstart="startDragging(${element['id']})" class="todo">
@@ -155,7 +167,12 @@ function init() {
 // Debugging-Funktion
 async function logDatabaseContentsToConsole() {
     try {
-        const response = await fetch(`${API_URL}/2/tasks.json`);
+        const rootKey = await getTaskRootKey(); // Root-Schlüssel für Tasks abrufen
+        if (!rootKey) {
+            throw new Error('Root key for tasks not found');
+        }
+
+        const response = await fetch(`${API_URL}/${rootKey}/tasks.json`);
         if (!response.ok) {
             throw new Error('Failed to fetch tasks');
         }

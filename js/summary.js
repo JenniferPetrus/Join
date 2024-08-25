@@ -31,7 +31,12 @@ updateGreeting();
 // SUMMARY COUNTERS
 async function fetchTasks() {
     try {
-        const response = await fetch(`${API_URL}/2/tasks.json`);
+        const rootKey = await getTasksRootKey(); // Abrufen des dynamischen Root-Schlüssels
+        if (!rootKey) {
+            throw new Error('Root key for tasks not found');
+        }
+
+        const response = await fetch(`${API_URL}/${rootKey}/tasks.json`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -48,17 +53,20 @@ async function updateSummary() {
     if (!data || typeof data !== 'object') {
         return;
     }
+
+    let tasks = [];
     if (Array.isArray(data)) {
         tasks = data;
     } else if (data && typeof data === 'object') {
         tasks = Object.values(data);
     }
+
     const toDoCount = tasks.filter(task => task && task.status === 'to-do').length;
     const doneCount = tasks.filter(task => task && task.status === 'done').length;
     const inProgressCount = tasks.filter(task => task && task.status === 'in-progress').length;
     const awaitingFeedbackCount = tasks.filter(task => task && task.status === 'awaiting-feedback').length;
     const urgentCount = tasks.filter(task => task && task.priority === 'urgent').length;
-    const totalTasks = tasks.length - 1;
+    const totalTasks = tasks.length;
 
     document.getElementById('to-do-amount').innerText = toDoCount;
     document.getElementById('done-amount').innerText = doneCount;
@@ -67,3 +75,5 @@ async function updateSummary() {
     document.getElementById('font-urgent-number').innerText = urgentCount;
     document.getElementById('tasks-amount').innerText = totalTasks;
 }
+
+updateSummary();
