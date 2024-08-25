@@ -29,8 +29,6 @@ function updateGreeting() {
 updateGreeting();
 
 // SUMMARY COUNTERS
-const API_URL = "https://join-d67a5-default-rtdb.europe-west1.firebasedatabase.app/";
-
 async function fetchTasks() {
     try {
         const response = await fetch(`${API_URL}/2/tasks.json`);

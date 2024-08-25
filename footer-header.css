@@ -24,14 +24,8 @@ body {
     background-color: #091931; 
 }
 
-.NavGap.active img {
-    content: url('./assets/icons/summary-icon-bright.png');
-    color: #fff; 
-}
-
-.NavGap:not(.active) img {
-    content: url('./assets/icons/summary-icon-dark.png');
-}
+/* Entferne content-Eigenschaften für die Bilder und verwalte die Icons über JavaScript */
+/* Icon-Wechsel wird über JavaScript gesteuert, daher keine Anpassungen hier */
 
 #Impressum div {
     color: #ccc; 
@@ -61,7 +55,7 @@ body {
     font-size: 18px;
 }
 
-#NavLeft>a{
+#NavLeft>a {
     text-decoration: none;
 }
 
@@ -92,7 +86,7 @@ body {
     margin: 30px 0;
 }
 
-#Impressum>a{
+#Impressum>a {
     text-decoration: none;
 }
 
@@ -149,6 +143,6 @@ body {
     margin-top: 31px;
 }
 
-#responsive-header{
+#responsive-header {
     display: none;
 }

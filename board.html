@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Board</title>
-    <link rel="icon" type="image/x-icon" href="/./assets/img/Logo for Favicon construction.svg">
+    <link rel="icon" type="image/x-icon" href="./assets/img/Logo for Favicon construction.svg">
     <link rel="stylesheet" href="./styles/board.css">
     <link rel="stylesheet" href="./assets/fonts/fonts.css">
     <link rel="stylesheet" href="./styles/root.css">
     <link rel="stylesheet" href="./styles/media.css">
     <link rel="stylesheet" href="./styles/board-overlays.css">
     <link rel="stylesheet" href="./styles/dd.css">
+    <script src="./js/global.js" defer></script>
 </head>
 <body onload="init(); includeHTML(); loadTasksFromDatabase()">
     <div w3-include-html="header.html"></div>
@@ -60,15 +61,12 @@
     <div id="overlay-container"></div>
 
     <div w3-include-html="footer.html"></div>
-    <!-- <script src="./js/add-task.js"></script> -->
-    <!-- <script src="/js/overlay.js"></script> -->
-   <!-- <script src="./js/contacts.js"></script> -->
     <script src="./js/template.js"></script>
     <script src="./js/footer-header.js"></script>
     <script src="./js/board.js"></script>
     <script src="./js/board-overlays.js"></script>
     <script src="./js/dd.js"></script>
-    <!-- <script src="./js/board-data-crawler.js"></script> -->
     <script src="./js/search.js"></script>
+    <script src="./js/mutationObserver.js"></script> 
 </body>
 </html>

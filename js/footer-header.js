@@ -1,59 +1,43 @@
+// Initialisiere das Skript, sobald der HTML-Inhalt vollständig geladen ist
 includeHTML(function() {
     console.log('Footer fully loaded, initializing navigation...');
-
+    
     const navbarContent = document.querySelector('#Navbar');
     if (navbarContent) {
         console.log('Loaded Navbar content:', navbarContent.innerHTML);
 
-        const navItems = document.querySelectorAll('#NavLeft .NavGap');
-        console.log('NavGap items found after loading:', navItems.length);
-
         // Setze die Markierung basierend auf der aktuellen URL
-        const currentPath = window.location.pathname;
-        console.log('Current path:', currentPath);
-
-        navItems.forEach(function(item) {
-            const itemPath = new URL(item.href).pathname;
-
-            // Setze das aktive Element basierend auf der aktuellen URL
-            if (itemPath === currentPath) {
-                setActive(item);
-            } else {
-                resetIcon(item);  // Setze alle anderen Icons auf inaktiv
-            }
-
-            // Klick-Listener für jeden Navigationseintrag
-            item.addEventListener('click', function(event) {
-                console.log('Nav item clicked:', event.currentTarget.href);
-                // Setze das aktive Element und aktualisiere die Icons
-                setActive(item);
-            });
-        });
+        highlightActiveLink();
     } else {
         console.log('Navbar content not found!');
     }
 });
 
-function setActive(element) {
-    console.log(`Setting active for element: ${element}`);
-    const navItems = document.getElementsByClassName('NavGap');
+// Funktion zur Hervorhebung des aktiven Links basierend auf der aktuellen URL
+function highlightActiveLink() {
+    const currentPath = window.location.pathname;
+    console.log('Current path:', currentPath);
 
-    // Setze alle Icons zurück und entferne die aktive Klasse
-    for (let i = 0; i < navItems.length; i++) {
-        navItems[i].classList.remove('active');
-        resetIcon(navItems[i]);  // Stelle sicher, dass nicht aktive Icons auf inaktiv gesetzt werden
-    }
+    const navItems = document.querySelectorAll('#NavLeft .NavGap');
+    console.log('NavGap items found:', navItems.length);
 
-    // Setze das aktuelle Element auf aktiv und aktualisiere das Icon
-    element.classList.add('active');
-    updateIcon(element, true);  // Setze das Icon auf den aktiven Zustand
+    navItems.forEach(function(item) {
+        const itemPath = new URL(item.href).pathname;
+
+        // Setze das aktive Element basierend auf der aktuellen URL
+        if (itemPath === currentPath) {
+            // Aktiviere das Element und setze das Icon
+            item.classList.add('active');
+            updateIcon(item, true);
+        } else {
+            // Deaktiviere alle anderen Elemente und setze die Icons zurück
+            item.classList.remove('active');
+            updateIcon(item, false);
+        }
+    });
 }
 
-function resetIcon(element) {
-    // Setzt die Icons auf den inaktiven Zustand zurück
-    updateIcon(element, false);
-}
-
+// Funktion zum Aktualisieren des Icons basierend auf dem Aktivitätsstatus
 function updateIcon(element, isActive) {
     const img = element.querySelector('img');
     if (img) {

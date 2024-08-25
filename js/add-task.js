@@ -1,4 +1,3 @@
-let API_URL = "https://join-d67a5-default-rtdb.europe-west1.firebasedatabase.app";
 let targetSectionId = 'todo'; 
 
 function addSubtask() {
@@ -18,6 +17,7 @@ function addSubtask() {
         }
     }
 }
+
 // Buttons Colour
 function setActivePriority(button) {
     const buttons = document.getElementsByClassName('priority-button');
@@ -82,6 +82,7 @@ function validateForm() {
     }
     return isValid;
 }
+
 // Event-Listener für Eingaben hinzufügen -> Fehlermeldungen zurücksetzen
 function setupEventListeners() {
     document.getElementById('taskTitle').addEventListener('input', function() {
@@ -120,12 +121,13 @@ async function createTask() {
         priority,
         category,
         subtasks,
-        dueDate 
+        dueDate,
+        status: 'toDo'  // Set default status for new tasks
     };
 
     try {
         const taskId = await saveTaskToDatabase(task); 
-        const taskHTML = generateTaskHTML(title, description, assignedTo, priority, category, subtasks);
+        const taskHTML = generateTaskHTML(title, description, assignedTo, priority, category, subtasks, dueDate);
         insertTaskIntoContainer(taskHTML);
     } catch (error) {
         console.error('Error creating task:', error);
@@ -169,10 +171,10 @@ async function loadTasksFromDatabase() {
                     task.priority || 'low',
                     task.category || 'uncategorized',
                     task.subtasks || [],
-                    task.progress || 0,
+                    task.dueDate || '',
                     id
                 );
-                insertTaskIntoContainer(taskHTML, task.phase);
+                insertTaskIntoContainer(taskHTML, task.status || 'toDo');
             } else {
                 console.warn(`Task with id ${id} is null or undefined`);
             }
@@ -201,17 +203,20 @@ async function getNextId() {
         throw error;
     }
 }
+
 // Holt die aktive Priorität
 function getActivePriority() {
     const priorityButton = document.querySelector('.priority-button.active');
     return priorityButton ? priorityButton.id : 'low';
 }
+
 // Holt alle Subtasks
 function getSubtasks() {
     return Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).map(item => ({
         text: item.textContent,
     }));
 }
+
 // HTML für eine Aufgabe
 function generateTaskHTML(title, description, assignedTo, priority, category, subtasks, dueDate) {
     const progressBarWidth = subtasks.length ? (subtasks.filter(subtask => subtask.completed).length / subtasks.length) * 100 : 0;
@@ -251,19 +256,21 @@ function getPriorityImageSrc(priority) {
             return '/assets/icons/Board-icons/low-green.svg';
     }
 }
+
 // Fügt die Aufgabe in den Container ein
-function insertTaskIntoContainer(taskHTML) {
-    const container = document.getElementById(targetSectionId);
+function insertTaskIntoContainer(taskHTML, status = 'toDo') {
+    const container = document.getElementById(status);
     if (container) {
         container.insertAdjacentHTML('beforeend', taskHTML);
     } else {
-        console.error(`Container ${targetSectionId} not found`);
+        console.error(`Container ${status} not found`);
     }
 }
+
 // Funktion zum Löschen einer Aufgabe
 async function deleteTask(taskId) {
     try {
-        let response = await fetch(`${API_URL}/tasks/${taskId}.json`, {
+        let response = await fetch(`${API_URL}/2/tasks/${taskId}.json`, {
             method: 'DELETE'
         });
         if (response.ok) {

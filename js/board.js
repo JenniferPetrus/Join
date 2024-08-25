@@ -49,3 +49,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     addEventListenersToButtons();
 });
+
+// Debuggin Krempel, löschen am schluß !
+async function logDatabaseStructureAndContent() {
+    try {
+        const response = await fetch(`${API_URL}/2/tasks.json`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch tasks');
+        }
+        const data = await response.json();
+
+        if (data) {
+            console.log("Database structure and content:");
+            printObjectStructure(data, 0); // Rekursive Funktion zur Anzeige der Struktur
+        } else {
+            console.log("No data found in the database.");
+        }
+    } catch (error) {
+        console.error('Error loading tasks from database:', error);
+    }
+}
+
+function printObjectStructure(obj, indent) {
+    for (const key in obj) {
+        if (typeof obj[key] === 'object' && obj[key] !== null) {
+            console.log(`${' '.repeat(indent)}${key}: {`);
+            printObjectStructure(obj[key], indent + 2); // Rekursion für verschachtelte Objekte
+            console.log(`${' '.repeat(indent)}}`);
+        } else {
+            console.log(`${' '.repeat(indent)}${key}: ${obj[key]}`);
+        }
+    }
+}
+
+// Funktion aufrufen, um die Struktur und den Inhalt anzuzeigen
+logDatabaseStructureAndContent();

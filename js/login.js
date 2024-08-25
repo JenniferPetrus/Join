@@ -1,5 +1,3 @@
-let API_URL = "https://join-d67a5-default-rtdb.europe-west1.firebasedatabase.app/1/users.json";
-
 function logIn() {
     let email = document.getElementById('emailInput').value;
     let password = document.getElementById('passwordInput').value;
