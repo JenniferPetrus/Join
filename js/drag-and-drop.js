@@ -27,14 +27,36 @@ function initDragAndDrop() {
             const taskId = e.dataTransfer.getData('text/plain');
             const taskElement = document.getElementById(taskId);
 
-            if (taskElement && container) {
-                container.appendChild(taskElement);
-                const newStatus = container.id;
-                await updateTaskStatusInDatabase(taskId.split('-')[1], newStatus); // Status in der Datenbank aktualisieren
-                hidePlaceholders(); // Aktualisiere Platzhalter
-            } else {
-                console.error('Target container or task element not found');
+            if (!taskId) {
+                console.error('Task ID is missing or invalid.');
+                return;
             }
+            if (!taskElement) {
+                console.error(`Task element with ID ${taskId} not found.`);
+                return;
+            }
+            if (!container) {
+                console.error(`Target container with ID ${container.id} not found.`);
+                return;
+            }
+
+            // Überprüfen, ob das Element bereits im Zielcontainer vorhanden ist
+            if (container.contains(taskElement)) {
+                console.warn('Task is already in the target container.');
+                return;
+            }
+
+            // Task-Element in den neuen Container verschieben
+            container.appendChild(taskElement);
+            const newStatus = container.id;
+
+            // Entferne das alte Suffix (z.B. .todo) und füge den neuen Status hinzu
+            const baseTaskId = taskId.split('-')[0];  // Die Basis-ID ohne den alten Status
+            taskElement.id = `${baseTaskId}-${newStatus}`;  // Neue ID basierend auf dem neuen Status
+            console.log(`Updated task ID to: ${taskElement.id}`);
+
+            await updateTaskStatusInDatabase(baseTaskId.split('_')[1], newStatus); // Status in der Datenbank aktualisieren
+            hidePlaceholders(); // Aktualisiere Platzhalter
         });
     });
 }
@@ -117,17 +139,24 @@ async function loadTasksFromDatabase() {
                 return;
             }
 
-            const status = task.status || 'default-status';
-            const taskHTML = generateTaskHTML({
-                id: id,
-                title: task.title,
-                description: task.description,
-                assignedTo: task.assignedTo || {},
-                priority: task.priority,
-                category: task.category,
-                progress: task.progress || 0
-            });
-            insertTaskIntoContainer(taskHTML, status);
+            const status = task.status || 'todo';
+
+            // Überprüfen, ob die Aufgabe bereits im Container vorhanden ist
+            const existingTaskElement = document.getElementById(`task_${id}`);
+            if (!existingTaskElement) {
+                const taskHTML = generateTaskHTML({
+                    id: id,
+                    title: task.title,
+                    description: task.description,
+                    assignedTo: task.assignedTo || {},
+                    priority: task.priority,
+                    category: task.category,
+                    progress: task.progress || 0
+                });
+                insertTaskIntoContainer(taskHTML, status);
+            } else {
+                console.warn(`Task with ID ${id} already exists in the DOM.`);
+            }
         });
 
         initDragAndDrop(); // Nachdem die Tasks geladen wurden, Drag-and-Drop initialisieren
@@ -149,7 +178,7 @@ function generateTaskHTML(task) {
     }
 
     return `
-        <div draggable="true" class="todo" id="task-${id}">
+        <div draggable="true" class="todo" id="task_${id}">
             <div>
                 <div class="choose-phase"><img draggable="false" src="./assets/img/Menu Contact options.svg" alt="Phase"></div>
                 <div class="category-dd">${category || 'Uncategorized'}</div>
@@ -181,4 +210,6 @@ function insertTaskIntoContainer(taskHTML, status) {
 // Initialisierung
 document.addEventListener('DOMContentLoaded', async () => {
     await loadTasksFromDatabase(); // Tasks laden und Drag-and-Drop initialisieren
+    hidePlaceholders();
+    setupMutationObserver();
 });
