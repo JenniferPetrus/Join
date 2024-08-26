@@ -1,6 +1,6 @@
 let targetSectionId = 'todo'; 
 let contacts = [];
-let assignedContacts = new Set(); // Verwende ein Set, um die zugewiesenen Kontakte zu verfolgen
+let assignedContacts = new Set();
 
 // Funktion zum Abrufen der Kontakte aus der Datenbank
 async function loadContactsFromDatabase() {
@@ -123,7 +123,21 @@ async function createTask() {
 
     const title = document.getElementById('taskTitle').value;
     const description = document.getElementById('taskDescription').value;
-    const assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
+
+    const assignedToElement = document.getElementById('assignedTo');
+    if (!assignedToElement) {
+        console.error('Element with id "assignedTo" not found');
+        return;
+    }
+
+    // Sicherstellen, dass selectedOptions existiert und ein Array ist
+    const selectedOptions = assignedToElement.selectedOptions;
+    if (!selectedOptions || !Array.isArray(selectedOptions)) {
+        console.error('selectedOptions is not available or not an array');
+        return;
+    }
+
+    const assignedTo = Array.from(selectedOptions).map(option => option.value);
 
     const priority = getActivePriority();
     const category = document.getElementById('category').value;
@@ -151,6 +165,7 @@ async function createTask() {
         console.error('Error creating task:', error);
     }
 }
+
 
 async function addSubtask() {
     let subtaskInput = document.getElementById('newSubtask');
