@@ -109,10 +109,18 @@ async function createTask() {
     
     const title = document.getElementById('taskTitle').value;
     const description = document.getElementById('taskDescription').value;
-    const assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
+    const assignedTo = {}; // Anstelle eines Arrays verwenden wir ein Objekt
+    Array.from(document.getElementById('assignedTo').selectedOptions).forEach((option, index) => {
+        assignedTo[`item_${index}`] = option.value;
+    });
+    
     const priority = getActivePriority();
     const category = document.getElementById('category').value;
-    const subtasks = getSubtasks();
+    const subtasks = {}; // Anstelle eines Arrays verwenden wir ein Objekt
+    Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).forEach((item, index) => {
+        subtasks[`item_${index}`] = { text: item.textContent };
+    });
+    
     const dueDate = document.getElementById('dueDate').value;
     const task = {
         title,
@@ -122,13 +130,12 @@ async function createTask() {
         category,
         subtasks,
         dueDate,
-        status: 'toDo'  // Set default status for new tasks
+        status: 'todo'  // Standardstatus für neue Aufgaben
     };
 
     try {
-        const taskId = await saveTaskToDatabase(task); 
-        const taskHTML = generateTaskHTML(title, description, assignedTo, priority, category, subtasks, dueDate);
-        insertTaskIntoContainer(taskHTML);
+        const taskId = await saveTaskToDatabase(task);
+        console.log('Task successfully created with ID:', taskId);
     } catch (error) {
         console.error('Error creating task:', error);
     }
@@ -136,7 +143,7 @@ async function createTask() {
 
 async function saveTaskToDatabase(task) {
     try {
-        const rootKey = await getTasksRootKey();  // Korrigierter Funktionsname
+        const rootKey = await getTaskRootKey();
         if (!rootKey) {
             throw new Error('Root key for tasks not found');
         }
