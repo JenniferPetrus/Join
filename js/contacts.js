@@ -96,7 +96,6 @@ async function fetchData() {
 }
 
 
-
 async function loadData() {
     try {
         contactsData = await fetchData();

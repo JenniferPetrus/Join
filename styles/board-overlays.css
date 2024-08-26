@@ -9,6 +9,55 @@
     align-items: center;
 }
 
+.contacts-container {
+    border: 1px solid #ddd;
+    padding: 10px;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.contact-item {
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    background-color: #f0f0f0;
+}
+
+.contact-item.selected {
+    background-color: #007bff;
+    color: white;
+}
+
+.assigned-contacts-container {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.assigned-contact {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.contact-item.selected:hover {
+    background-color: #0056b3;
+}
+
+.contact-item:hover{
+    background-color: #ddd;
+}
+
 .overlay-content {
     background-color: white;
     padding: 20px;

@@ -1,4 +1,156 @@
 let targetSectionId = 'todo'; 
+let contacts = [];
+let assignedContacts = new Set(); // Verwende ein Set, um die zugewiesenen Kontakte zu verfolgen
+
+// Funktion zum Abrufen der Kontakte aus der Datenbank
+async function loadContactsFromDatabase() {
+    try {
+        const rootKey = await getUserRootKey();
+        if (!rootKey) {
+            throw new Error('Root key for users not found');
+        }
+
+        const response = await fetch(`${API_URL}/${rootKey}/users.json`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch contacts');
+        }
+
+        const data = await response.json();
+        contacts = Object.entries(data || {}).map(([id, contact]) => ({
+            id,
+            ...contact
+        }));
+
+        populateContactsContainer();
+        updateAssignedContactsDisplay();
+    } catch (error) {
+        console.error('Error loading contacts:', error);
+    }
+}
+
+// Kontakte in den Container einfügen
+function populateContactsContainer() {
+    const contactsContainer = document.getElementById('contactsContainer');
+    contactsContainer.innerHTML = '';
+
+    contacts.forEach(contact => {
+        const contactDiv = document.createElement('div');
+        contactDiv.className = 'contact-item';
+        contactDiv.dataset.id = contact.id;
+        contactDiv.textContent = contact.fullName;
+
+        contactDiv.addEventListener('click', () => {
+            toggleContactSelection(contact.id);
+        });
+
+        contactsContainer.appendChild(contactDiv);
+    });
+}
+
+// Toggle der Auswahl eines Kontakts
+function toggleContactSelection(contactId) {
+    const contactDiv = document.querySelector(`.contact-item[data-id="${contactId}"]`);
+    const isSelected = contactDiv.classList.contains('selected');
+
+    if (isSelected) {
+        contactDiv.classList.remove('selected');
+        removeAssignedContact(contactId);
+    } else {
+        contactDiv.classList.add('selected');
+        addAssignedContact(contactId);
+    }
+}
+
+// Hinzufügen eines zugewiesenen Kontakts zur Anzeige
+function addAssignedContact(contactId) {
+    const contact = contacts.find(c => c.id === contactId);
+    if (contact) {
+        assignedContacts.add(contactId);
+        updateAssignedContactsDisplay();
+    }
+}
+
+// Entfernen eines zugewiesenen Kontakts
+function removeAssignedContact(contactId) {
+    assignedContacts.delete(contactId);
+    updateAssignedContactsDisplay();
+}
+
+function updateAssignedContactsDisplay() {
+    const assignedContactsContainer = document.getElementById('assignedContacts');
+    assignedContactsContainer.innerHTML = '';
+
+    contacts.forEach(contact => {
+        if (assignedContacts.has(contact.id)) {
+            const contactDiv = document.createElement('div');
+            contactDiv.className = 'assigned-contact';
+            contactDiv.textContent = getInitials(contact.fullName);
+            contactDiv.dataset.id = contact.id;
+
+            contactDiv.addEventListener('click', () => {
+                removeAssignedContact(contact.id);
+                const contactDivInContainer = document.querySelector(`.contact-item[data-id="${contact.id}"]`);
+                if (contactDivInContainer) {
+                    contactDivInContainer.classList.remove('selected');
+                }
+            });
+
+            assignedContactsContainer.appendChild(contactDiv);
+        }
+    });
+}
+
+// Holt die Initialen eines Kontakts
+function getInitials(fullName) {
+    const names = fullName.split(' ');
+    const initials = names.map(name => name.charAt(0).toUpperCase()).join('');
+    return initials;
+}
+
+// Event-Listener für das Initialisieren der Seite und das Laden der Kontakte
+document.addEventListener('DOMContentLoaded', function() {
+    loadContactsFromDatabase();
+});
+
+async function createTask() {
+    if (!validateForm()) {
+        return;
+    }
+
+    if (contacts.length === 0) {
+        await loadContactsFromDatabase();
+    }
+
+    const title = document.getElementById('taskTitle').value;
+    const description = document.getElementById('taskDescription').value;
+    const assignedTo = Array.from(document.getElementById('assignedTo').selectedOptions).map(option => option.value);
+
+    const priority = getActivePriority();
+    const category = document.getElementById('category').value;
+    const subtasks = {}; // Anstelle eines Arrays verwenden wir ein Objekt
+    Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).forEach((item, index) => {
+        subtasks[`item_${index}`] = { text: item.textContent };
+    });
+
+    const dueDate = document.getElementById('dueDate').value;
+    const task = {
+        title,
+        description,
+        assignedTo,
+        priority,
+        category,
+        subtasks,
+        dueDate,
+        status: 'todo'  // Standardstatus für neue Aufgaben
+    };
+
+    try {
+        const taskId = await saveTaskToDatabase(task);
+        console.log('Task successfully created with ID:', taskId);
+    } catch (error) {
+        console.error('Error creating task:', error);
+    }
+}
 
 async function addSubtask() {
     let subtaskInput = document.getElementById('newSubtask');
@@ -100,45 +252,6 @@ function resetErrorMessages() {
     document.querySelectorAll('.error-message').forEach(errorElement => {
         errorElement.textContent = '';
     });
-}
-
-async function createTask() {
-    if (!validateForm()) {
-        return;
-    }
-    
-    const title = document.getElementById('taskTitle').value;
-    const description = document.getElementById('taskDescription').value;
-    const assignedTo = {}; // Anstelle eines Arrays verwenden wir ein Objekt
-    Array.from(document.getElementById('assignedTo').selectedOptions).forEach((option, index) => {
-        assignedTo[`item_${index}`] = option.value;
-    });
-    
-    const priority = getActivePriority();
-    const category = document.getElementById('category').value;
-    const subtasks = {}; // Anstelle eines Arrays verwenden wir ein Objekt
-    Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).forEach((item, index) => {
-        subtasks[`item_${index}`] = { text: item.textContent };
-    });
-    
-    const dueDate = document.getElementById('dueDate').value;
-    const task = {
-        title,
-        description,
-        assignedTo,
-        priority,
-        category,
-        subtasks,
-        dueDate,
-        status: 'todo'  // Standardstatus für neue Aufgaben
-    };
-
-    try {
-        const taskId = await saveTaskToDatabase(task);
-        console.log('Task successfully created with ID:', taskId);
-    } catch (error) {
-        console.error('Error creating task:', error);
-    }
 }
 
 async function saveTaskToDatabase(task) {
@@ -313,15 +426,20 @@ async function deleteTask(taskId) {
 }
 
 function clearOverlay() {
+    console.log('clearOverlay function called');
+
     // Leeren der Texteingabefelder
     document.getElementById('taskTitle').value = '';
     document.getElementById('taskDescription').value = '';
     document.getElementById('newSubtask').value = '';
+    
     // Zurücksetzen der Dropdowns
     document.getElementById('assignedTo').selectedIndex = 0;
     document.getElementById('category').selectedIndex = 0;
+    
     // Zurücksetzen des Datumseingabefeldes
     document.getElementById('dueDate').value = '';
+    
     // Zurücksetzen der Prioritätsauswahl
     const priorityButtons = document.getElementsByClassName('priority-button');
     for (let button of priorityButtons) {
@@ -341,11 +459,15 @@ function clearOverlay() {
                 break;
         }
     }
+    
     // Leeren der Subtasks-Liste
     const subtaskList = document.getElementById('subtaskList');
     subtaskList.innerHTML = '';
+    const subtasksHeader = document.querySelector('.subtask-title');
     if (subtasksHeader) {
         subtasksHeader.remove();
     }
+    
+    // Fehlermeldungen zurücksetzen
     resetErrorMessages();
 }

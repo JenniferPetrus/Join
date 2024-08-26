@@ -30,9 +30,8 @@
                     </div>
                     <div class="input-section">
                         <label for="assignedTo">Assigned to</label>
-                        <select id="assignedTo">
-                            <option disabled selected>Select contacts to assign</option>
-                        </select>
+                        <div id="contactsContainer" class="contacts-container"></div>
+                        <div id="assignedContacts" class="assigned-contacts-container"></div>
                     </div>
                 </div>
                 <hr class="middle-vector">
@@ -97,8 +96,7 @@
     </div>
 
 </body>
-<script src="./js/board-overlays.js"></script>
+<script src="./js/drag-and-drop.js"></script>
 <script src="./js/board-data-crawler.js"></script>
-<script src="./js/dd.js"></script>
 <script src="./js/mutationObserver.js"></script> 
 </html>
