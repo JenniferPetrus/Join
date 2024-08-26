@@ -32,25 +32,40 @@ updateGreeting();
 async function fetchTasks() {
     try {
         const rootKey = await getTasksRootKey(); // Abrufen des dynamischen Root-Schlüssels
+        console.log("Root key for tasks:", rootKey); // Debugging
+
         if (!rootKey) {
             throw new Error('Root key for tasks not found');
         }
 
         const response = await fetch(`${API_URL}/${rootKey}/tasks.json`);
+        console.log("Firebase response status:", response.status); // Debugging
+
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
+
         const data = await response.json();
+        console.log("Fetched tasks data:", data); // Debugging
+
+        if (!data) {
+            console.error('No data found in the database.');
+            return null;
+        }
+
         return data;
     } catch (error) {
         console.error('Error fetching tasks:', error);
-        return {};
+        return null;
     }
 }
+
+
 
 async function updateSummary() {
     const data = await fetchTasks();
     if (!data || typeof data !== 'object') {
+        console.error('Invalid data structure received:', data); // Debugging
         return;
     }
 
@@ -60,6 +75,8 @@ async function updateSummary() {
     } else if (data && typeof data === 'object') {
         tasks = Object.values(data);
     }
+
+    console.log("Tasks array:", tasks); // Debugging
 
     const toDoCount = tasks.filter(task => task && task.status === 'to-do').length;
     const doneCount = tasks.filter(task => task && task.status === 'done').length;
@@ -74,6 +91,8 @@ async function updateSummary() {
     document.getElementById('feedback-amount').innerText = awaitingFeedbackCount;
     document.getElementById('font-urgent-number').innerText = urgentCount;
     document.getElementById('tasks-amount').innerText = totalTasks;
+
+    console.log("Summary updated successfully"); // Debugging
 }
 
 updateSummary();

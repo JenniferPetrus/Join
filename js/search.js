@@ -36,6 +36,7 @@ async function loadTasksFromDatabase() {
                 console.warn(`Task with id ${id} is null or undefined`);
             }
         });
+        updateHTML();
     } catch (error) {
         console.error('Error loading tasks from database:', error);
     }
@@ -65,41 +66,6 @@ function updateHTML() {
     });
 }
 
-function updateTaskInDatabase(taskId, newStatus) {
-    const taskData = { 
-        status: newStatus 
-        // Weitere Felder hier hinzufügen, wenn notwendig, aber keine Arrays
-    };
-
-    getTaskRootKey().then(rootKey => {
-        if (!rootKey) {
-            throw new Error('Root key for tasks not found');
-        }
-        
-        fetch(`${API_URL}/${rootKey}/tasks/${taskId}.json`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(taskData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to update task in Firebase');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Task updated successfully in Firebase:', data);
-        })
-        .catch(error => {
-            console.error('Error updating task in Firebase:', error);
-        });
-    }).catch(error => {
-        console.error('Error getting root key:', error);
-    });
-}
-
 function generateTaskHTML(element) {
     return `<div draggable="true" ondragstart="startDragging(${element['id']})" class="todo">
     <div>
@@ -117,46 +83,6 @@ function generateTaskHTML(element) {
         </div>
     </div>
 </div>`;
-}
-
-function startDragging(id) {
-    currentDraggedElement = id;
-    console.log("Dragging started for Task ID:", id); // Debugging-Ausgabe
-}
-
-function allowDrop(ev) {
-    ev.preventDefault();
-}
-
-function moveTo(status) {
-    if (!currentDraggedElement) {
-        console.error("No task is being dragged.");
-        return;
-    }
-
-    const taskElement = document.getElementById(currentDraggedElement);
-    if (!taskElement) {
-        console.error(`Task with id ${currentDraggedElement} not found.`);
-        return;
-    }
-
-    const targetContainer = document.getElementById(status);
-    if (targetContainer) {
-        targetContainer.appendChild(taskElement);
-
-        // Aktualisiere den Status in der Datenbank
-        updateTaskInDatabase(currentDraggedElement, status);
-    } else {
-        console.error(`Target container ${status} not found.`);
-    }
-}
-
-function highlight(id) {
-    document.getElementById(id).classList.add('drag-area-highlight');
-}
-
-function removeHighlight(id) {
-    document.getElementById(id).classList.remove('drag-area-highlight');
 }
 
 function init() {

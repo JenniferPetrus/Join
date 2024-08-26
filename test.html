@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Einfaches Kanban-Board</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+        }
+        .column {
+            width: 30%;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            min-height: 400px;
+        }
+        .column h2 {
+            text-align: center;
+        }
+        .card {
+            background-color: #fff;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: grab;
+        }
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="column" id="todo">
+        <h2>To Do</h2>
+        <div class="card" draggable="true" id="card1">Aufgabe 1</div>
+        <div class="card" draggable="true" id="card2">Aufgabe 2</div>
+    </div>
+
+    <div class="column" id="in-progress">
+        <h2>In Arbeit</h2>
+        <div class="card" draggable="true" id="card3">Aufgabe 3</div>
+    </div>
+
+    <div class="column" id="done">
+        <h2>Erledigt</h2>
+    </div>
+
+    <script>
+        const cards = document.querySelectorAll('.card');
+        const columns = document.querySelectorAll('.column');
+
+        let draggedCard = null;
+
+        cards.forEach(card => {
+            card.addEventListener('dragstart', dragStart);
+            card.addEventListener('dragend', dragEnd);
+        });
+
+        columns.forEach(column => {
+            column.addEventListener('dragover', dragOver);
+            column.addEventListener('drop', drop);
+        });
+
+        function dragStart(event) {
+            draggedCard = event.target;
+            setTimeout(() => {
+                event.target.classList.add('hide');
+            }, 0);
+        }
+
+        function dragEnd(event) {
+            setTimeout(() => {
+                event.target.classList.remove('hide');
+                draggedCard = null;
+            }, 0);
+        }
+
+        function dragOver(event) {
+            event.preventDefault();
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            if (draggedCard) {
+                event.target.appendChild(draggedCard);
+            }
+        }
+    </script>
+
+</body>
+</html>

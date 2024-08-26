@@ -114,8 +114,39 @@ async function getUserRootKey() {
     }
 }
 
+async function getTaskRootKey() {
+    try {
+        const response = await fetch(`${API_URL}/.json`);
+        const data = await response.json();
+        const rootKey = Object.keys(data).find(key => data[key]?.tasks);
+
+        // Debugging: Loggen des ermittelten Root-Schlüssels
+        console.log('Determined root key for tasks:', rootKey);
+
+        return rootKey;
+    } catch (error) {
+        console.error('Error fetching root key:', error);
+        return null;
+    }
+}
+
 
 // Funktion zum Abrufen des Root-Schlüssels für Aufgaben
+//async function getTasksRootKey() {
+//    return await getRootKey('2');
+//}
 async function getTasksRootKey() {
-    return await getRootKey('2');
+    try {
+        const response = await fetch(`${API_URL}/.json`);
+        const data = await response.json();
+        const rootKey = Object.keys(data).find(key => data[key]?.tasks);
+
+        // Debugging: Loggen des ermittelten Root-Schlüssels
+        console.log('Determined root key for tasks:', rootKey);
+
+        return rootKey;
+    } catch (error) {
+        console.error('Error fetching root key:', error);
+        return null;
+    }
 }
