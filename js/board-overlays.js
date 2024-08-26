@@ -1,5 +1,54 @@
+// Bereinigt die Aufgaben in der Datenbank
+async function cleanUpTasksInDatabase() {
+    try {
+        const rootKey = await getTaskRootKey();
+        if (!rootKey) {
+            throw new Error('Root key for tasks not found');
+        }
+
+        const response = await fetch(`${API_URL}/${rootKey}/tasks.json`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch tasks');
+        }
+        const tasks = await response.json();
+        const cleanedTasks = {};
+
+        // Bereinige die Tasks
+        Object.keys(tasks).forEach(taskId => {
+            const task = tasks[taskId];
+            if (task && task.title) {
+                if (task.dueDate === 'Invalid Date') {
+                    task.dueDate = null;
+                }
+                if (Array.isArray(task.subtasks)) {
+                    task.subtasks = task.subtasks.filter(subtask => subtask.text);
+                }
+                cleanedTasks[taskId] = task;
+            }
+        });
+
+        // Aktualisiere die Datenbank mit den bereinigten Tasks
+        const putResponse = await fetch(`${API_URL}/${rootKey}/tasks.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(cleanedTasks)
+        });
+
+        if (!putResponse.ok) {
+            throw new Error('Failed to update tasks in database');
+        }
+
+        console.log('Tasks successfully cleaned up in database');
+    } catch (error) {
+        console.error('Error cleaning up tasks:', error);
+    }
+}
+
+// Lädt die Aufgaben aus der Datenbank und fügt sie in das Board ein
 async function loadTasksFromDatabase() {
     try {
+        await cleanUpTasksInDatabase();  // Bereinige die Aufgaben bevor sie geladen werden
+
         const rootKey = await getTaskRootKey();  // Root-Schlüssel für Tasks abrufen
         if (!rootKey) {
             throw new Error('Root key for tasks not found');
@@ -47,10 +96,21 @@ function insertTaskIntoContainer(taskHTML, status) {
 
 function rebindEventListeners() {
     document.querySelectorAll('.todo').forEach(element => {
-        const taskId = element.id.split('-')[1];
-        element.setAttribute('ondragstart', `startDragging(${taskId})`);
+        const taskId = element.id.split('_')[1]; // IDs sind im Format task_1
+
+        if (taskId) {
+            element.setAttribute('ondragstart', `startDragging(${taskId})`);
+            console.log(`Bound dragstart event to task with ID: ${taskId}`); // Debugging-Ausgabe
+        } else {
+            console.error('Task ID not found for element:', element);
+        }
     });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    rebindEventListeners(); // Sicherstellen, dass die Event-Listener zu Beginn gebunden sind
+});
+
 
 document.addEventListener('DOMContentLoaded', () => {
     rebindEventListeners(); // Sicherstellen, dass die Event-Listener zu Beginn gebunden sind
@@ -87,8 +147,8 @@ function generateTaskHTML(task) {
 }
 
 function startDragging(id) {
-    currentDraggedElement = id;
-    console.log('Dragging started for Task ID:', id);
+    currentDraggedElement = `task-${id}`;
+    console.log('Dragging started for Task ID:', currentDraggedElement);
 }
 
 function allowDrop(event) {

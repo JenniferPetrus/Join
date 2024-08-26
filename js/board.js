@@ -50,9 +50,57 @@ document.addEventListener('DOMContentLoaded', () => {
     addEventListenersToButtons();
 });
 
+// Bereinigt die Aufgaben in der Datenbank
+async function cleanUpTasksInDatabase() {
+    try {
+        const rootKey = await getTaskRootKey();
+        if (!rootKey) {
+            throw new Error('Root key for tasks not found');
+        }
+
+        const response = await fetch(`${API_URL}/${rootKey}/tasks.json`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch tasks');
+        }
+        const tasks = await response.json();
+        const cleanedTasks = {};
+
+        // Bereinige die Tasks
+        Object.keys(tasks).forEach(taskId => {
+            const task = tasks[taskId];
+            if (task && task.title) {
+                if (task.dueDate === 'Invalid Date') {
+                    task.dueDate = null;
+                }
+                if (Array.isArray(task.subtasks)) {
+                    task.subtasks = task.subtasks.filter(subtask => subtask.text);
+                }
+                cleanedTasks[taskId] = task;
+            }
+        });
+
+        // Aktualisiere die Datenbank mit den bereinigten Tasks
+        const putResponse = await fetch(`${API_URL}/${rootKey}/tasks.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(cleanedTasks)
+        });
+
+        if (!putResponse.ok) {
+            throw new Error('Failed to update tasks in database');
+        }
+
+        console.log('Tasks successfully cleaned up in database');
+    } catch (error) {
+        console.error('Error cleaning up tasks:', error);
+    }
+}
+
 // Debugging: Struktur und Inhalte der Datenbank ausgeben
 async function logDatabaseStructureAndContent() {
     try {
+        await cleanUpTasksInDatabase();  // Bereinige die Aufgaben bevor sie geladen werden
+
         const rootKey = await getTaskRootKey();  // Root-Schlüssel für Tasks abrufen
         if (!rootKey) {
             throw new Error('Root key for tasks not found');

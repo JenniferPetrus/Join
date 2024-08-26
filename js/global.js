@@ -150,3 +150,61 @@ async function getTasksRootKey() {
         return null;
     }
 }
+
+async function cleanUpTasksInDatabase() {
+    try {
+        const rootKey = await getTaskRootKey();  // Root-Schlüssel für Tasks abrufen
+        if (!rootKey) {
+            throw new Error('Root key for tasks not found');
+        }
+
+        const response = await fetch(`${API_URL}/${rootKey}/tasks.json`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch tasks from database');
+        }
+        const tasks = await response.json();
+
+        const cleanedTasks = {};
+
+        Object.entries(tasks || {}).forEach(([id, task]) => {
+            // Sicherstellen, dass notwendige Felder vorhanden sind
+            const cleanedTask = {
+                id: id,
+                title: task.title || 'No Title',
+                description: task.description || '',
+                assignedTo: task.assignedTo || {},
+                category: task.category || 'Uncategorized',
+                dueDate: task.dueDate || '',
+                priority: task.priority || 'low',
+                status: task.status || 'todo',
+                subtasks: task.subtasks || {},
+                progress: task.progress !== undefined ? task.progress : 0,
+            };
+
+            cleanedTasks[id] = cleanedTask;
+        });
+
+        // Aktualisiere die bereinigten Tasks in der Datenbank
+        const updateResponse = await fetch(`${API_URL}/${rootKey}/tasks.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(cleanedTasks)
+        });
+
+        if (!updateResponse.ok) {
+            throw new Error('Failed to update tasks in the database');
+        }
+
+        console.log('Tasks cleaned up successfully in the database');
+    } catch (error) {
+        console.error('Error cleaning up tasks in database:', error);
+    }
+}
+
+// Beispiel-Aufruf der Funktion nach dem Laden des DOMs
+//document.addEventListener('DOMContentLoaded', () => {
+  //  cleanUpTasksInDatabase();.then(() => {
+        // Nachdem die Bereinigung abgeschlossen ist, Tasks laden und UI aktualisieren
+    //    loadTasksFromDatabase();
+    //});
+//});

@@ -15,12 +15,14 @@
     <script src="./js/template.js" defer></script>
     <script src="./js/footer-header.js" defer></script>
     <script src="./js/board.js" defer></script>
-    <script src="./js/board-overlays.js" defer></script>
-    <script src="./js/dd.js" defer></script>
-    <script src="./js/search.js" defer></script>
+    <!-- <script src="./js/board-overlays.js" defer></script> -->
+   <!-- <script src="./js/dd.js" defer></script> -->
+   <!-- <script src="./js/search.js" defer></script> -->
     <script src="./js/mutationObserver.js" defer></script> 
+    <script src="./js/drag-and-drop.js" defer></script>
+
 </head>
-<body onload="init(); includeHTML(); loadTasksFromDatabase()">
+<body onload="includeHTML()">
     <div w3-include-html="header.html"></div>
     <div class="wrapper-board">
         <div class="headline-board">
@@ -38,27 +40,27 @@
                     <div class="to-do">To do</div>
                     <img class="plus-icon" src="./assets/icons/Board-icons/plus icon black.svg" onclick="openOverlay('todo')">                
                 </div>
-                <div class="drag-area-responsive" id="todo" ondrop="moveTo('todo')" ondragleave="removeHighlight('todo')" ondragover="allowDrop(event); highlight('todo')"></div>
+                <div class="drag-area-responsive" id="todo" ondragleave="removeHighlight('todo')" ondragover="allowDrop(event); highlight('todo')"></div>
             </div>
             <div>
                 <div class="responsive-dd-header">
                     <div class="in-progress">In progress</div>
                     <img class="plus-icon" src="./assets/icons/Board-icons/plus icon black.svg" onclick="openOverlay('in-progress')">              
                 </div>
-                <div class="drag-area-responsive" id="in-progress" ondrop="moveTo('in-progress')" ondragleave="removeHighlight('in-progress')" ondragover="allowDrop(event); highlight('in-progress')"></div>
+                <div class="drag-area-responsive" id="in-progress" ondragleave="removeHighlight('in-progress')" ondragover="allowDrop(event); highlight('in-progress')"></div>
             </div>
             <div>
                 <div class="responsive-dd-header">
                     <div class="await-feedback">Await feedback</div>
                     <img class="plus-icon" src="./assets/icons/Board-icons/plus icon black.svg" onclick="openOverlay('await-feedback')">              
                 </div>
-                <div class="drag-area-responsive" id="await-feedback" ondrop="moveTo('await-feedback')" ondragleave="removeHighlight('await-feedback')" ondragover="allowDrop(event); highlight('await-feedback')"></div>
+                <div class="drag-area-responsive" id="await-feedback" ondragleave="removeHighlight('await-feedback')" ondragover="allowDrop(event); highlight('await-feedback')"></div>
             </div>
             <div>
                 <div class="responsive-dd-header">
                     <div class="done">Done</div>               
                 </div>
-                <div class="drag-area-responsive" id="done" ondrop="moveTo('done')" ondragleave="removeHighlight('done')" ondragover="allowDrop(event); highlight('done')"></div>              
+                <div class="drag-area-responsive" id="done" ondragleave="removeHighlight('done')" ondragover="allowDrop(event); highlight('done')"></div>
             </div>
         </div>
     </div>
