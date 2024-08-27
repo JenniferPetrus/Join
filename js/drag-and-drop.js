@@ -1,6 +1,5 @@
 // let contacts = [];
 // let assignedContacts = new Set();
-
 // Funktion zum Abrufen der Kontakte aus der Datenbank
 async function loadContactsFromDatabase() {
     try {
@@ -51,7 +50,6 @@ function populateContactsContainer() {
         contactsContainer.appendChild(contactDiv);
     });
 }
-
 
 
 // Toggle der Auswahl eines Kontakts
@@ -115,55 +113,45 @@ function updateAssignedContactsDisplay() {
 let taskCreationInProgress = false; // verhindert das erstellen von zwei Tasks
 
 async function createTask() {
-    if (taskCreationInProgress) {
+    if (!validateForm()) {
         return;
     }
 
-    taskCreationInProgress = true; 
+    const title = document.getElementById('taskTitle').value;
+    const description = document.getElementById('taskDescription').value;
+
+    // Erfassen der zugewiesenen Kontakte aus dem Container
+    const assignedTo = Array.from(document.querySelectorAll('#assignedContacts .assigned-contact')).map(contact => contact.dataset.id);
+    const priority = getActivePriority();
+    const priorityImage = getPriorityImage(priority);
+    const category = document.getElementById('category').value;
+
+    // Subtasks als Objekt speichern
+    const subtasks = {};
+    Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).forEach((item, index) => {
+        subtasks[`item_${index}`] = { text: item.textContent };
+    });
+
+    const dueDate = document.getElementById('dueDate').value;
+    const task = {
+        title,
+        description,
+        assignedTo,
+        priority,
+        priorityImage,
+        category,
+        subtasks,
+        dueDate,
+        status: 'todo'
+    };
 
     try {
-        console.log('createTask function called');
-
-        if (!validateForm()) {
-            console.log('Form validation failed');
-            taskCreationInProgress = false;
-            return;
-        }
-
-        if (contacts.length === 0) {
-            await loadContactsFromDatabase();
-        }
-
-        const title = document.getElementById('taskTitle').value;
-        const description = document.getElementById('taskDescription').value;
-        const assignedTo = Array.from(document.querySelectorAll('#assignedContacts .assigned-contact')).map(contact => contact.dataset.id);
-
-        const priority = getActivePriority();
-        const category = document.getElementById('category').value;
-        const subtasks = {};
-        Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).forEach((item, index) => {
-            subtasks[`item_${index}`] = { text: item.textContent };
-        });
-
-        const dueDate = document.getElementById('dueDate').value;
-        const task = {
-            title,
-            description,
-            assignedTo,
-            priority,
-            category,
-            subtasks,
-            dueDate,
-            status: 'todo'
-        };
-
-        console.log('Saving task to database');
         const taskId = await saveTaskToDatabase(task);
         console.log('Task successfully created with ID:', taskId);
+        clearOverlay();  // Overlay nach dem Erstellen der Aufgabe leeren
+        showSuccessMessage();  // Erfolgsmeldung anzeigen
     } catch (error) {
         console.error('Error creating task:', error);
-    } finally {
-        taskCreationInProgress = false;
     }
 }
 // Funktion zum Abrufen der aktiven Priorität

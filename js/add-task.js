@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     loadContactsFromDatabase();
-    restrictDateSelection();  // Datumseinschränkung aufrufen
+    restrictDateSelection();
 });
 
 // Funktion zum Erstellen einer neuen Aufgabe
