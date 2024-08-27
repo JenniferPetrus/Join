@@ -82,7 +82,7 @@ function removeAssignedContact(contactId) {
 
 function updateAssignedContactsDisplay() {
     const assignedContactsContainer = document.getElementById('assignedContacts');
-    
+
     if (!assignedContactsContainer) {
         console.error('Element with ID "assignedContacts" not found.');
         return;
@@ -94,7 +94,7 @@ function updateAssignedContactsDisplay() {
         if (assignedContacts.has(contact.id)) {
             const contactDiv = document.createElement('div');
             contactDiv.className = 'assigned-contact';
-            contactDiv.textContent = getInitials(contact.fullName);
+            contactDiv.textContent = contact.fullName; // Zeigt den vollständigen Namen an
             contactDiv.dataset.id = contact.id;
 
             contactDiv.addEventListener('click', () => {
@@ -109,7 +109,6 @@ function updateAssignedContactsDisplay() {
         }
     });
 }
-
 
 
 // Holt die Initialen eines Kontakts
@@ -211,17 +210,16 @@ function initDragAndDrop() {
                 return;
             }
 
-            // Task-Element in den neuen Container verschieben
+             
             container.appendChild(taskElement);
             const newStatus = container.id;
-
-            // Entferne das alte Suffix (z.B. .todo) und füge den neuen Status hinzu
-            const baseTaskId = taskId.split('-')[0];  // Die Basis-ID ohne den alten Status
-            taskElement.id = `${baseTaskId}-${newStatus}`;  // Neue ID basierend auf dem neuen Status
+ 
+            const baseTaskId = taskId.split('-')[0]; 
+            taskElement.id = `${baseTaskId}-${newStatus}`; 
             console.log(`Updated task ID to: ${taskElement.id}`);
 
-            await updateTaskStatusInDatabase(baseTaskId.split('_')[1], newStatus); // Status in der Datenbank aktualisieren
-            hidePlaceholders(); // Aktualisiere Platzhalter
+            await updateTaskStatusInDatabase(baseTaskId.split('_')[1], newStatus); 
+            hidePlaceholders();
         });
     });
 }
@@ -233,22 +231,18 @@ function startDragging(event, taskId) {
     console.log('Dragging started for task with ID:', taskId);
 }
 
-// Funktion, die das Ziehen über einem Container erlaubt
 function allowDrop(event) {
     event.preventDefault();
 }
 
-// Funktion zum Hervorheben eines Containers beim Ziehen
 function highlight(id) {
     document.getElementById(id).classList.add('drag-area-highlight');
 }
 
-// Funktion zum Entfernen der Hervorhebung eines Containers beim Verlassen
 function removeHighlight(id) {
     document.getElementById(id).classList.remove('drag-area-highlight');
 }
 
-// Aktualisiere den Status einer Aufgabe in der Datenbank
 async function updateTaskStatusInDatabase(taskId, newStatus) {
     try {
         const rootKey = await getTaskRootKey();
@@ -286,7 +280,7 @@ function hidePlaceholders() {
 // Tasks aus der Datenbank laden und anzeigen
 async function loadTasksFromDatabase() {
     try {
-        const rootKey = await getTaskRootKey();  // Root-Schlüssel für Tasks abrufen
+        const rootKey = await getTaskRootKey();
         if (!rootKey) {
             throw new Error('Root key for tasks not found');
         }
@@ -306,7 +300,6 @@ async function loadTasksFromDatabase() {
 
             const status = task.status || 'todo';
 
-            // Überprüfen, ob die Aufgabe bereits im Container vorhanden ist
             const existingTaskElement = document.getElementById(`task_${id}`);
             if (!existingTaskElement) {
                 const taskHTML = generateTaskHTML({
@@ -324,7 +317,7 @@ async function loadTasksFromDatabase() {
             }
         });
 
-        initDragAndDrop(); // Nachdem die Tasks geladen wurden, Drag-and-Drop initialisieren
+        initDragAndDrop();
 
     } catch (error) {
         console.error('Error loading tasks from database:', error);
@@ -333,33 +326,69 @@ async function loadTasksFromDatabase() {
 
 // HTML für eine Aufgabe generieren
 function generateTaskHTML(task) {
-    const { id, title, description, assignedTo, priority, category, progress } = task;
+    const { id, title, description, assignedTo, priority, category, subtasks } = task;
 
-    let assignedToDisplay = 'Unassigned';
-    if (typeof assignedTo === 'object' && assignedTo !== null) {
-        assignedToDisplay = Object.values(assignedTo).join(', ');
-    } else if (typeof assignedTo === 'string') {
-        assignedToDisplay = assignedTo;
+    let categoryBackgroundColor = '';
+    switch (category) {
+        case 'User Story':
+            categoryBackgroundColor = '#0038FF';
+            break;
+        case 'Technical Task':
+            categoryBackgroundColor = '#1FD7C1';
+            break;
+    }
+
+    const subtasksArray = Object.values(subtasks || {});
+    const completedSubtasks = subtasksArray.filter(subtask => subtask.completed).length;
+    const totalSubtasks = subtasksArray.length;
+    const progress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
+
+    let progressBarColor = progress > 0 ? '#1E90FF' : '#D3D3D3';
+
+    let priorityImageURL = '';
+    switch (priority) {
+        case 'urgent':
+            priorityImageURL = './assets/icons/Board-icons/urgent-red.svg';
+            break;
+        case 'medium':
+            priorityImageURL = './assets/icons/Board-icons/medium-orange.svg';
+            break;
+        case 'low':
+            priorityImageURL = './assets/icons/Board-icons/low-green.svg';
+            break;
+    }
+
+    let assignedContactsHTML = '';
+    if (assignedTo) {
+        Object.keys(assignedTo).forEach(contactId => {
+            assignedContactsHTML += `<div class="contact-circle" title="${assignedTo[contactId]}">
+                ${getInitials(assignedTo[contactId])}
+            </div>`;
+        });
     }
 
     return `
         <div draggable="true" class="todo" id="task_${id}">
-            <div>
-                <div class="choose-phase"><img draggable="false" src="./assets/img/Menu Contact options.svg" alt="Phase"></div>
-                <div class="category-dd">${category || 'Uncategorized'}</div>
-                <div class="titel-dd">${title || 'No Title'}</div>
-                <div class="description-dd">${description || 'No Description'}</div>
-                <div class="progress-dd">
-                    <div class="progressBar-dd">---</div>
-                    <div class="progressNumber-dd">${progress || 0}/100</div>
+            <div class="task-category" style="background-color: ${categoryBackgroundColor};">
+                ${category || 'Uncategorized'}
+            </div>
+            <div class="task-title">${title || 'No Title'}</div>
+            <div class="task-description">${description || 'No Description'}</div>
+            <div class="task-progress">
+                <div class="progress-bar" style="background-color: ${progressBarColor}; width: ${progress}%;"></div>
+                <div class="progress-info">${completedSubtasks}/${totalSubtasks} Subtasks</div>
+            </div>
+            <div class="task-footer">
+                <div class="task-contacts">
+                    ${assignedContactsHTML}
                 </div>
-                <div class="bottom-dd">
-                    <div class="user-dd">${assignedToDisplay}</div>
-                    <div class="prio-dd">${priority || 'low'}</div>
+                <div class="task-priority">
+                    <img src="${priorityImageURL}" alt="${priority || 'low'} Priority" />
                 </div>
             </div>
         </div>`;
 }
+
 
 // Fügt den Task in den entsprechenden Container ein
 function insertTaskIntoContainer(taskHTML, status) {
@@ -411,6 +440,7 @@ function resetErrorMessages() {
         errorElement.textContent = '';
     });
 }
+
 // Farben der Prioritäten und ausgewählte Prio in der Task übergeben
 function setActivePriority(button) {
     const buttons = document.getElementsByClassName('priority-button');
@@ -468,13 +498,59 @@ function addSubtask() {
         newSubtask.textContent = subtaskInput.value.trim();
         subtaskList.appendChild(newSubtask);
         subtaskInput.value = '';
+
         if (!document.querySelector('.subtask-list').previousElementSibling || !document.querySelector('.subtask-list').previousElementSibling.classList.contains('subtask-title')) {
             let subtasksHeader = document.createElement('div');
             subtasksHeader.className = 'subtask-title';
             subtaskList.parentElement.insertBefore(subtasksHeader, subtaskList);
         }
+
+        // Aktualisiere die Anzahl der Unteraufgaben in der bestehenden Aufgabe
+        const taskId = document.getElementById('taskId').value; // Stellen Sie sicher, dass taskId gesetzt ist
+        updateTaskInDatabase(taskId);
     }
 }
+
+async function updateTaskInDatabase(taskId) {
+    try {
+        const rootKey = await getTaskRootKey();
+        if (!rootKey) {
+            throw new Error('Root key for tasks not found');
+        }
+
+        // Abrufen der aktuellen Aufgabeninformationen
+        const response = await fetch(`${API_URL}/${rootKey}/tasks/${taskId}.json`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch task details');
+        }
+        const task = await response.json();
+
+        // Erstellen der Unteraufgabenliste
+        const subtasksArray = Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).map(item => ({
+            text: item.textContent,
+            completed: false
+        }));
+
+        // Aktualisieren der Aufgabe in der Datenbank
+        task.subtasks = subtasksArray;
+        const updateResponse = await fetch(`${API_URL}/${rootKey}/tasks/${taskId}.json`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ subtasks: task.subtasks })
+        });
+
+        if (!updateResponse.ok) {
+            throw new Error('Failed to update task');
+        }
+
+        console.log('Task updated successfully with new subtasks');
+        // Optional: Hier könnten Sie die Seite neu laden, um die Änderungen anzuzeigen
+        loadTasksFromDatabase();
+    } catch (error) {
+        console.error('Error updating task:', error);
+    }
+}
+
 
 async function saveTaskToDatabase(task) {
     try {

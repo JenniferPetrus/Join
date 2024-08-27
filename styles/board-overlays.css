@@ -207,6 +207,7 @@ label, input, textarea, select{
     display: flex;
     flex-direction: column;
     gap: 5px;
+    position: absolute;
 }
 
 .subtask-item {

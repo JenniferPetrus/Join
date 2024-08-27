@@ -154,3 +154,13 @@ function setupOverlayEventListeners() {
 
     setupEventListeners(); // Rufe die Setup-Funktion auf, die Event-Listener hinzufügt
 }
+function clearOverlay() {
+    document.getElementById('addTaskOverlay').style.display = 'none';
+}
+function setupEventListeners() {
+    console.log('Event listeners are set up.');
+}
+function getActivePriority() {
+    const priorityElement = document.querySelector('.priority-selector');
+    return priorityElement ? priorityElement.value : 'default';
+}

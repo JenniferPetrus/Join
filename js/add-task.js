@@ -73,6 +73,7 @@ function validateForm() {
 }
 
 // Funktion zur Erstellung einer neuen Subtask
+// Funktion zur Erstellung einer neuen Subtask
 async function addSubtask() {
     const subtaskInput = document.getElementById('newSubtask');
     const subtaskList = document.getElementById('subtaskList');
@@ -84,14 +85,22 @@ async function addSubtask() {
         subtaskList.appendChild(newSubtask);
         subtaskInput.value = '';
 
+        // Falls noch keine Überschrift vorhanden ist, füge sie hinzu
         if (!document.querySelector('.subtask-list').previousElementSibling ||
             !document.querySelector('.subtask-list').previousElementSibling.classList.contains('subtask-title')) {
             const subtasksHeader = document.createElement('div');
             subtasksHeader.className = 'subtask-title';
             subtaskList.parentElement.insertBefore(subtasksHeader, subtaskList);
         }
+
+        // Aktualisiere die Anzahl der Unteraufgaben in der Datenbank
+        const taskId = document.getElementById('taskId').value; // Stellen Sie sicher, dass taskId gesetzt ist
+        if (taskId) {
+            await updateTaskInDatabase(taskId);
+        }
     }
 }
+
 
 // Funktion zum Festlegen der aktiven Priorität
 function setActivePriority(button) {

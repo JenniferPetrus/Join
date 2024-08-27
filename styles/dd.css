@@ -29,6 +29,58 @@
     animation: highlightFade 3s forwards;
 }
 
+.progress-bar {
+    height: 10px;
+    background-color: #D3D3D3;
+    border-radius: 8px;
+    margin-right: 10px;
+    flex: 1;
+    transition: width 0.3s ease;
+}
+
+.task-progress {
+    display: flex;
+    align-items: center;
+}
+
+.progress-info {
+    font-size: 0.9em;
+}
+
+.task-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.task-contacts {
+    display: flex;
+    align-items: center;
+}
+
+.contact-circle {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    margin-right: 5px;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.task-priority {
+    display: flex;
+    align-items: center;
+}
+
+.task-priority img {
+    height: 24px;
+}
 @keyframes highlightFade {
     0% {
         background-color: rgba(0, 0, 0, 0.2);
