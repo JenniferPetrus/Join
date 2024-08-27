@@ -73,7 +73,6 @@ function validateForm() {
 }
 
 // Funktion zur Erstellung einer neuen Subtask
-// Funktion zur Erstellung einer neuen Subtask
 async function addSubtask() {
     const subtaskInput = document.getElementById('newSubtask');
     const subtaskList = document.getElementById('subtaskList');
@@ -100,7 +99,6 @@ async function addSubtask() {
         }
     }
 }
-
 
 // Funktion zum Festlegen der aktiven Priorität
 function setActivePriority(button) {

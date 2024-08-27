@@ -395,7 +395,6 @@ function generateTaskHTML(task) {
         </div>`;
 }
 
-
 // Fügt den Task in den entsprechenden Container ein
 function insertTaskIntoContainer(taskHTML, status) {
     const container = document.getElementById(status);

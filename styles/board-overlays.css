@@ -437,6 +437,7 @@ label, input, textarea, select{
     justify-content: center;
 }
 
+
 @media (max-width: 1500px) {
     .overlay-content {
         max-width: 90%;
