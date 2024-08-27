@@ -60,7 +60,22 @@ async function fetchTasks() {
     }
 }
 
+function getNextDueDate(urgentTasks) {
+    if (!urgentTasks || urgentTasks.length === 0) {
+        return null;
+    }
 
+    const dueDates = urgentTasks
+        .map(task => new Date(task.dueDate))
+        .filter(date => !isNaN(date.getTime())); 
+
+    if (dueDates.length === 0) {
+        return null;
+    }
+
+    const nearestDueDate = new Date(Math.min(...dueDates));
+    return nearestDueDate.toLocaleDateString();
+}
 
 async function updateSummary() {
     const data = await fetchTasks();
@@ -82,7 +97,8 @@ async function updateSummary() {
     const doneCount = tasks.filter(task => task && task.status === 'done').length;
     const inProgressCount = tasks.filter(task => task && task.status === 'in-progress').length;
     const awaitingFeedbackCount = tasks.filter(task => task && task.status === 'awaiting-feedback').length;
-    const urgentCount = tasks.filter(task => task && task.priority === 'urgent').length;
+    const urgentTasks = tasks.filter(task => task && task.priority === 'urgent');
+    const urgentCount = urgentTasks.length;
     const totalTasks = tasks.length;
 
     document.getElementById('to-do-amount').innerText = toDoCount;
@@ -92,7 +108,10 @@ async function updateSummary() {
     document.getElementById('font-urgent-number').innerText = urgentCount;
     document.getElementById('tasks-amount').innerText = totalTasks;
 
-    console.log("Summary updated successfully"); // Debugging
+    const nextDueDate = getNextDueDate(urgentTasks);
+    document.getElementById('deadline-date').innerText = nextDueDate ? nextDueDate : 'No Upcoming Deadline';
+
+    console.log("Summary updated successfully");
 }
 
 updateSummary();

@@ -191,8 +191,8 @@ function setupEditDeleteButtons() {
     let deleteButton = document.querySelector('.contact-delete');
 
     if (editButton && deleteButton) {
-        editButton.style.display = 'block';  
-        deleteButton.style.display = 'block';
+        editButton.style.display = 'flex';  
+        deleteButton.style.display = 'flex';
 
         editButton.removeEventListener('click', setupEditContact);
         deleteButton.removeEventListener('click', handleDeleteContact);
