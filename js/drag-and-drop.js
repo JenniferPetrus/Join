@@ -344,7 +344,15 @@ function generateTaskHTML(task) {
     const totalSubtasks = subtasksArray.length;  // Ensure that this is correctly calculated
     const progress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
 
-    let progressBarColor = progress > 0 ? '#1E90FF' : '#D3D3D3';
+    let progressBarHTML = '';
+    if (totalSubtasks > 0) {
+        let progressBarColor = progress > 0 ? '#1E90FF' : '#D3D3D3';
+        progressBarHTML = `
+            <div class="task-progress">
+                <div class="progress-bar" style="background-color: ${progressBarColor}; width: ${progress}%;"></div>
+                <div class="progress-info">${completedSubtasks}/${totalSubtasks} Subtasks</div>
+            </div>`;
+    }
 
     let priorityImageURL = '';
     switch (priority) {
@@ -374,11 +382,8 @@ function generateTaskHTML(task) {
                 ${category || 'Uncategorized'}
             </div>
             <div class="task-title">${title || 'No Title'}</div>
-            <div class="task-description">${description || 'No Description'}</div>
-            <div class="task-progress">
-                <div class="progress-bar" style="background-color: ${progressBarColor}; width: ${progress}%;"></div>
-                <div class="progress-info">${completedSubtasks}/${totalSubtasks} Subtasks</div>
-            </div>
+            ${description ? `<div class="task-description">${description}</div>` : ''}
+            ${progressBarHTML}
             <div class="task-footer">
                 <div class="task-contacts">
                     ${assignedContactsHTML}
@@ -550,8 +555,6 @@ async function updateTaskInDatabase(taskId) {
         console.error('Error updating task:', error);
     }
 }
-
-
 
 async function saveTaskToDatabase(task) {
     try {
