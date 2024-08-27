@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 document.getElementById('overlay-container').innerHTML = data;
                 addEventListenersToButtons();
+                // Event-Listener für das Overlay setzen
+                setupOverlayEventListeners();
             })
             .catch(error => console.error('Error loading the overlay:', error));
     }
@@ -27,13 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function openOverlay(sectionId) {
         loadOverlay(); 
         document.getElementById('addTaskOverlay').style.display = 'flex';
+        targetSectionId = sectionId || 'todo'; // Setze den Standardwert, wenn keine Section ID angegeben wurde
     }
 
     const addTaskButton = document.querySelector('.add-task-button');
     if (addTaskButton) {
         addTaskButton.addEventListener('click', () => {
-            loadOverlay();
-            document.getElementById('addTaskOverlay').style.display = 'flex';
+            openOverlay('todo');
         });
     }
 
@@ -137,3 +139,18 @@ function printObjectStructure(obj, indent) {
 
 // Funktion aufrufen, um die Struktur und den Inhalt anzuzeigen
 logDatabaseStructureAndContent();
+
+// Funktion zum Setzen der Event-Listener im Overlay
+function setupOverlayEventListeners() {
+    const createTaskButton = document.querySelector('.create-task-button');
+    if (createTaskButton) {
+        createTaskButton.addEventListener('click', createTask); // Verwende die globale createTask-Funktion
+    }
+
+    const cancelButton = document.querySelector('.cancel-button');
+    if (cancelButton) {
+        cancelButton.addEventListener('click', clearOverlay); // Verwende die globale clearOverlay-Funktion
+    }
+
+    setupEventListeners(); // Rufe die Setup-Funktion auf, die Event-Listener hinzufügt
+}

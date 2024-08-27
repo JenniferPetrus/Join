@@ -1,5 +1,5 @@
-let contacts = [];
-let assignedContacts = new Set();
+// let contacts = [];
+// let assignedContacts = new Set();
 
 // Funktion zum Abrufen der Kontakte aus der Datenbank
 async function loadContactsFromDatabase() {
