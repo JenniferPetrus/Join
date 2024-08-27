@@ -309,7 +309,7 @@ async function loadTasksFromDatabase() {
                     assignedTo: task.assignedTo || {},
                     priority: task.priority,
                     category: task.category,
-                    progress: task.progress || 0
+                    subtasks: task.subtasks || {}
                 });
                 insertTaskIntoContainer(taskHTML, status);
             } else {
@@ -324,9 +324,10 @@ async function loadTasksFromDatabase() {
     }
 }
 
+
 // HTML für eine Aufgabe generieren
 function generateTaskHTML(task) {
-    const { id, title, description, assignedTo, priority, category, subtasks } = task;
+    const { id, title, description, assignedTo, priority, category, subtasks = {} } = task;
 
     let categoryBackgroundColor = '';
     switch (category) {
@@ -338,9 +339,9 @@ function generateTaskHTML(task) {
             break;
     }
 
-    const subtasksArray = Object.values(subtasks || {});
+    const subtasksArray = Object.values(subtasks);
     const completedSubtasks = subtasksArray.filter(subtask => subtask.completed).length;
-    const totalSubtasks = subtasksArray.length;
+    const totalSubtasks = subtasksArray.length;  // Ensure that this is correctly calculated
     const progress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
 
     let progressBarColor = progress > 0 ? '#1E90FF' : '#D3D3D3';
@@ -510,7 +511,6 @@ function addSubtask() {
         updateTaskInDatabase(taskId);
     }
 }
-
 async function updateTaskInDatabase(taskId) {
     try {
         const rootKey = await getTaskRootKey();
@@ -550,6 +550,7 @@ async function updateTaskInDatabase(taskId) {
         console.error('Error updating task:', error);
     }
 }
+
 
 
 async function saveTaskToDatabase(task) {
