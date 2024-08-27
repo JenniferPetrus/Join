@@ -14,6 +14,7 @@ async function createTask() {
 
     const assignedTo = Array.from(assignedContacts); // Verwenden der globalen assignedContacts
     const priority = getActivePriority();
+    const priorityImage = getPriorityImage(priority); // Prioritätsbild abrufen
     const category = document.getElementById('category').value;
 
     // Subtasks als Objekt speichern (kein Array)
@@ -28,6 +29,7 @@ async function createTask() {
         description,
         assignedTo,
         priority,
+        priorityImage,
         category,
         subtasks,
         dueDate,
@@ -42,6 +44,42 @@ async function createTask() {
     } catch (error) {
         console.error('Error creating task:', error);
     }
+}
+// Funktion zum Abrufen des Bildpfads basierend auf der Priorität
+function getPriorityImage(priority) {
+    switch (priority) {
+        case 'urgent':
+            return './assets/icons/Board-icons/urgent-red.svg';
+        case 'medium':
+            return './assets/icons/Board-icons/medium-orange.svg';
+        case 'low':
+            return './assets/icons/Board-icons/low-green.svg';
+        default:
+            return './assets/icons/Board-icons/low-green.svg';  // Standardmäßig "low"
+    }
+}
+// Funktion zum Anzeigen der Aufgabe mit Prioritätsbild
+function displayTask(task) {
+    const taskContainer = document.createElement('div');
+    taskContainer.className = 'task';
+
+    const title = document.createElement('h3');
+    title.textContent = task.title;
+    taskContainer.appendChild(title);
+
+    const description = document.createElement('p');
+    description.textContent = task.description;
+    taskContainer.appendChild(description);
+
+    const priorityImage = document.createElement('img');
+    priorityImage.src = task.priorityImage;  // Verwende das gespeicherte Bild
+    priorityImage.alt = task.priority + ' priority';
+    taskContainer.appendChild(priorityImage);
+
+    // Weitere Task-Details (AssignedTo, DueDate, etc.) hinzufügen
+    // ...
+
+    document.getElementById('taskBoard').appendChild(taskContainer);  // Füge die Aufgabe zu deinem Taskboard hinzu
 }
 
 // Funktion zum Validieren des Formulars
@@ -105,9 +143,10 @@ function setActivePriority(button) {
     const buttons = document.getElementsByClassName('priority-button');
     for (let i = 0; i < buttons.length; i++) {
         const img = buttons[i].querySelector('img');
-        buttons[i].classList.remove('active-urgent', 'active-medium', 'active-low');
+        buttons[i].classList.remove('active', 'active-urgent', 'active-medium', 'active-low');
         buttons[i].style.backgroundColor = 'white';
         buttons[i].style.color = 'black';
+        
         switch (buttons[i].id) {
             case 'urgent':
                 img.src = './assets/icons/Board-icons/urgent-red.svg';
@@ -120,6 +159,8 @@ function setActivePriority(button) {
                 break;
         }
     }
+
+    button.classList.add('active');
     button.classList.add(`active-${button.id}`);
     const priorityColors = {
         urgent: '#FF3D00',
@@ -128,6 +169,7 @@ function setActivePriority(button) {
     };
     button.style.backgroundColor = priorityColors[button.id];
     button.style.color = 'white';
+
     const activeImg = button.querySelector('img');
     switch (button.id) {
         case 'urgent':
@@ -141,6 +183,7 @@ function setActivePriority(button) {
             break;
     }
 }
+
 
 // Funktion zum Abrufen der aktiven Priorität
 function getActivePriority() {

@@ -112,53 +112,72 @@ function updateAssignedContactsDisplay() {
 
 
 // Holt die Initialen eines Kontakts
-function getInitials(fullName) {
-    const names = fullName.split(' ');
-    const initials = names.map(name => name.charAt(0).toUpperCase()).join('');
-    return initials;
-}
+let taskCreationInProgress = false; // verhindert das erstellen von zwei Tasks
+
 async function createTask() {
-    if (!validateForm()) {
+    if (taskCreationInProgress) {
         return;
     }
 
-    if (contacts.length === 0) {
-        await loadContactsFromDatabase();
-    }
-
-    const title = document.getElementById('taskTitle').value;
-    const description = document.getElementById('taskDescription').value;
-    const assignedTo = Array.from(document.querySelectorAll('#assignedContacts .assigned-contact')).map(contact => contact.dataset.id);
-
-    const priority = getActivePriority();
-    const category = document.getElementById('category').value;
-    const subtasks = {}; // Anstelle eines Arrays verwenden wir ein Objekt
-    Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).forEach((item, index) => {
-        subtasks[`item_${index}`] = { text: item.textContent };
-    });
-
-    const dueDate = document.getElementById('dueDate').value;
-    const task = {
-        title,
-        description,
-        assignedTo,
-        priority,
-        category,
-        subtasks,
-        dueDate,
-        status: 'todo'  // Standardstatus für neue Aufgaben
-    };
+    taskCreationInProgress = true; 
 
     try {
+        console.log('createTask function called');
+
+        if (!validateForm()) {
+            console.log('Form validation failed');
+            taskCreationInProgress = false;
+            return;
+        }
+
+        if (contacts.length === 0) {
+            await loadContactsFromDatabase();
+        }
+
+        const title = document.getElementById('taskTitle').value;
+        const description = document.getElementById('taskDescription').value;
+        const assignedTo = Array.from(document.querySelectorAll('#assignedContacts .assigned-contact')).map(contact => contact.dataset.id);
+
+        const priority = getActivePriority();
+        const category = document.getElementById('category').value;
+        const subtasks = {};
+        Array.from(document.querySelectorAll('#subtaskList .subtask-list-item')).forEach((item, index) => {
+            subtasks[`item_${index}`] = { text: item.textContent };
+        });
+
+        const dueDate = document.getElementById('dueDate').value;
+        const task = {
+            title,
+            description,
+            assignedTo,
+            priority,
+            category,
+            subtasks,
+            dueDate,
+            status: 'todo'
+        };
+
+        console.log('Saving task to database');
         const taskId = await saveTaskToDatabase(task);
         console.log('Task successfully created with ID:', taskId);
     } catch (error) {
         console.error('Error creating task:', error);
+    } finally {
+        taskCreationInProgress = false;
     }
 }
+// Funktion zum Abrufen der aktiven Priorität
+function getActivePriority() {
+    const priorityButton = document.querySelector('.priority-button.active');
+    return priorityButton ? priorityButton.id : 'low';
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    loadContactsFromDatabase();
-    // Andere Initialisierungen...
+    const createTaskButton = document.getElementById('createTaskButton');  // Hier die richtige Button-ID verwenden
+    if (createTaskButton) {
+        createTaskButton.removeEventListener('click', createTask);  // Entfernt vorherige Event-Listener
+        createTaskButton.addEventListener('click', createTask);     // Fügt den Event-Listener einmal hinzu
+    }
 });
 
 
@@ -329,6 +348,10 @@ async function loadTasksFromDatabase() {
 function generateTaskHTML(task) {
     const { id, title, description, assignedTo, priority, category, subtasks = {} } = task;
 
+    // Debug-Ausgabe für die Priorität
+    console.log('Task Priority:', priority);
+
+    // Standardmäßige Hintergrundfarbe für die Kategorie
     let categoryBackgroundColor = '';
     switch (category) {
         case 'User Story':
@@ -337,13 +360,17 @@ function generateTaskHTML(task) {
         case 'Technical Task':
             categoryBackgroundColor = '#1FD7C1';
             break;
+        default:
+            categoryBackgroundColor = '#CCCCCC'; // Default-Farbe für andere Kategorien
     }
 
+    // Berechnung des Fortschritts
     const subtasksArray = Object.values(subtasks);
     const completedSubtasks = subtasksArray.filter(subtask => subtask.completed).length;
-    const totalSubtasks = subtasksArray.length;  // Ensure that this is correctly calculated
+    const totalSubtasks = subtasksArray.length;
     const progress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
 
+    // Fortschrittsanzeige HTML
     let progressBarHTML = '';
     if (totalSubtasks > 0) {
         let progressBarColor = progress > 0 ? '#1E90FF' : '#D3D3D3';
@@ -354,6 +381,7 @@ function generateTaskHTML(task) {
             </div>`;
     }
 
+    // Prioritätsbild URL
     let priorityImageURL = '';
     switch (priority) {
         case 'urgent':
@@ -365,8 +393,14 @@ function generateTaskHTML(task) {
         case 'low':
             priorityImageURL = './assets/icons/Board-icons/low-green.svg';
             break;
+        default:
+            priorityImageURL = './assets/icons/Board-icons/low-green.svg'; // Standardbild für unbekannte Prioritäten
     }
 
+    // Debug-Ausgabe für die Bild-URL
+    console.log('Priority Image URL:', priorityImageURL);
+
+    // HTML für zugewiesene Kontakte
     let assignedContactsHTML = '';
     if (assignedTo) {
         Object.keys(assignedTo).forEach(contactId => {
@@ -394,6 +428,7 @@ function generateTaskHTML(task) {
             </div>
         </div>`;
 }
+
 
 // Fügt den Task in den entsprechenden Container ein
 function insertTaskIntoContainer(taskHTML, status) {
@@ -454,6 +489,7 @@ function setActivePriority(button) {
         buttons[i].classList.remove('active', 'active-urgent', 'active-medium', 'active-low');
         buttons[i].style.backgroundColor = 'white';
         buttons[i].style.color = 'black';
+        
         switch (buttons[i].id) {
             case 'urgent':
                 img.src = './assets/icons/Board-icons/urgent-red.svg';
@@ -466,7 +502,9 @@ function setActivePriority(button) {
                 break;
         }
     }
-    button.classList.add('active', `active-${button.id}`);
+
+    button.classList.add('active');
+    button.classList.add(`active-${button.id}`);
     const priorityColors = {
         urgent: '#FF3D00',
         medium: '#FFA800',
@@ -474,6 +512,7 @@ function setActivePriority(button) {
     };
     button.style.backgroundColor = priorityColors[button.id];
     button.style.color = 'white';
+
     const activeImg = button.querySelector('img');
     switch (button.id) {
         case 'urgent':
@@ -574,7 +613,7 @@ async function saveTaskToDatabase(task) {
 
         console.log('Task created successfully');
         closeOverlay(); // Schließe das Overlay nach erfolgreichem Erstellen
-        loadTasksFromDatabase(); // Lade die Aufgaben neu
+        await loadTasksFromDatabase(); // Lade die Aufgaben neu
     } catch (error) {
         console.error('Error saving task:', error);
     }
