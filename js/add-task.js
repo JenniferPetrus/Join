@@ -79,7 +79,7 @@ function displayTask(task) {
     // Weitere Task-Details (AssignedTo, DueDate, etc.) hinzufügen
     // ...
 
-    document.getElementById('taskBoard').appendChild(taskContainer);  // Füge die Aufgabe zu deinem Taskboard hinzu
+    document.getElementById('taskBoard').appendChild(taskContainer);  // Füge die Aufgabe zum  Taskboard hinzu
 }
 
 // Funktion zum Validieren des Formulars

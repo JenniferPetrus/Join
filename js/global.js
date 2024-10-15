@@ -385,3 +385,14 @@ function removeAssignedContact(contactId) {
     assignedContacts.delete(contactId);
     updateAssignedContactsDisplay();
 }
+
+
+function checkLoginStatus() {
+    // Überprüfe, ob der Benutzer eingeloggt ist
+    const userLoggedIn = sessionStorage.getItem('loggedInUser') || localStorage.getItem('loggedInUser');
+    
+    // Wenn kein Benutzer eingeloggt ist, leite zur Login-Seite weiter
+    if (!userLoggedIn) {
+        window.location.href = 'login.html';  // Umleiten zur Login-Seite
+    }
+}
